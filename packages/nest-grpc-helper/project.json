@@ -1,0 +1,31 @@
+{
+  "name": "nest-grpc-helper",
+  "root": "packages/nest-grpc-helper",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/nest-grpc-helper",
+        "commands": [
+          "rm -rf ./output",
+          "rollup --config ./rollup.config.js",
+          "cp ./package.json README.md ./output",
+          "printf \"{\n  \\\"type\\\": \\\"commonjs\\\"\n}\n\" > ./output/cjs/package.json"
+        ],
+        "parallel": false
+      }
+    },
+    "publish": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/nest-grpc-helper/output"
+      },
+      "configurations": {
+        "local": {
+          "command": "npm link"
+        }
+      }
+    }
+  }
+}

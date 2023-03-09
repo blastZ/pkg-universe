@@ -1,0 +1,3 @@
+import "../common/main.proto";
+
+import "./users-service.proto";
