@@ -1,12 +1,12 @@
 import { DynamicModule } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
-import { GRPC_CLIENTS_OPTIONS } from '../../constants/grpc-clients-options.constant.js';
-import { GRPC_CLIENTS } from '../../constants/grpc-clients.constant.js';
 
-import { GrpcClientsOptions } from '../../interfaces/grpc-clients-options.interface.js';
-import { GrpcClients } from '../../interfaces/grpc-clients.interface.js';
-import { getGrpcClientOptions } from '../../utils/get-grpc-options.util.js';
+import { getGrpcClientOptions } from '../grpc-options/index.js';
+import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
+import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
 import { GrpcClientsService } from './grpc-clients.service.js';
+import { GrpcClientsOptions } from './interfaces/grpc-clients-options.interface.js';
+import { GrpcClients } from './interfaces/grpc-clients.interface.js';
 
 export class GrpcClientsModule {
   static forRoot(options: GrpcClientsOptions): DynamicModule {

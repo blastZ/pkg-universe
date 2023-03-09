@@ -1,8 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions } from '@nestjs/microservices';
 
-import { GetGrpcOptsOptions } from '../interfaces/get-grpc-opts-options.interface.js';
-import { getGrpcServerOptions } from './get-grpc-options.util.js';
+import { GetGrpcOptsOptions, getGrpcServerOptions } from '../grpc-options';
 
 export async function createGrpcApp(
   moduleCls: any,
