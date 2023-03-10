@@ -1,11 +1,6 @@
-import { AsyncLocalStorage } from 'async_hooks';
 import { NextFunction, Request, Response } from 'express';
 
-interface Store {
-  headers: Record<string, string | string[] | undefined>;
-}
-
-export const propagationContext = new AsyncLocalStorage<Store>();
+import { propagationContext } from './context.js';
 
 export function propagationMiddleware(
   req: Request,
