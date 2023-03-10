@@ -24,6 +24,9 @@
       "configurations": {
         "local": {
           "command": "npm link"
+        },
+        "prod": {
+          "command": "npm publish --access public --registry=https://registry.npmjs.org"
         }
       }
     }

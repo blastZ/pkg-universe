@@ -10,9 +10,7 @@
   },
   "types": "./index.d.ts",
   "scripts": {
-    "tsc": "tsc",
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
-    "push": "npm test && npm run build && cd ./output && npm publish --access public --registry=https://registry.npmjs.org"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
