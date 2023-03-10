@@ -11,7 +11,7 @@ export function getGrpcClientOptions(
   const { packageName, url } = opts;
 
   return {
-    name: packageName,
+    name: Symbol(packageName),
     transport: Transport.GRPC,
     options: {
       url,

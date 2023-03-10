@@ -42,6 +42,10 @@ export class ServiceProxy {
   ): Observable<T2> {
     const metadata = this.getMetadata(options?.meta);
 
+    if (!this.service[method]) {
+      throw new InternalServerErrorException('ERR_SERVICE_METHOD_NOT_FOUND');
+    }
+
     return this.service[method](data, metadata).pipe(
       timeout({
         first: options?.timeout ?? this.options.timeout ?? 3000,

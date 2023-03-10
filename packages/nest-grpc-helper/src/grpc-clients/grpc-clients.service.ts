@@ -38,12 +38,14 @@ export class GrpcClientsService {
   }
 
   getService(packageName: string, serviceName: string) {
-    let service = this.serviceMap.get(packageName);
+    const key = `${packageName}_${serviceName}`;
+
+    let service = this.serviceMap.get(key);
 
     if (!service) {
       service = this.getClient(packageName).getService(serviceName);
 
-      this.serviceMap.set(packageName, service);
+      this.serviceMap.set(key, service);
     }
 
     const options = this.optionsMap.get(packageName);
