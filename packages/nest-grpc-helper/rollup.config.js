@@ -13,6 +13,8 @@ const external = [
   'express',
   'reflect-metadata',
   'rxjs',
+  'node:async_hooks',
+  'node:path',
 ];
 
 export default [
@@ -25,13 +27,13 @@ export default [
       },
     ],
     plugins: [
-      typescript({
-        outDir: 'output/cjs',
-        declaration: false,
-      }),
       nodeResolve({
         modulesOnly: true,
         exportConditions: ['node'],
+      }),
+      typescript({
+        outDir: 'output/cjs',
+        declaration: false,
       }),
       commonjs(),
     ],
@@ -62,6 +64,6 @@ export default [
       },
     ],
     plugins: [dts()],
-    external: ['async_hooks'],
+    external: external,
   },
 ];

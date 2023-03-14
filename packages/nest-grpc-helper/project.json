@@ -22,6 +22,9 @@
         "cwd": "packages/nest-grpc-helper/output"
       },
       "configurations": {
+        "file": {
+          "command": "npm pack"
+        },
         "local": {
           "command": "npm link"
         },
