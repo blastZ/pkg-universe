@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { lastValueFrom, Observable } from 'rxjs';
-import { propagationContext } from './context';
+import { propagationContext } from './context.js';
 
 export class PropagationInterceptor implements NestInterceptor {
   intercept(

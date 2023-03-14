@@ -3,7 +3,17 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
 
-const external = ['@blastz/logger'];
+const external = [
+  '@grpc/grpc-js',
+  '@grpc/proto-loader',
+  '@nestjs/common',
+  '@nestjs/core',
+  '@nestjs/microservices',
+  '@types/express',
+  'express',
+  'reflect-metadata',
+  'rxjs',
+];
 
 export default [
   {
@@ -41,7 +51,7 @@ export default [
         declaration: false,
       }),
     ],
-    external: external.concat(['chalk']),
+    external: external,
   },
   {
     input: 'src/index.ts',
