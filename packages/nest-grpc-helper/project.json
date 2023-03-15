@@ -10,6 +10,7 @@
           "rm -rf ./output",
           "rollup --config ./rollup.config.js",
           "cp ./package.json README.md ./output",
+          "cp -r ./protos ./output",
           "printf \"{\n  \\\"type\\\": \\\"commonjs\\\"\n}\n\" > ./output/cjs/package.json"
         ],
         "parallel": false

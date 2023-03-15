@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package blastz.nestGrpcHelper.common;
+
+import "google/protobuf/any.proto";
+
+message ReplyError {
+  string code = 1;
+  string message = 2;
+}
+
+message Pagination {
+  uint32 page = 1;
+  uint32 pageSize = 2;
+  uint32 pageCount = 3;
+  uint32 total = 4;
+}
+
+message ReplyMeta {
+  optional Pagination pagination = 1;
+}
+
+message Reply {
+  required google.protobuf.Any data = 1;
+  optional ReplyMeta meta = 2;
+  optional ReplyError error = 3;
+}
+
+message EmptyRequest {}
