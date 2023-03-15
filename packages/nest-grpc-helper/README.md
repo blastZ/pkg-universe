@@ -39,6 +39,10 @@ import { GrpcClientsModule } from '@blastz/nest-grpc-helper';
       {
         packageName: 'pkgUniverse.accountManager',
         url: '0.0.0.0:3000',
+        // change default request options
+        timeout: 1000, // default is 3000ms
+        retryCount: 10, // default is 3
+        retryDelay: 1000, // default is 0
       },
     ]),
   ],
@@ -65,7 +69,25 @@ export class AppService implements OnModuleInit {
   }
 
   getUserById(id: string) {
-    return this.usersService.send('getUserById', { id });
+    return this.usersService.send(
+      'getUserById',
+      { id },
+      // rewrite global request options
+      { timeout: 5000, retryCount: 5, retryDelay: 2000 }
+    );
+  }
+}
+```
+
+Get `Promise` response instead of `Observable`
+
+```ts
+@Injectable()
+export class AppService implements OnModuleInit {
+  // ...
+
+  getUserById(id: string) {
+    return this.usersService.pSend('getUserById', { id });
   }
 }
 ```
