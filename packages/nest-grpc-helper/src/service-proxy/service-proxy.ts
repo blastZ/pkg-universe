@@ -1,8 +1,16 @@
 import { Metadata } from '@grpc/grpc-js';
 import { InternalServerErrorException } from '@nestjs/common';
-import { lastValueFrom, Observable, retry, throwError, timeout } from 'rxjs';
+import {
+  lastValueFrom,
+  map,
+  Observable,
+  retry,
+  throwError,
+  timeout,
+} from 'rxjs';
 
 import { GrpcClientOptions } from '../grpc-clients/index.js';
+import { GrpcReply } from '../grpc-common/index.js';
 import { propagationContext } from '../propagation/index.js';
 import { SendOptions } from './interfaces/send-options.interface.js';
 
@@ -47,6 +55,21 @@ export class ServiceProxy {
     }
 
     return this.service[method](data, metadata).pipe(
+      map((reply: GrpcReply) => {
+        if (!reply.data || !reply.data['@type']) {
+          return reply;
+        }
+
+        const {
+          data: { ['@type']: _, ...data },
+          ...other
+        } = reply;
+
+        return {
+          data,
+          ...other,
+        };
+      }),
       timeout({
         first: options?.timeout ?? this.options.timeout ?? 3000,
         with: () =>

@@ -1,4 +1,4 @@
-export interface GrpcReply<T> {
+export interface GrpcReply<T = any> {
   data: T;
   meta?: {
     pagination?: {
