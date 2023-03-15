@@ -1,5 +1,5 @@
 export interface GrpcReply<T = any> {
-  data: T;
+  data: T & { '@type'?: string };
   meta?: {
     pagination?: {
       page: number;
