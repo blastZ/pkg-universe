@@ -15,6 +15,7 @@ const external = [
   'rxjs',
   'node:async_hooks',
   'node:path',
+  'node:url',
 ];
 
 export default [
