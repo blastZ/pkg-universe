@@ -12,6 +12,7 @@
 dist
 output
 tmp
+.tmp
 /out-tsc
 
 # dependencies
