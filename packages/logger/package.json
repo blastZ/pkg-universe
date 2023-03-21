@@ -1,0 +1,46 @@
+{
+  "name": "@blastz/logger",
+  "version": "0.8.0",
+  "description": "nodejs logger",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "scripts": {
+    "push": "npm test && npm run build && cd ./output && npm publish --access public --registry=https://registry.npmjs.org"
+  },
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/logger",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "keywords": [
+    "logger",
+    "trace",
+    "debug",
+    "log"
+  ],
+  "author": "blastz",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.11.19",
+    "@types/triple-beam": "^1.3.2",
+    "aliyun-sdk": "^1.12.6",
+    "chalk": "^5.2.0",
+    "triple-beam": "^1.3.0",
+    "ts-jest": "^29.0.5",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
+    "winston-transport": "^4.5.0"
+  },
+  "bugs": {
+    "url": "https://github.com/blastZ/pkg-universe/issues"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {}
+}

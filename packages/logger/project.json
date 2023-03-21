@@ -1,0 +1,45 @@
+{
+  "name": "logger",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/logger",
+        "command": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js -c './jest.config.js'"
+      }
+    },
+    "build": {
+      "dependsOn": ["test"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/logger",
+        "commands": [
+          "rm -rf ./output",
+          "rollup --config ./rollup.config.js",
+          "cp ./package.json README.md ./output",
+          "printf \"{\n  \\\"type\\\": \\\"commonjs\\\"\n}\n\" > ./output/cjs/package.json"
+        ],
+        "parallel": false
+      }
+    },
+    "publish": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/logger/output"
+      },
+      "configurations": {
+        "file": {
+          "command": "npm pack"
+        },
+        "local": {
+          "command": "npm link"
+        },
+        "prod": {
+          "command": "npm publish --access public --registry=https://registry.npmjs.org"
+        }
+      }
+    }
+  }
+}
