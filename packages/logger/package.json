@@ -1,10 +1,11 @@
 {
   "name": "@blastz/logger",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "nodejs logger",
   "type": "module",
   "main": "./cjs/index.js",
   "exports": {
+    "types": "./index.d.ts",
     "require": "./cjs/index.js",
     "import": "./esm/index.js"
   },

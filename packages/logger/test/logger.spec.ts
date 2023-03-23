@@ -102,4 +102,10 @@ describe('logger', () => {
         target: 'project2',
       });
   });
+
+  it('should output error', () => {
+    logger.clear().add(createConsoleTransport({ level: LoggerLevel.Trace }));
+
+    logger.error(new Error('test'));
+  });
 });

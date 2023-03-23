@@ -1,15 +1,15 @@
-import { AsyncLocalStorage } from "async_hooks";
-import { hostname } from "os";
-import { createLogger } from "winston";
+import { AsyncLocalStorage } from 'async_hooks';
+import { hostname } from 'os';
+import { createLogger, format } from 'winston';
 
-import { LEVELS } from "./constants/index.js";
-import { LoggerLevel } from "./enums/index.js";
-import { Logger } from "./interfaces/index.js";
+import { LEVELS } from './constants/index.js';
+import { LoggerLevel } from './enums/index.js';
+import { Logger } from './interfaces/index.js';
 
 const originLogger = createLogger({
   level: LoggerLevel.Info,
   levels: LEVELS,
-  format: undefined,
+  format: format.errors({ stack: true }),
   defaultMeta: {
     host: hostname(),
     pid: process.pid,
@@ -30,7 +30,7 @@ export const logger = new Proxy(originLogger, {
     return Reflect.get(t, p, r);
   },
   set: (t, p, v, r) => {
-    if (p === "context") {
+    if (p === 'context') {
       context = v;
 
       return true;
@@ -42,7 +42,7 @@ export const logger = new Proxy(originLogger, {
   context: typeof context;
 };
 
-export * from "./enums/index.js";
-export * from "./formats/index.js";
-export * from "./interfaces/index.js";
-export * from "./transports/index.js";
+export * from './enums/index.js';
+export * from './formats/index.js';
+export * from './interfaces/index.js';
+export * from './transports/index.js';
