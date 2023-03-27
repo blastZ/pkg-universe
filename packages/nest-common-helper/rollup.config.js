@@ -18,6 +18,7 @@ const external = [
   'node:url',
   '@blastz/logger',
   'uuid',
+  'deepmerge-ts',
 ];
 
 export default [

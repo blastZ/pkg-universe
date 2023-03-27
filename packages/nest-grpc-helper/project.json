@@ -5,15 +5,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/nest-grpc-helper",
-        "commands": [
-          "rm -rf ./output",
-          "rollup --config ./rollup.config.js",
-          "cp ./package.json README.md ./output",
-          "cp -r ./protos ./output",
-          "printf \"{\n  \\\"type\\\": \\\"commonjs\\\"\n}\n\" > ./output/cjs/package.json"
-        ],
-        "parallel": false
+        "command": "tools/scripts/pkgx/index.mjs build nest-grpc-helper"
       }
     },
     "publish": {
