@@ -1,16 +1,3 @@
-export default {
-  testEnvironment: 'node',
-  rootDir: 'test',
-  extensionsToTreatAsEsm: ['.ts'],
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    '^.+\\.ts$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
-  },
-};
+import pkgxJestConfig from '../../tools/scripts/pkgx/pkgx-jest-config.mjs';
+
+export default pkgxJestConfig();
