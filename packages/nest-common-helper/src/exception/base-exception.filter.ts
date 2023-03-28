@@ -23,7 +23,7 @@ export interface Payload {
 export class BaseExceptionFilter<T = any> {
   private errorCodePrefix?: string;
 
-  constructor(params: Params) {
+  constructor(params: Params = {}) {
     this.errorCodePrefix = params.errorCodePrefix;
   }
 

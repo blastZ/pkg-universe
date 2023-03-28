@@ -1,10 +1,11 @@
 {
   "name": "@blastz/nest-common-helper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "nestjs common helper",
   "type": "module",
   "main": "./cjs/index.js",
   "exports": {
+    "types": "./index.d.ts",
     "require": "./cjs/index.js",
     "import": "./esm/index.js"
   },
