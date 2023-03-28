@@ -1,0 +1,9 @@
+export enum PacketType {
+  CONNECT,
+  DISCONNECT,
+  EVENT,
+  ACK,
+  CONNECT_ERROR,
+  BINARY_EVENT,
+  BINARY_ACK,
+}

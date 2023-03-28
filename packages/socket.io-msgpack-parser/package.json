@@ -1,0 +1,27 @@
+{
+  "name": "@blastz/socket.io-msgpack-parser",
+  "version": "0.3.0",
+  "description": "socket.io msgpack parser",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/socket.io-msgpack-parser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "author": "blastz",
+  "license": "MIT",
+  "dependencies": {
+    "msgpackr": "^1.5.5"
+  },
+  "bugs": {
+    "url": "https://github.com/blastZ/elaina/issues"
+  },
+  "devDependencies": {}
+}
