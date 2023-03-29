@@ -35,6 +35,7 @@ export function traceMiddleware(
       .child({
         reqMethod: req.method,
         reqUrl: req.originalUrl,
+        reqBody: req.body,
         reqIp: req.ip,
         reqIps: req.ips,
         referer: req.headers.referer,
