@@ -10,9 +10,6 @@
     "import": "./esm/index.js"
   },
   "types": "./index.d.ts",
-  "scripts": {
-    "push": "npm test && npm run build && cd ./output && npm publish --access public --registry=https://registry.npmjs.org"
-  },
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/logger",
   "repository": {
     "type": "git",
@@ -39,9 +36,6 @@
   },
   "bugs": {
     "url": "https://github.com/blastZ/pkg-universe/issues"
-  },
-  "directories": {
-    "test": "test"
   },
   "devDependencies": {}
 }
