@@ -1,0 +1,23 @@
+{
+  "name": "@blastz/inject-config",
+  "version": "0.3.0",
+  "description": "nodejs inject-config",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/inject-config",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "author": "blastz",
+  "license": "MIT",
+  "dependencies": {
+    "deepmerge": "^4.3.1"
+  }
+}
