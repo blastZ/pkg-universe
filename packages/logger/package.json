@@ -33,9 +33,5 @@
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
     "winston-transport": "^4.5.0"
-  },
-  "bugs": {
-    "url": "https://github.com/blastZ/pkg-universe/issues"
-  },
-  "devDependencies": {}
+  }
 }

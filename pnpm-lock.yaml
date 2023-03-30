@@ -10,6 +10,7 @@ importers:
       '@rollup/plugin-node-resolve': ^15.0.1
       '@rollup/plugin-typescript': ^11.0.0
       '@types/jest': ^29.5.0
+      '@types/node': ^18.11.19
       '@types/supertest': ^2.0.12
       chalk: ^5.2.0
       commander: ^10.0.0
@@ -31,11 +32,12 @@ importers:
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.19.1
       '@rollup/plugin-typescript': 11.0.0_f5df7e3acd6d7fdd73822e2957469e12
       '@types/jest': 29.5.0
+      '@types/node': 18.15.3
       '@types/supertest': 2.0.12
       chalk: 5.2.0
       commander: 10.0.0
       dotenv: 16.0.3
-      jest: 29.5.0
+      jest: 29.5.0_@types+node@18.15.3
       nx: 15.8.6
       prettier: 2.8.4
       rollup: 3.19.1
@@ -45,6 +47,12 @@ importers:
       tslib: 2.5.0
       typescript: 4.9.5
       zx: 7.2.1
+
+  packages/inject-config:
+    specifiers:
+      deepmerge: ^4.3.1
+    dependencies:
+      deepmerge: 4.3.1
 
   packages/logger:
     specifiers:
@@ -2076,7 +2084,6 @@ packages:
   /deepmerge/4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /define-lazy-prop/2.0.0:
     resolution: {integrity: sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==}
@@ -2823,7 +2830,7 @@ packages:
       - supports-color
     dev: true
 
-  /jest-cli/29.5.0:
+  /jest-cli/29.5.0_@types+node@18.15.3:
     resolution: {integrity: sha512-L1KcP1l4HtfwdxXNFCL5bmUbLQiKrakMUriBEcc1Vfz6gx31ORKdreuWvmQVBit+1ss9NNR3yxjwfwzZNdQXJw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -2840,7 +2847,7 @@ packages:
       exit: 0.1.2
       graceful-fs: 4.2.11
       import-local: 3.1.0
-      jest-config: 29.5.0
+      jest-config: 29.5.0_@types+node@18.15.3
       jest-util: 29.5.0
       jest-validate: 29.5.0
       prompts: 2.4.2
@@ -2849,44 +2856,6 @@ packages:
       - '@types/node'
       - supports-color
       - ts-node
-    dev: true
-
-  /jest-config/29.5.0:
-    resolution: {integrity: sha512-kvDUKBnNJPNBmFFOhDbm59iu1Fii1Q6SxyhXfvylq3UTHbg6o7j/g8k2dZyXWLvfdKB1vAPxNZnMgtKJcmu3kA==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    peerDependencies:
-      '@types/node': '*'
-      ts-node: '>=9.0.0'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      ts-node:
-        optional: true
-    dependencies:
-      '@babel/core': 7.21.3
-      '@jest/test-sequencer': 29.5.0
-      '@jest/types': 29.5.0
-      babel-jest: 29.5.0_@babel+core@7.21.3
-      chalk: 4.1.2
-      ci-info: 3.8.0
-      deepmerge: 4.3.1
-      glob: 7.2.3
-      graceful-fs: 4.2.11
-      jest-circus: 29.5.0
-      jest-environment-node: 29.5.0
-      jest-get-type: 29.4.3
-      jest-regex-util: 29.4.3
-      jest-resolve: 29.5.0
-      jest-runner: 29.5.0
-      jest-util: 29.5.0
-      jest-validate: 29.5.0
-      micromatch: 4.0.5
-      parse-json: 5.2.0
-      pretty-format: 29.5.0
-      slash: 3.0.0
-      strip-json-comments: 3.1.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /jest-config/29.5.0_@types+node@18.15.3:
@@ -3213,7 +3182,7 @@ packages:
       supports-color: 8.1.1
     dev: true
 
-  /jest/29.5.0:
+  /jest/29.5.0_@types+node@18.15.3:
     resolution: {integrity: sha512-juMg3he2uru1QoXX078zTa7pO85QyB9xajZc6bU+d9yEGwrKX6+vGmJQ3UdVZsvTEUARIdObzH68QItim6OSSQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -3226,7 +3195,7 @@ packages:
       '@jest/core': 29.5.0
       '@jest/types': 29.5.0
       import-local: 3.1.0
-      jest-cli: 29.5.0
+      jest-cli: 29.5.0_@types+node@18.15.3
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
@@ -4405,7 +4374,7 @@ packages:
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 29.5.0
+      jest: 29.5.0_@types+node@18.15.3
       jest-util: 29.5.0
       json5: 2.2.3
       lodash.memoize: 4.1.2

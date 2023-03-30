@@ -5,6 +5,7 @@
 /lib
 /app.js
 /log
+packages/**/log
 /app
 .env
 
