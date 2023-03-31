@@ -1,7 +1,8 @@
 import { ArgumentsHost, Catch } from '@nestjs/common';
 import { Response } from 'express';
+import { of } from 'rxjs';
 
-import { AppException } from './app.exception.js';
+import { StandardException } from './standard.exception.js';
 
 const MESSAGES = {
   UNKNOWN_EXCEPTION_MESSAGE: 'Internal server error',
@@ -20,7 +21,7 @@ export interface Payload {
 }
 
 @Catch()
-export class BaseExceptionFilter<T = any> {
+export class StandardExceptionFilter<T = any> {
   private errorCodePrefix?: string;
 
   constructor(params: Params = {}) {
@@ -52,7 +53,7 @@ export class BaseExceptionFilter<T = any> {
   }
 
   private getPayload(exception: T): Payload {
-    if (exception instanceof AppException) {
+    if (exception instanceof StandardException) {
       const response = exception.getResponse() as Payload;
 
       return {
@@ -75,7 +76,7 @@ export class BaseExceptionFilter<T = any> {
   }
 
   private handleRpcError(host: ArgumentsHost, payload: Payload) {
-    return payload;
+    return of(payload);
   }
 
   private handleWsError(host: ArgumentsHost, payload: Payload) {

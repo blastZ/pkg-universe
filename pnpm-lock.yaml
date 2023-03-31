@@ -168,6 +168,7 @@ importers:
 
   packages/nest-grpc-helper:
     specifiers:
+      '@blastz/logger': workspace:^0.9.0
       '@grpc/grpc-js': ^1.8.12
       '@grpc/proto-loader': ^0.7.5
       '@nestjs/common': ^9.3.9
@@ -178,10 +179,11 @@ importers:
       reflect-metadata: ^0.1.13
       rxjs: ^7.8.0
     devDependencies:
+      '@blastz/logger': link:../logger/output
       '@grpc/grpc-js': 1.8.12
       '@grpc/proto-loader': 0.7.5
       '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
-      '@nestjs/core': 9.3.10_e1929752fabd2640cc6480bd1ed47ee1
+      '@nestjs/core': 9.3.10_6f5d9d5cb8fc789a8627cabb4116b671
       '@nestjs/microservices': 9.3.10_668ba6ca86fd1fd3b480a1f8fca12763
       '@types/express': 4.17.17
       express: 4.18.2
@@ -190,6 +192,7 @@ importers:
 
   packages/nest-grpc-helper/output:
     specifiers:
+      '@blastz/logger': workspace:^0.9.0
       '@grpc/grpc-js': ^1.8.12
       '@grpc/proto-loader': ^0.7.5
       '@nestjs/common': ^9.3.9
@@ -200,10 +203,11 @@ importers:
       reflect-metadata: ^0.1.13
       rxjs: ^7.8.0
     devDependencies:
+      '@blastz/logger': link:../../logger/output
       '@grpc/grpc-js': 1.8.12
       '@grpc/proto-loader': 0.7.5
       '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
-      '@nestjs/core': 9.3.10_e1929752fabd2640cc6480bd1ed47ee1
+      '@nestjs/core': 9.3.10_6f5d9d5cb8fc789a8627cabb4116b671
       '@nestjs/microservices': 9.3.10_668ba6ca86fd1fd3b480a1f8fca12763
       '@types/express': 4.17.17
       express: 4.18.2
@@ -957,6 +961,38 @@ packages:
       uid: 2.0.1
     dev: true
 
+  /@nestjs/core/9.3.10_6f5d9d5cb8fc789a8627cabb4116b671:
+    resolution: {integrity: sha512-9QuE5jHtRnqKZULUhQoB0pNU26mwJ4hYNwAQ7lc/nFU2/4Ci+wTTRrXhLZeirgaF6TLCgLQB7/wLHImcfoXUog==}
+    requiresBuild: true
+    peerDependencies:
+      '@nestjs/common': ^9.0.0
+      '@nestjs/microservices': ^9.0.0
+      '@nestjs/platform-express': ^9.0.0
+      '@nestjs/websockets': ^9.0.0
+      reflect-metadata: ^0.1.12
+      rxjs: ^7.1.0
+    peerDependenciesMeta:
+      '@nestjs/microservices':
+        optional: true
+      '@nestjs/platform-express':
+        optional: true
+      '@nestjs/websockets':
+        optional: true
+    dependencies:
+      '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
+      '@nestjs/microservices': 9.3.10_668ba6ca86fd1fd3b480a1f8fca12763
+      '@nuxtjs/opencollective': 0.3.2
+      fast-safe-stringify: 2.1.1
+      iterare: 1.2.1
+      path-to-regexp: 3.2.0
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.0
+      tslib: 2.5.0
+      uid: 2.0.1
+    transitivePeerDependencies:
+      - encoding
+    dev: true
+
   /@nestjs/core/9.3.10_e1929752fabd2640cc6480bd1ed47ee1:
     resolution: {integrity: sha512-9QuE5jHtRnqKZULUhQoB0pNU26mwJ4hYNwAQ7lc/nFU2/4Ci+wTTRrXhLZeirgaF6TLCgLQB7/wLHImcfoXUog==}
     requiresBuild: true
@@ -1028,7 +1064,7 @@ packages:
     dependencies:
       '@grpc/grpc-js': 1.8.12
       '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
-      '@nestjs/core': 9.3.10_e1929752fabd2640cc6480bd1ed47ee1
+      '@nestjs/core': 9.3.10_6f5d9d5cb8fc789a8627cabb4116b671
       iterare: 1.2.1
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
