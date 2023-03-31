@@ -1,3 +1,3 @@
-export * from './context.js';
-export * from './propagation.interceptor.js';
-export * from './propagation.middleware.js';
+export * from './grpc-propagation.interceptor.js';
+export * from './http-propagation.middleware.js';
+export * from './propagation-context.js';

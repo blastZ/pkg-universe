@@ -1,17 +1,15 @@
 {
   "name": "@blastz/nest-grpc-helper",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "nestjs grpc helper",
   "type": "module",
   "main": "./cjs/index.js",
   "exports": {
+    "types": "./index.d.ts",
     "require": "./cjs/index.js",
     "import": "./esm/index.js"
   },
   "types": "./index.d.ts",
-  "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
-  },
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/nest-grpc-helper",
   "repository": {
     "type": "git",
@@ -21,6 +19,7 @@
   "author": "blastz",
   "license": "MIT",
   "devDependencies": {
+    "@blastz/logger": "^0.9.0",
     "@grpc/grpc-js": "^1.8.12",
     "@grpc/proto-loader": "^0.7.5",
     "@nestjs/common": "^9.3.9",
@@ -32,6 +31,7 @@
     "rxjs": "^7.8.0"
   },
   "peerDependencies": {
+    "@blastz/logger": "^0.9.0",
     "@grpc/grpc-js": "^1.8.12",
     "@grpc/proto-loader": "^0.7.5",
     "@nestjs/common": "^9.3.9",

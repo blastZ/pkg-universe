@@ -12,6 +12,7 @@ import {
 import { GrpcClientOptions } from '../grpc-clients/index.js';
 import { GrpcReply } from '../grpc-common/index.js';
 import { propagationContext } from '../propagation/index.js';
+import { COMMON_PROPAGATION_HEADERS } from './common-propagation-headers.constant.js';
 import { SendOptions } from './interfaces/send-options.interface.js';
 
 export class ServiceProxy {
@@ -20,18 +21,20 @@ export class ServiceProxy {
   private getMetadata(meta?: Record<string, string | Buffer>) {
     const metadata = new Metadata();
 
-    if (this.options.propagationHeaders) {
-      const propagation = propagationContext.getStore();
+    const propagationHeaders = COMMON_PROPAGATION_HEADERS.concat(
+      this.options.propagationHeaders || []
+    );
 
-      if (propagation) {
-        this.options.propagationHeaders.map((key) => {
-          const value = propagation.headers[key];
+    const propagation = propagationContext.getStore();
 
-          if (value) {
-            metadata.add(key, String(value));
-          }
-        });
-      }
+    if (propagation) {
+      propagationHeaders.map((key) => {
+        const value = propagation.headers[key];
+
+        if (value) {
+          metadata.add(key, String(value));
+        }
+      });
     }
 
     if (meta) {

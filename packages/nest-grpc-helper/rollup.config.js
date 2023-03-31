@@ -14,5 +14,6 @@ export default pkgxRollupConfig({
     'node:async_hooks',
     'node:path',
     'node:url',
+    '@blastz/logger',
   ],
 });
