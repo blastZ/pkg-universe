@@ -1,6 +1,7 @@
 import { Metadata } from '@grpc/grpc-js';
 import { InternalServerErrorException } from '@nestjs/common';
 import {
+  catchError,
   lastValueFrom,
   map,
   Observable,
@@ -22,7 +23,7 @@ export class ServiceProxy {
     const metadata = new Metadata();
 
     const propagationHeaders = COMMON_PROPAGATION_HEADERS.concat(
-      this.options.propagationHeaders || []
+      this.options.propagationHeaders || [],
     );
 
     const propagation = propagationContext.getStore();
@@ -49,7 +50,7 @@ export class ServiceProxy {
   send<T1 = any, T2 = any>(
     method: string,
     data: T1,
-    options?: SendOptions
+    options?: SendOptions,
   ): Observable<T2> {
     const metadata = this.getMetadata(options?.meta);
 
@@ -77,20 +78,30 @@ export class ServiceProxy {
         first: options?.timeout ?? this.options.timeout ?? 3000,
         with: () =>
           throwError(
-            () => new InternalServerErrorException('ERR_GRPC_REQUEST_TIMEOUT')
+            () => new InternalServerErrorException('ERR_GRPC_REQUEST_TIMEOUT'),
           ),
       }),
       retry({
         count: options?.retryCount ?? this.options.retryCount ?? 3,
-        delay: options?.retryDelay ?? this.options.retryDelay ?? 0,
-      })
+        delay: options?.retryDelay ?? this.options.retryDelay ?? 600,
+      }),
+      catchError((err) => {
+        return throwError(
+          () =>
+            new InternalServerErrorException({
+              message: `ERR_SEND_REQUEST: send request "${this.options.packageName}.${method}" failed`,
+              code: 500,
+              cause: err,
+            }),
+        );
+      }),
     );
   }
 
-  pSend<T1 = any, T2 = any>(
+  async pSend<T1 = any, T2 = any>(
     method: string,
     data: T1,
-    options?: SendOptions
+    options?: SendOptions,
   ): Promise<T2> {
     return lastValueFrom(this.send(method, data, options));
   }
