@@ -168,7 +168,7 @@ importers:
 
   packages/nest-grpc-helper:
     specifiers:
-      '@blastz/logger': workspace:^0.9.0
+      '@blastz/logger': ^0.9.0
       '@grpc/grpc-js': ^1.8.12
       '@grpc/proto-loader': ^0.7.5
       '@nestjs/common': ^9.3.9
@@ -192,7 +192,7 @@ importers:
 
   packages/nest-grpc-helper/output:
     specifiers:
-      '@blastz/logger': workspace:^0.9.0
+      '@blastz/logger': ^0.9.0
       '@grpc/grpc-js': ^1.8.12
       '@grpc/proto-loader': ^0.7.5
       '@nestjs/common': ^9.3.9
