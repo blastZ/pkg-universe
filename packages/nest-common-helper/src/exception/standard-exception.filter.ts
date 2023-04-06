@@ -20,6 +20,7 @@ export interface StandardExceptionFilterPayload {
     code: string;
     message: string;
   };
+  meta?: any;
 }
 
 @Catch()
@@ -49,6 +50,7 @@ export class StandardExceptionFilter<T = any> {
         code: this.getErrorCode(response?.error?.code || '500'),
         message: response?.error?.message || MESSAGES.UNKNOWN_EXCEPTION_MESSAGE,
       },
+      meta: response.meta || {},
     };
   }
 
@@ -57,6 +59,7 @@ export class StandardExceptionFilter<T = any> {
     const code = this.getErrorCode(String(exception.getStatus()));
 
     const data = {};
+    const meta = {};
 
     // throw new HttpException('error', 500)
     if (typeof response === 'string') {
@@ -66,6 +69,7 @@ export class StandardExceptionFilter<T = any> {
           code,
           message: response,
         },
+        meta,
       };
     }
 
@@ -76,6 +80,7 @@ export class StandardExceptionFilter<T = any> {
         code: response.code ?? code,
         message: response.message ?? MESSAGES.UNKNOWN_EXCEPTION_MESSAGE,
       },
+      meta: response.meta ?? meta,
     };
   }
 
@@ -86,6 +91,7 @@ export class StandardExceptionFilter<T = any> {
         code: this.getErrorCode('500'),
         message: MESSAGES.UNKNOWN_EXCEPTION_MESSAGE,
       },
+      meta: {},
     };
   }
 
