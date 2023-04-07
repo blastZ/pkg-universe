@@ -1,5 +1,10 @@
 import { logger } from '@blastz/logger';
-import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  BadRequestException,
+  Catch,
+  HttpException,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { of } from 'rxjs';
 
@@ -7,11 +12,13 @@ import { StandardException } from './standard.exception.js';
 
 const MESSAGES = {
   UNKNOWN_EXCEPTION_MESSAGE: 'Internal server error',
+  BAD_REQUEST_MESSAGE: 'Bad request',
 };
 
 export interface StandardExceptionFilterOptions {
   errorCodePrefix?: string;
   logError?: boolean;
+  returnBadRequestDetails?: boolean;
 }
 
 export interface StandardExceptionFilterPayload {
@@ -84,6 +91,21 @@ export class StandardExceptionFilter<T = any> {
     };
   }
 
+  private getBadRequestPayload(exception: BadRequestException) {
+    if (this.options.returnBadRequestDetails) {
+      return this.getHttpPayload(exception);
+    }
+
+    return {
+      data: {},
+      error: {
+        code: this.getErrorCode('400'),
+        message: MESSAGES.BAD_REQUEST_MESSAGE,
+      },
+      meta: {},
+    };
+  }
+
   private getDefaultPayload() {
     return {
       data: {},
@@ -98,6 +120,10 @@ export class StandardExceptionFilter<T = any> {
   getPayload(exception: T): StandardExceptionFilterPayload {
     if (exception instanceof StandardException) {
       return this.getStandardPayload(exception);
+    }
+
+    if (exception instanceof BadRequestException) {
+      return this.getBadRequestPayload(exception);
     }
 
     if (exception instanceof HttpException) {
