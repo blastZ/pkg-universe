@@ -1,6 +1,6 @@
 {
   "name": "@blastz/nest-common-helper",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "nestjs common helper",
   "type": "module",
   "main": "./cjs/index.js",
@@ -26,7 +26,9 @@
     "@nestjs/core": "^9.3.9",
     "@nestjs/microservices": "^9.3.9",
     "@types/express": "^4.17.17",
+    "@types/pg": "^8.6.6",
     "express": "^4.18.2",
+    "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   },
@@ -38,7 +40,9 @@
     "@nestjs/core": "^9.3.9",
     "@nestjs/microservices": "^9.3.9",
     "@types/express": "^4.17.17",
+    "@types/pg": "^8.6.6",
     "express": "^4.18.2",
+    "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   },
