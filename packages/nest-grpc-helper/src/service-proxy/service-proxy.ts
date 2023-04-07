@@ -12,7 +12,6 @@ import {
 
 import { GrpcClientOptions } from '../grpc-clients/index.js';
 import { GrpcReply } from '../grpc-common/index.js';
-import { propagationContext } from '../propagation/index.js';
 import { COMMON_PROPAGATION_HEADERS } from './common-propagation-headers.constant.js';
 import { SendOptions } from './interfaces/send-options.interface.js';
 
@@ -22,27 +21,33 @@ export class ServiceProxy {
   private getMetadata(meta?: Record<string, string | Buffer>) {
     const metadata = new Metadata();
 
-    const propagationHeaders = COMMON_PROPAGATION_HEADERS.concat(
-      this.options.propagationHeaders || [],
-    );
-
-    const propagation = propagationContext.getStore();
-
-    if (propagation) {
-      propagationHeaders.map((key) => {
-        const value = propagation.headers[key];
-
-        if (value) {
-          metadata.add(key, String(value));
-        }
-      });
-    }
-
     if (meta) {
       Object.keys(meta).map((key) => {
         metadata.add(key, meta[key]);
       });
     }
+
+    if (!this.options.propagation) {
+      return metadata;
+    }
+
+    const store = this.options.propagation.context.getStore();
+
+    if (!store) {
+      return metadata;
+    }
+
+    const propagationHeaders = COMMON_PROPAGATION_HEADERS.concat(
+      this.options.propagation.headers || [],
+    );
+
+    propagationHeaders.map((key) => {
+      const value = store.headers[key];
+
+      if (value) {
+        metadata.add(key, String(value));
+      }
+    });
 
     return metadata;
   }
