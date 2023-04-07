@@ -17,5 +17,6 @@ export default pkgxRollupConfig({
     '@blastz/logger',
     'uuid',
     'deepmerge-ts',
+    'pg',
   ],
 });
