@@ -110,9 +110,11 @@ importers:
       '@nestjs/core': ^9.3.9
       '@nestjs/microservices': ^9.3.9
       '@types/express': ^4.17.17
+      '@types/pg': ^8.6.6
       '@types/uuid': ^9.0.1
       deepmerge-ts: ^5.0.0
       express: ^4.18.2
+      pg: ^8.10.0
       reflect-metadata: ^0.1.13
       rxjs: ^7.8.0
       uuid: ^9.0.0
@@ -125,10 +127,12 @@ importers:
       '@grpc/grpc-js': 1.8.12
       '@grpc/proto-loader': 0.7.5
       '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
-      '@nestjs/core': 9.3.10_e1929752fabd2640cc6480bd1ed47ee1
+      '@nestjs/core': 9.3.10_6f5d9d5cb8fc789a8627cabb4116b671
       '@nestjs/microservices': 9.3.10_668ba6ca86fd1fd3b480a1f8fca12763
       '@types/express': 4.17.17
+      '@types/pg': 8.6.6
       express: 4.18.2
+      pg: 8.10.0
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
 
@@ -141,9 +145,11 @@ importers:
       '@nestjs/core': ^9.3.9
       '@nestjs/microservices': ^9.3.9
       '@types/express': ^4.17.17
+      '@types/pg': ^8.6.6
       '@types/uuid': ^9.0.1
       deepmerge-ts: ^5.0.0
       express: ^4.18.2
+      pg: ^8.10.0
       reflect-metadata: ^0.1.13
       rxjs: ^7.8.0
       uuid: ^9.0.0
@@ -156,10 +162,12 @@ importers:
       '@grpc/grpc-js': 1.8.12
       '@grpc/proto-loader': 0.7.5
       '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
-      '@nestjs/core': 9.3.10_e1929752fabd2640cc6480bd1ed47ee1
+      '@nestjs/core': 9.3.10_6f5d9d5cb8fc789a8627cabb4116b671
       '@nestjs/microservices': 9.3.10_668ba6ca86fd1fd3b480a1f8fca12763
       '@types/express': 4.17.17
+      '@types/pg': 8.6.6
       express: 4.18.2
+      pg: 8.10.0
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
 
@@ -993,39 +1001,6 @@ packages:
       - encoding
     dev: true
 
-  /@nestjs/core/9.3.10_e1929752fabd2640cc6480bd1ed47ee1:
-    resolution: {integrity: sha512-9QuE5jHtRnqKZULUhQoB0pNU26mwJ4hYNwAQ7lc/nFU2/4Ci+wTTRrXhLZeirgaF6TLCgLQB7/wLHImcfoXUog==}
-    requiresBuild: true
-    peerDependencies:
-      '@nestjs/common': ^9.0.0
-      '@nestjs/microservices': ^9.0.0
-      '@nestjs/platform-express': ^9.0.0
-      '@nestjs/websockets': ^9.0.0
-      reflect-metadata: ^0.1.12
-      rxjs: ^7.1.0
-    peerDependenciesMeta:
-      '@nestjs/microservices':
-        optional: true
-      '@nestjs/platform-express':
-        optional: true
-      '@nestjs/websockets':
-        optional: true
-    dependencies:
-      '@nestjs/common': 9.3.10_6363e4e8645f76ca34905e3a7e635f02
-      '@nestjs/microservices': 9.3.10_668ba6ca86fd1fd3b480a1f8fca12763
-      '@nestjs/platform-express': 9.3.10
-      '@nuxtjs/opencollective': 0.3.2
-      fast-safe-stringify: 2.1.1
-      iterare: 1.2.1
-      path-to-regexp: 3.2.0
-      reflect-metadata: 0.1.13
-      rxjs: 7.8.0
-      tslib: 2.5.0
-      uid: 2.0.1
-    transitivePeerDependencies:
-      - encoding
-    dev: true
-
   /@nestjs/microservices/9.3.10_668ba6ca86fd1fd3b480a1f8fca12763:
     resolution: {integrity: sha512-w27CxGYFAt9hMTLq9oWxx2amd7TOISk2/F8KbIqWFnb9riWE6YTxjZm7q/SolOlflYUcCZUEEgXFZedY8vAS6w==}
     peerDependencies:
@@ -1480,6 +1455,14 @@ packages:
   /@types/node/18.15.3:
     resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
 
+  /@types/pg/8.6.6:
+    resolution: {integrity: sha512-O2xNmXebtwVekJDD+02udOncjVcMZQuTEQEMpKJ0ZRf5E7/9JJX3izhKUcUifBkyKpljyUM6BTgy2trmviKlpw==}
+    dependencies:
+      '@types/node': 18.15.3
+      pg-protocol: 1.6.0
+      pg-types: 2.2.0
+    dev: true
+
   /@types/prettier/2.7.2:
     resolution: {integrity: sha512-KufADq8uQqo1pYKVIYzfKbJfBAc0sOeXqGbFaSpv8MRmC/zXgowNZmFcbngndGk922QDmOASEXUZCaY48gs4cg==}
     dev: true
@@ -1834,6 +1817,11 @@ packages:
 
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+    dev: true
+
+  /buffer-writer/2.0.0:
+    resolution: {integrity: sha512-a7ZpuTZU1TRtnwyCNW3I5dc0wWNC3VR9S++Ewyk2HHZdrO3CQJqSpd+95Us590V6AL7JqUAH2IwZ/398PmNFgw==}
+    engines: {node: '>=4'}
     dev: true
 
   /buffer/5.7.1:
@@ -3737,6 +3725,10 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /packet-reader/1.0.0:
+    resolution: {integrity: sha512-HAKu/fG3HpHFO0AA8WE8q2g+gBJaZ9MG7fcKk+IJPLTGAD6Psw4443l+9DGRbOIh3/aXr7Phy0TjilYivJo5XQ==}
+    dev: true
+
   /parse-json/5.2.0:
     resolution: {integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==}
     engines: {node: '>=8'}
@@ -3790,6 +3782,62 @@ packages:
       through: 2.3.8
     dev: true
 
+  /pg-connection-string/2.5.0:
+    resolution: {integrity: sha512-r5o/V/ORTA6TmUnyWZR9nCj1klXCO2CEKNRlVuJptZe85QuhFayC7WeMic7ndayT5IRIR0S0xFxFi2ousartlQ==}
+    dev: true
+
+  /pg-int8/1.0.1:
+    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
+    engines: {node: '>=4.0.0'}
+    dev: true
+
+  /pg-pool/3.6.0_pg@8.10.0:
+    resolution: {integrity: sha512-clFRf2ksqd+F497kWFyM21tMjeikn60oGDmqMT8UBrynEwVEX/5R5xd2sdvdo1cZCFlguORNpVuqxIj+aK4cfQ==}
+    peerDependencies:
+      pg: '>=8.0'
+    dependencies:
+      pg: 8.10.0
+    dev: true
+
+  /pg-protocol/1.6.0:
+    resolution: {integrity: sha512-M+PDm637OY5WM307051+bsDia5Xej6d9IR4GwJse1qA1DIhiKlksvrneZOYQq42OM+spubpcNYEo2FcKQrDk+Q==}
+    dev: true
+
+  /pg-types/2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
+    engines: {node: '>=4'}
+    dependencies:
+      pg-int8: 1.0.1
+      postgres-array: 2.0.0
+      postgres-bytea: 1.0.0
+      postgres-date: 1.0.7
+      postgres-interval: 1.2.0
+    dev: true
+
+  /pg/8.10.0:
+    resolution: {integrity: sha512-ke7o7qSTMb47iwzOSaZMfeR7xToFdkE71ifIipOAAaLIM0DYzfOAXlgFFmYUIE2BcJtvnVlGCID84ZzCegE8CQ==}
+    engines: {node: '>= 8.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+    dependencies:
+      buffer-writer: 2.0.0
+      packet-reader: 1.0.0
+      pg-connection-string: 2.5.0
+      pg-pool: 3.6.0_pg@8.10.0
+      pg-protocol: 1.6.0
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    dev: true
+
+  /pgpass/1.0.5:
+    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
+    dependencies:
+      split2: 4.2.0
+    dev: true
+
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: true
@@ -3813,6 +3861,28 @@ packages:
   /pomelo-protobuf/0.4.0:
     resolution: {integrity: sha512-QbAdJad/QpoGc4xZsHrrYWrpNtr4d1Qzb8b/5uU5BYF3TX4eBmBX5PiFmFq9JDucC38k8Q7PsTe+EN8QVnjldQ==}
     dev: false
+
+  /postgres-array/2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
+    engines: {node: '>=4'}
+    dev: true
+
+  /postgres-bytea/1.0.0:
+    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
+  /postgres-date/1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
+  /postgres-interval/1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      xtend: 4.0.2
+    dev: true
 
   /prettier/2.8.4:
     resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
@@ -4172,6 +4242,11 @@ packages:
     resolution: {integrity: sha512-wD2AeVmxXRBoX44wAycgjVpMhvbwdI2aZjCkvfNcH1YqHQvJVa1duWc73OyVGJUc05fhFaTZeQ/PYsrmyH0JVA==}
     dependencies:
       through: 2.3.8
+    dev: true
+
+  /split2/4.2.0:
+    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
+    engines: {node: '>= 10.x'}
     dev: true
 
   /sprintf-js/1.0.3:
