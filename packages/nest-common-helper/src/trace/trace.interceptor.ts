@@ -10,7 +10,7 @@ import {
 } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 
-import { StandardException } from '../exception/standard.exception.js';
+import { ExceptionMeta } from '../exception/index.js';
 import { traceContext } from './trace-context.js';
 
 const REQUEST_ID_HEADER = 'x-request-id';
@@ -152,30 +152,10 @@ export class TraceInterceptor implements NestInterceptor {
                 .trace('request out');
             }),
             catchError((err) => {
-              const resTime = this.getResTime(startTime);
-
-              logger
-                .child({
-                  resTime,
-                  error: err,
-                })
-                .error('request end by error');
-
-              if (context.getType() === 'ws') {
-                if (err instanceof StandardException) {
-                  const response = err.getResponse() as any;
-
-                  if (response.meta) {
-                    response.meta.requestId = requestId;
-                  } else {
-                    response.meta = {
-                      requestId,
-                    };
-                  }
-
-                  return throwError(() => new StandardException(response));
-                }
-              }
+              err.meta = {
+                resTime: this.getResTime(startTime),
+                requestId,
+              } satisfies ExceptionMeta;
 
               return throwError(() => err);
             }),

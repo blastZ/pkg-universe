@@ -4,10 +4,12 @@ import {
   BadRequestException,
   Catch,
   HttpException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { of } from 'rxjs';
 
+import { ExceptionMeta } from './exception-meta.interface.js';
 import { StandardException } from './standard.exception.js';
 
 const MESSAGES = {
@@ -17,7 +19,6 @@ const MESSAGES = {
 
 export interface StandardExceptionFilterOptions {
   errorCodePrefix?: string;
-  logError?: boolean;
   returnBadRequestDetails?: boolean;
 }
 
@@ -48,7 +49,7 @@ export class StandardExceptionFilter<T = any> {
     return code;
   }
 
-  private getStandardPayload(exception: StandardException) {
+  private getPayloadFromStandardException(exception: StandardException) {
     const response = exception.getResponse() as StandardExceptionFilterPayload;
 
     return {
@@ -61,7 +62,7 @@ export class StandardExceptionFilter<T = any> {
     };
   }
 
-  private getHttpPayload(exception: HttpException) {
+  private getPayloadFromHttpException(exception: HttpException) {
     const response: any = exception.getResponse();
     const code = this.getErrorCode(String(exception.getStatus()));
 
@@ -91,9 +92,9 @@ export class StandardExceptionFilter<T = any> {
     };
   }
 
-  private getBadRequestPayload(exception: BadRequestException) {
+  private getPayloadFromBadRequestException(exception: BadRequestException) {
     if (this.options.returnBadRequestDetails) {
-      return this.getHttpPayload(exception);
+      return this.getPayloadFromHttpException(exception);
     }
 
     return {
@@ -119,26 +120,39 @@ export class StandardExceptionFilter<T = any> {
 
   getPayload(exception: T): StandardExceptionFilterPayload {
     if (exception instanceof StandardException) {
-      return this.getStandardPayload(exception);
+      return this.getPayloadFromStandardException(exception);
     }
 
     if (exception instanceof BadRequestException) {
-      return this.getBadRequestPayload(exception);
+      return this.getPayloadFromBadRequestException(exception);
     }
 
     if (exception instanceof HttpException) {
-      return this.getHttpPayload(exception);
+      return this.getPayloadFromHttpException(exception);
     }
 
     return this.getDefaultPayload();
   }
 
-  catch(exception: T, host: ArgumentsHost): any {
-    if (this.options.logError) {
-      this.logger.error(exception);
+  catch(exception: T & { meta?: ExceptionMeta }, host: ArgumentsHost): any {
+    const { meta = {}, ...originException } = exception;
+
+    const logger = this.logger.child(meta);
+
+    if (
+      !(exception instanceof HttpException) ||
+      exception instanceof InternalServerErrorException
+    ) {
+      logger.fatal(originException);
+    } else {
+      logger.error(originException);
     }
 
     const payload = this.getPayload(exception);
+
+    if (exception.meta) {
+      payload.meta.requestId = exception.meta.requestId;
+    }
 
     return this.handleError(host, payload);
   }
