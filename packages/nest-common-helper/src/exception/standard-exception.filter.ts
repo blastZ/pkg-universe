@@ -9,7 +9,7 @@ import {
 import { Response } from 'express';
 import { of } from 'rxjs';
 
-import { ExceptionMeta } from './exception-meta.interface.js';
+import { ExceptionMeta, StandardExceptionPayload } from './interfaces/index.js';
 import { StandardException } from './standard.exception.js';
 
 const MESSAGES = {
@@ -20,15 +20,6 @@ const MESSAGES = {
 export interface StandardExceptionFilterOptions {
   errorCodePrefix?: string;
   returnBadRequestDetails?: boolean;
-}
-
-export interface StandardExceptionFilterPayload {
-  data?: any;
-  error?: {
-    code: string;
-    message: string;
-  };
-  meta?: any;
 }
 
 @Catch()
@@ -50,7 +41,7 @@ export class StandardExceptionFilter<T = any> {
   }
 
   private getPayloadFromStandardException(exception: StandardException) {
-    const response = exception.getResponse() as StandardExceptionFilterPayload;
+    const response = exception.getResponse() as StandardExceptionPayload;
 
     return {
       data: response.data || {},
@@ -118,7 +109,7 @@ export class StandardExceptionFilter<T = any> {
     };
   }
 
-  getPayload(exception: T): StandardExceptionFilterPayload {
+  getPayload(exception: T): StandardExceptionPayload {
     if (exception instanceof StandardException) {
       return this.getPayloadFromStandardException(exception);
     }
@@ -135,29 +126,31 @@ export class StandardExceptionFilter<T = any> {
   }
 
   catch(exception: T & { meta?: ExceptionMeta }, host: ArgumentsHost): any {
-    const { meta = {}, ...originException } = exception;
+    const meta = exception.meta;
 
-    const logger = this.logger.child(meta);
+    const logger = this.logger.child(meta || {});
+
+    delete exception.meta;
 
     if (
       !(exception instanceof HttpException) ||
       exception instanceof InternalServerErrorException
     ) {
-      logger.fatal(originException);
+      logger.fatal(exception);
     } else {
-      logger.error(originException);
+      logger.error(exception);
     }
 
     const payload = this.getPayload(exception);
 
-    if (exception.meta) {
-      payload.meta.requestId = exception.meta.requestId;
+    if (meta) {
+      payload.meta.requestId = meta.requestId;
     }
 
     return this.handleError(host, payload);
   }
 
-  handleError(host: ArgumentsHost, payload: StandardExceptionFilterPayload) {
+  handleError(host: ArgumentsHost, payload: StandardExceptionPayload) {
     const type = host.getType();
 
     if (type === 'rpc') {
@@ -173,14 +166,14 @@ export class StandardExceptionFilter<T = any> {
 
   private handleRpcError(
     host: ArgumentsHost,
-    payload: StandardExceptionFilterPayload,
+    payload: StandardExceptionPayload,
   ) {
     return of(payload);
   }
 
   private handleWsError(
     host: ArgumentsHost,
-    payload: StandardExceptionFilterPayload,
+    payload: StandardExceptionPayload,
   ) {
     const client = host.switchToWs().getClient();
     const callback = host.getArgByIndex(2);
@@ -195,7 +188,7 @@ export class StandardExceptionFilter<T = any> {
 
   private handleHttpError(
     host: ArgumentsHost,
-    payload: StandardExceptionFilterPayload,
+    payload: StandardExceptionPayload,
   ) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();

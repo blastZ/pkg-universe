@@ -1,26 +1,43 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
+interface Payload {
+  data?: any;
+  error?: {
+    code?: string;
+    message?: string;
+  };
+  meta?: any;
+}
+
 export class StandardException extends HttpException {
+  constructor();
+  constructor(message: string);
+  constructor(payload: Payload);
+  constructor(code: string, message: string);
   constructor(
-    stringOrObject:
-      | string
-      | {
-          error?: { code?: string; message?: string };
-          data?: any;
-          meta?: any;
-        } = {},
+    emptyOrMessageOrPayloadOrCode: string | Payload | undefined = {},
+    message?: string,
   ) {
-    if (typeof stringOrObject === 'string') {
-      super(
-        HttpException.createBody({
-          error: { code: '400', message: stringOrObject },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
+    if (typeof emptyOrMessageOrPayloadOrCode === 'string') {
+      if (typeof message === 'string') {
+        super(
+          HttpException.createBody({
+            error: { code: emptyOrMessageOrPayloadOrCode, message },
+          }),
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        super(
+          HttpException.createBody({
+            error: { code: '400', message: emptyOrMessageOrPayloadOrCode },
+          }),
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     } else {
       super(
-        HttpException.createBody(stringOrObject),
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpException.createBody(emptyOrMessageOrPayloadOrCode),
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

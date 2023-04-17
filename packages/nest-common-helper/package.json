@@ -1,6 +1,6 @@
 {
   "name": "@blastz/nest-common-helper",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "nestjs common helper",
   "type": "module",
   "main": "./cjs/index.js",
