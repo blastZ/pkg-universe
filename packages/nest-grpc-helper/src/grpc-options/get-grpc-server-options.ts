@@ -9,7 +9,7 @@ import { GetGrpcOptsOptions } from './interfaces/get-grpc-opts-options.interface
 import { getProtoPath } from './utils/get-proto-path.util.js';
 
 export function getGrpcServerOptions(opts: GetGrpcOptsOptions): GrpcOptions {
-  const { packageName, url, dependentProtos } = opts;
+  const { packageName, url, dependentProtos, loader = {} } = opts;
 
   return {
     transport: Transport.GRPC,
@@ -17,7 +17,7 @@ export function getGrpcServerOptions(opts: GetGrpcOptsOptions): GrpcOptions {
       package: packageName,
       protoPath: getProtoPath(packageName, dependentProtos),
       url,
-      loader: PROTO_LOADER_OPTIONS,
+      loader: { ...PROTO_LOADER_OPTIONS, ...loader },
       keepalive: {
         ...KEEPALIVE_CORE_OPTIONS,
         ...KEEPALIVE_SERVER_OPTIONS,

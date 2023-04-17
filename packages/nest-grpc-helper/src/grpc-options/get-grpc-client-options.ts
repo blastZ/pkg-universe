@@ -6,9 +6,9 @@ import { GetGrpcOptsOptions } from './interfaces/get-grpc-opts-options.interface
 import { getProtoPath } from './utils/get-proto-path.util.js';
 
 export function getGrpcClientOptions(
-  opts: GetGrpcOptsOptions
+  opts: GetGrpcOptsOptions,
 ): ClientProviderOptions {
-  const { packageName, url, dependentProtos } = opts;
+  const { packageName, url, dependentProtos, loader = {} } = opts;
 
   return {
     name: Symbol(packageName),
@@ -18,7 +18,7 @@ export function getGrpcClientOptions(
       package: packageName,
       protoPath: getProtoPath(packageName, dependentProtos),
       keepalive: KEEPALIVE_CORE_OPTIONS,
-      loader: PROTO_LOADER_OPTIONS,
+      loader: { ...PROTO_LOADER_OPTIONS, ...loader },
     },
   };
 }
