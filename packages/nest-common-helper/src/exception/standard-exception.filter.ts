@@ -18,7 +18,6 @@ const MESSAGES = {
 };
 
 export interface StandardExceptionFilterOptions {
-  errorCodePrefix?: string;
   returnBadRequestDetails?: boolean;
 }
 
@@ -30,23 +29,13 @@ export class StandardExceptionFilter<T = any> {
 
   constructor(private options: StandardExceptionFilterOptions = {}) {}
 
-  getErrorCode(code: string) {
-    const { errorCodePrefix } = this.options;
-
-    if (errorCodePrefix) {
-      return `${errorCodePrefix}-${code}`;
-    }
-
-    return code;
-  }
-
   private getPayloadFromStandardException(exception: StandardException) {
     const response = exception.getResponse() as StandardExceptionPayload;
 
     return {
       data: response.data || {},
       error: {
-        code: this.getErrorCode(response?.error?.code || '500'),
+        code: response?.error?.code || '500',
         message: response?.error?.message || MESSAGES.UNKNOWN_EXCEPTION_MESSAGE,
       },
       meta: response.meta || {},
@@ -55,7 +44,7 @@ export class StandardExceptionFilter<T = any> {
 
   private getPayloadFromHttpException(exception: HttpException) {
     const response: any = exception.getResponse();
-    const code = this.getErrorCode(String(exception.getStatus()));
+    const code = String(exception.getStatus());
 
     const data = {};
     const meta = {};
@@ -91,7 +80,7 @@ export class StandardExceptionFilter<T = any> {
     return {
       data: {},
       error: {
-        code: this.getErrorCode('400'),
+        code: '400',
         message: MESSAGES.BAD_REQUEST_MESSAGE,
       },
       meta: {},
@@ -102,7 +91,7 @@ export class StandardExceptionFilter<T = any> {
     return {
       data: {},
       error: {
-        code: this.getErrorCode('500'),
+        code: '500',
         message: MESSAGES.UNKNOWN_EXCEPTION_MESSAGE,
       },
       meta: {},
