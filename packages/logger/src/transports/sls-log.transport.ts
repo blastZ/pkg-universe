@@ -1,9 +1,10 @@
-import $SDK from "aliyun-sdk";
-import { MESSAGE } from "triple-beam";
-import { format } from "winston";
-import Transport, { TransportStreamOptions } from "winston-transport";
-import { createJsonFormat, createTimestampFormat } from "../formats/index.js";
-import { SlsLogTransportOptions } from "../interfaces/index.js";
+import $SDK from 'aliyun-sdk';
+import { MESSAGE } from 'triple-beam';
+import { format } from 'winston';
+import Transport, { TransportStreamOptions } from 'winston-transport';
+
+import { createJsonFormat, createTimestampFormat } from '../formats/index.js';
+import { SlsLogTransportOptions } from '../interfaces/index.js';
 
 class SlsLogTransport extends Transport {
   private client: $SDK.SLS;
@@ -27,7 +28,7 @@ class SlsLogTransport extends Transport {
               time: new Date(info.timestamp).getTime() / 1000,
               contents: [
                 {
-                  key: "info",
+                  key: 'info',
                   value: info[MESSAGE],
                 },
               ],
@@ -47,7 +48,7 @@ class SlsLogTransport extends Transport {
         }
 
         return next();
-      }
+      },
     );
   }
 }

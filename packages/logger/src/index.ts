@@ -1,5 +1,5 @@
-import { AsyncLocalStorage } from 'async_hooks';
-import { hostname } from 'os';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { hostname } from 'node:os';
 import { createLogger, format } from 'winston';
 
 import { LEVELS } from './constants/index.js';

@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { $, cd } from 'zx';
+
+import { getPkgJson } from './utils/get-pkg-json.util.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -17,10 +19,14 @@ program
 
     cd(pkgPath);
 
-    const pkgJson = JSON.parse(readFileSync('./package.json').toString());
+    const pkgJson = getPkgJson(`${pkgPath}/package.json`);
 
     await $`rm -rf ./output`.quiet();
     await $`rollup --config ./rollup.config.js`;
+
+    await $`rm -rf ./output/esm/.dts`.quiet();
+    await $`rm -rf ./output/.dts`.quiet();
+
     await $`cp ./package.json README.md ./output`.quiet();
 
     if (existsSync('./protos')) {
@@ -34,7 +40,7 @@ program
           type: 'commonjs',
         },
         null,
-        2
+        2,
       );
 
       await $`printf ${cjsPkgJson} > ./output/cjs/package.json`.quiet();

@@ -1,17 +1,39 @@
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
 
-export default function pkgxRollupConfig(opts) {
+import { getPkgJson } from './utils/get-pkg-json.util.mjs';
+
+function getNodeResolveOptions(pkgxOptions) {
   const options = {
-    external: [],
-    esmExternal: [],
-    browser: false,
-    ...opts,
+    exportConditions: ['node'],
+    preferBuiltins: true,
   };
 
-  const cjsOutput = {
+  if (pkgxOptions.resolve) {
+    options.resolveOnly = pkgxOptions.resolve(pkgxOptions.external);
+  }
+
+  return options;
+}
+
+function getExternal() {
+  const pkgJson = getPkgJson(`${process.cwd()}/package.json`);
+
+  const dependencies = Object.keys(pkgJson.dependencies || {});
+  const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
+
+  const external = dependencies.concat(peerDependencies);
+
+  external.push(/^node:.+$/);
+
+  return external;
+}
+
+function getCjsOutput(pkgxOptions) {
+  const output = {
     input: 'src/index.ts',
     output: [
       {
@@ -24,18 +46,23 @@ export default function pkgxRollupConfig(opts) {
         outDir: 'output/cjs',
         declaration: false,
       }),
-      nodeResolve({
-        modulesOnly: true,
-        exportConditions: ['node'],
-      }),
+      nodeResolve(getNodeResolveOptions(pkgxOptions)),
       commonjs(),
+      json(),
     ],
-    external: options.external,
   };
 
-  const esmOutputDir = options.browser ? 'output' : 'output/esm';
+  if (!pkgxOptions.resolve) {
+    output.external = pkgxOptions.external;
+  }
 
-  const esmOutput = {
+  return output;
+}
+
+function getEsmOutput(pkgxOptions) {
+  const { esmOutputDir } = pkgxOptions;
+
+  const output = {
     input: 'src/index.ts',
     output: [
       {
@@ -46,14 +73,21 @@ export default function pkgxRollupConfig(opts) {
     plugins: [
       typescript({
         outDir: esmOutputDir,
-        declaration: false,
+        declaration: true,
+        declarationDir: esmOutputDir + '/.dts',
       }),
     ],
-    external: options.external.concat(options.esmExternal),
+    external: pkgxOptions.external,
   };
 
-  const typeOutput = {
-    input: 'src/index.ts',
+  return output;
+}
+
+function getDtsOutput(pkgxOptions) {
+  const { esmOutputDir, pkgName } = pkgxOptions;
+
+  const output = {
+    input: `${esmOutputDir}/.dts/packages/${pkgName}/src/index.d.ts`,
     output: [
       {
         file: 'output/index.d.ts',
@@ -61,10 +95,29 @@ export default function pkgxRollupConfig(opts) {
       },
     ],
     plugins: [dts()],
-    external: options.external,
+    external: pkgxOptions.external,
   };
 
-  const outputs = [esmOutput, typeOutput];
+  return output;
+}
+
+export default function pkgxRollupConfig(opts = {}) {
+  const options = {
+    resolve: null,
+    browser: false,
+    external: getExternal(),
+    esmOutputDir: opts.browser ? 'output' : 'output/esm',
+    pkgName: process.cwd().split('/').at(-1),
+    ...opts,
+  };
+
+  const cjsOutput = getCjsOutput(options);
+
+  const esmOutput = getEsmOutput(options);
+
+  const dtsOutput = getDtsOutput(options);
+
+  const outputs = [esmOutput, dtsOutput];
 
   if (!options.browser) {
     outputs.unshift(cjsOutput);
