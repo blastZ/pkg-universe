@@ -1,0 +1,21 @@
+{
+  "name": "@blastz/node-proxy",
+  "version": "0.1.0",
+  "description": "Node proxy",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/node-proxy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "author": "blastz",
+  "license": "MIT",
+  "dependencies": {}
+}
