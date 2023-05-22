@@ -11,4 +11,6 @@ export interface ProxyOptions {
   ) => https.RequestOptions;
   preserveHeaderKeyCase?: boolean; // default is false
   agent?: http.Agent | https.Agent | boolean; // default is false
+  cookieDomainRewrite?: Record<string, string> | string; // default is undefined
+  cookiePathRewrite?: Record<string, string> | string; // default is undefined
 }

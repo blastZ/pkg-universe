@@ -1,13 +1,16 @@
 import http from 'node:http';
 
+import { PassOptions } from '../interfaces/pass-options.interface.js';
 import { Proxy } from '../proxy.js';
+import { getRewriteCookieConfig } from '../utils/get-rewrite-cookie-config.util.js';
+import { getRewroteCookie } from '../utils/get-rewrote-cookie.util.js';
 
 export function writeHeaders(
   proxy: Proxy,
   req: http.IncomingMessage,
   res: http.ServerResponse,
   proxyRes: http.IncomingMessage,
-  passOptions: any,
+  passOptions: PassOptions,
 ) {
   let headers = proxyRes.headers;
 
@@ -24,13 +27,16 @@ export function writeHeaders(
     }
   }
 
-  Object.keys(headers).map((key) => {
-    const value = headers[key];
+  const rewriteCookieConfig = getRewriteCookieConfig(passOptions);
 
-    // TODO rewrite cookie domain
-    // TODO rewrite cookie path
+  Object.keys(headers).map((key) => {
+    let value = headers[key];
 
     if (value) {
+      if (key.toLowerCase() === 'set-cookie') {
+        value = getRewroteCookie(String(value), rewriteCookieConfig);
+      }
+
       res.setHeader(key, value);
     }
   });
