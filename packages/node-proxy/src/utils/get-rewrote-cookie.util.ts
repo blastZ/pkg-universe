@@ -1,7 +1,7 @@
 import { RewriteCookieConfig } from '../interfaces/rewrite-cookie-config.interface.js';
 
 function getRegExp(prop: 'path' | 'domain') {
-  return new RegExp(`(;\\s*${prop}=)([^;]+)`, 'i');
+  return new RegExp(`(;\\s*${prop}=)([^;]+)`, 'ig');
 }
 
 function parseCookie(
@@ -28,7 +28,7 @@ export function getRewroteCookie(value: string, config: RewriteCookieConfig) {
   if (config.rewriteCookieDomainConfig) {
     newValue = parseCookie(
       getRegExp('domain'),
-      value,
+      newValue,
       config.rewriteCookieDomainConfig,
     );
   }
@@ -36,7 +36,7 @@ export function getRewroteCookie(value: string, config: RewriteCookieConfig) {
   if (config.rewriteCookiePathConfig) {
     newValue = parseCookie(
       getRegExp('path'),
-      value,
+      newValue,
       config.rewriteCookiePathConfig,
     );
   }

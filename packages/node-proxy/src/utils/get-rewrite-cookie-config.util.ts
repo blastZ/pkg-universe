@@ -2,7 +2,7 @@ import { PassOptions } from '../interfaces/pass-options.interface.js';
 import { RewriteCookieConfig } from '../interfaces/rewrite-cookie-config.interface.js';
 
 export function getRewriteCookieConfig(
-  passOptions: PassOptions,
+  passOptions: Pick<PassOptions, 'cookieDomainRewrite' | 'cookiePathRewrite'>,
 ): RewriteCookieConfig {
   let rewriteCookieDomainConfig = passOptions.cookieDomainRewrite;
   let rewriteCookiePathConfig = passOptions.cookiePathRewrite;
