@@ -55,7 +55,9 @@ export class TraceInterceptor implements NestInterceptor {
 
     const reqUrl = this.getRequestUrl(context);
     const data = rpc.getData();
-    const metadata = rpc.getContext().getMap();
+
+    const rpcContext = rpc.getContext();
+    const metadata = rpcContext.getMap ? rpcContext.getMap() : undefined;
 
     return {
       reqType: 'rpc',
@@ -110,7 +112,13 @@ export class TraceInterceptor implements NestInterceptor {
     }
 
     if (type === 'rpc') {
-      const metadata = context.switchToRpc().getContext().getMap();
+      const rpcContext = context.switchToRpc().getContext();
+
+      if (!rpcContext.getMap) {
+        return uuid();
+      }
+
+      const metadata = rpcContext.getMap();
 
       const requestId = metadata[REQUEST_ID_HEADER] || uuid();
 

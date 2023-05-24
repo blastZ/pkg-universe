@@ -29,9 +29,9 @@ export class PropagationInterceptor implements NestInterceptor {
   }
 
   private getRpcHeaders(context: ExecutionContext) {
-    const rpc = context.switchToRpc();
+    const rpcContext = context.switchToRpc().getContext();
 
-    const metadata = rpc.getContext().getMap();
+    const metadata = rpcContext.getMap ? rpcContext.getMap() : {};
 
     return metadata;
   }
