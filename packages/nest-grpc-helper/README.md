@@ -64,7 +64,7 @@ export class AppService implements OnModuleInit {
   onModuleInit() {
     this.grpcUsersService = this.grpcClientsService.getService(
       'pkgUniverse.accountManager',
-      'UsersService'
+      'UsersService',
     );
   }
 
@@ -73,7 +73,7 @@ export class AppService implements OnModuleInit {
       'getUserById',
       { id },
       // rewrite global request options
-      { timeout: 5000, retryCount: 5, retryDelay: 2000 }
+      { timeout: 5000, retryCount: 5, retryDelay: 2000 },
     );
   }
 }
@@ -88,6 +88,43 @@ export class AppService implements OnModuleInit {
 
   getUserById(id: string) {
     return this.usersService.pSend('getUserById', { id });
+  }
+}
+```
+
+## Health check
+
+This feature depends on [gRPC Health Checking Protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md)
+
+Enable `healthCheck` feature
+
+```ts
+const app = await createGrpcApp(AppModule, {
+  packageName: 'accountManager',
+  url: '0.0.0.0:3000',
+  healthCheck: true,
+});
+```
+
+Implement health check method
+
+```ts
+import {
+  HEALTH_SERVICE_NAME,
+  HealthCheckRequest,
+  HealthCheckResponse,
+  ServingStatus,
+} from '@blastz/nest-grpc-helper';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
+
+@Controller()
+export class HealthController {
+  @GrpcMethod(HEALTH_SERVICE_NAME)
+  check(data: HealthCheckRequest): HealthCheckResponse {
+    return {
+      status: ServingStatus.SERVING,
+    };
   }
 }
 ```

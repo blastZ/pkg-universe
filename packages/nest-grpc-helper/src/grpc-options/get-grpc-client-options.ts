@@ -16,7 +16,7 @@ export function getGrpcClientOptions(
     options: {
       url,
       package: packageName,
-      protoPath: getProtoPath(packageName, dependentProtos),
+      protoPath: getProtoPath(packageName, { dependentProtos }),
       keepalive: KEEPALIVE_CORE_OPTIONS,
       loader: { ...PROTO_LOADER_OPTIONS, ...loader },
     },

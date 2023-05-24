@@ -1,7 +1,12 @@
 import path from 'node:path';
 import url from 'node:url';
 
-export function getProtoPath(packageName: string, dependentProtos?: string[]) {
+interface Options {
+  dependentProtos?: string[];
+  healthCheck?: boolean;
+}
+
+export function getProtoPath(packageName: string, options: Options = {}) {
   const domainList = packageName.split('.');
 
   const folderList = domainList.map((domain) => {
@@ -10,16 +15,20 @@ export function getProtoPath(packageName: string, dependentProtos?: string[]) {
 
   const packageProto = path.resolve(
     process.cwd(),
-    `./protos/${folderList.join('/')}/main.proto`
+    `./protos/${folderList.join('/')}/main.proto`,
   );
 
   const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
   const libProtos = [path.resolve(__dirname, '../protos/common.proto')];
 
+  if (options.healthCheck) {
+    libProtos.push(path.resolve(__dirname, '../protos/health.proto'));
+  }
+
   let protoPath: string[] = libProtos;
 
-  if (dependentProtos) {
-    protoPath = protoPath.concat(dependentProtos);
+  if (options.dependentProtos) {
+    protoPath = protoPath.concat(options.dependentProtos);
   }
 
   protoPath.push(packageProto);
