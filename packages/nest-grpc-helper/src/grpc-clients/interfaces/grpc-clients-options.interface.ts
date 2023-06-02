@@ -13,6 +13,7 @@ export type PropagationOptions = {
 export type GrpcClientOptions = GetGrpcOptsOptions &
   GrpcClientRequestOptions & {
     propagation?: PropagationOptions;
+    services?: string[];
   };
 
 export type GrpcClientsOptions = GrpcClientOptions[];

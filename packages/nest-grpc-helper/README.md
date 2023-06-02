@@ -53,20 +53,14 @@ export class AppModule {}
 Get service instance
 
 ```ts
-import { GrpcClientsService, ServiceProxy } from '@blastz/nest-grpc-helper';
+import { ServiceProxyDec, ServiceProxy } from '@blastz/nest-grpc-helper';
 
 @Injectable()
-export class AppService implements OnModuleInit {
-  private usersService: ServiceProxy;
-
-  constructor(private grpcClientsService: GrpcClientsService) {}
-
-  onModuleInit() {
-    this.grpcUsersService = this.grpcClientsService.getService(
-      'pkgUniverse.accountManager',
-      'UsersService',
-    );
-  }
+export class AppService {
+  constructor(
+    @ServiceProxyDec('pkgUniverse.accountManager', 'UsersService')
+    private usersService: ServiceProxy,
+  ) {}
 
   getUserById(id: string) {
     return this.usersService.send(
