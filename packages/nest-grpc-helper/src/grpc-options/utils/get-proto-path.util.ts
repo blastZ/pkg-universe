@@ -6,6 +6,12 @@ interface Options {
   healthCheck?: boolean;
 }
 
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
+export function getHealthProtoPath() {
+  return path.resolve(__dirname, '../protos/health.proto');
+}
+
 export function getProtoPath(packageName: string, options: Options = {}) {
   const domainList = packageName.split('.');
 
@@ -18,11 +24,10 @@ export function getProtoPath(packageName: string, options: Options = {}) {
     `./protos/${folderList.join('/')}/main.proto`,
   );
 
-  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
   const libProtos = [path.resolve(__dirname, '../protos/common.proto')];
 
   if (options.healthCheck) {
-    libProtos.push(path.resolve(__dirname, '../protos/health.proto'));
+    libProtos.push(getHealthProtoPath());
   }
 
   let protoPath: string[] = libProtos;

@@ -39,6 +39,7 @@ import { GrpcClientsModule } from '@blastz/nest-grpc-helper';
       {
         packageName: 'pkgUniverse.accountManager',
         url: '0.0.0.0:3000',
+        services: ['UsersService'],
         // change default request options
         timeout: 1000, // default is 3000ms
         retryCount: 10, // default is 3

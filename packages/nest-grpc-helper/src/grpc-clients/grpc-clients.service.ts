@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 
+import { healthClientKey } from '../grpc-health/health-client-key.util.js';
 import { ServiceProxy } from '../service-proxy/index.js';
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
@@ -20,15 +21,19 @@ export class GrpcClientsService {
 
   constructor(
     @Inject(GRPC_CLIENTS) private clients: GrpcClients,
-    @Inject(GRPC_CLIENTS_OPTIONS) private options: GrpcClientsOptions
+    @Inject(GRPC_CLIENTS_OPTIONS) private options: GrpcClientsOptions,
   ) {
     options.map((o) => {
       this.optionsMap.set(o.packageName, o);
+
+      if (o.healthCheck) {
+        this.optionsMap.set(healthClientKey(o.packageName), o);
+      }
     });
   }
 
-  private getClient(packageName: string) {
-    const client = this.clients.get(packageName);
+  private getClient(clientKey: string) {
+    const client = this.clients.get(clientKey);
 
     if (!client) {
       throw new InternalServerErrorException('ERR_CLIENT_NOT_FOUND');
@@ -37,18 +42,18 @@ export class GrpcClientsService {
     return client;
   }
 
-  getService(packageName: string, serviceName: string) {
-    const key = `${packageName}_${serviceName}`;
+  getService(clientKey: string, serviceName: string) {
+    const key = `${clientKey}_${serviceName}`;
 
     let service = this.serviceMap.get(key);
 
     if (!service) {
-      service = this.getClient(packageName).getService(serviceName);
+      service = this.getClient(clientKey).getService(serviceName);
 
       this.serviceMap.set(key, service);
     }
 
-    const options = this.optionsMap.get(packageName);
+    const options = this.optionsMap.get(clientKey);
 
     if (!options) {
       throw new InternalServerErrorException('ERR_CLIENT_OPTIONS_NOT_FOUND');
