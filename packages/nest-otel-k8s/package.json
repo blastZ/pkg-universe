@@ -1,0 +1,71 @@
+{
+  "name": "@blastz/nest-otel-k8s",
+  "version": "0.1.0",
+  "description": "nestjs opentelemetry for kubernetes env",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/nest-otel-k8s",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "keywords": [],
+  "author": "blastz",
+  "license": "MIT",
+  "devDependencies": {
+    "@nestjs/common": "^9.3.9",
+    "@nestjs/core": "^9.3.9",
+    "@nestjs/schedule": "^3.0.0",
+    "express": "^4.18.2",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0",
+    "@opentelemetry/api": "^1.4.1",
+    "@opentelemetry/auto-instrumentations-node": "^0.37.0",
+    "@opentelemetry/context-async-hooks": "^1.14.0",
+    "@opentelemetry/core": "^1.14.0",
+    "@opentelemetry/resource-detector-container": "^0.2.4",
+    "@opentelemetry/resources": "^1.14.0",
+    "@opentelemetry/sdk-node": "^0.40.0",
+    "@opentelemetry/sdk-trace-base": "^1.14.0",
+    "@opentelemetry/semantic-conventions": "^1.14.0",
+    "typeorm": "^0.3.0",
+    "fast-glob": "^3.2.12"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.3.9",
+    "@nestjs/core": "^9.3.9",
+    "@nestjs/schedule": "^3.0.0",
+    "express": "^4.18.2",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0",
+    "@opentelemetry/api": "^1.4.1",
+    "@opentelemetry/auto-instrumentations-node": "^0.37.0",
+    "@opentelemetry/context-async-hooks": "^1.14.0",
+    "@opentelemetry/core": "^1.14.0",
+    "@opentelemetry/resource-detector-container": "^0.2.4",
+    "@opentelemetry/resources": "^1.14.0",
+    "@opentelemetry/sdk-node": "^0.40.0",
+    "@opentelemetry/sdk-trace-base": "^1.14.0",
+    "@opentelemetry/semantic-conventions": "^1.14.0",
+    "typeorm": "^0.3.0",
+    "fast-glob": "^3.2.12"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/schedule": {
+      "optional": true
+    },
+    "typeorm": {
+      "optional": true
+    },
+    "fast-glob": {
+      "optional": true
+    }
+  },
+  "dependencies": {}
+}
