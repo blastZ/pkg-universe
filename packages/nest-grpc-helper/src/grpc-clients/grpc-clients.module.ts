@@ -2,8 +2,11 @@ import { DynamicModule, Provider } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
 
 import { healthClientKey } from '../grpc-health/health-client-key.util.js';
+import {
+  HEALTH_PACKAGE_NAME,
+  HEALTH_SERVICE_NAME,
+} from '../grpc-health/index.js';
 import { getGrpcClientOptions } from '../grpc-options/index.js';
-import { HEALTH_PACKAGE_NAME, HEALTH_SERVICE_NAME } from '../index.js';
 import { serviceProxyToken } from '../service-proxy/service-proxy-token.util.js';
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';

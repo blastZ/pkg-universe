@@ -1,3 +1,4 @@
+import { NestApplicationContextOptions } from '@nestjs/common/interfaces/nest-application-context-options.interface.js';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions } from '@nestjs/microservices';
 
@@ -7,10 +8,14 @@ import { CreateGrpcServerOptions } from './create-grpc-server-options.interface.
 export async function createGrpcApp(
   moduleCls: any,
   options: CreateGrpcServerOptions,
+  nestOptions: NestApplicationContextOptions = {},
 ) {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     moduleCls,
-    getGrpcServerOptions(options),
+    {
+      ...nestOptions,
+      ...getGrpcServerOptions(options),
+    },
   );
 
   return app;
