@@ -16,7 +16,11 @@ import { COMMON_PROPAGATION_HEADERS } from './common-propagation-headers.constan
 import { SendOptions } from './interfaces/send-options.interface.js';
 
 export class ServiceProxy {
-  constructor(private service: any, private options: GrpcClientOptions) {}
+  constructor(
+    private serviceName: string,
+    private service: any,
+    private options: GrpcClientOptions,
+  ) {}
 
   private getMetadata(meta?: Record<string, string | Buffer>) {
     const metadata = new Metadata();
@@ -94,7 +98,7 @@ export class ServiceProxy {
         return throwError(
           () =>
             new InternalServerErrorException({
-              message: `ERR_SEND_REQUEST: send request "${this.options.packageName}.${method}" failed`,
+              message: `ERR_SEND_REQUEST: send request "${this.options.packageName}.${this.serviceName}.${method}" failed`,
               code: 500,
               cause: err,
             }),

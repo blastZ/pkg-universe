@@ -59,6 +59,6 @@ export class GrpcClientsService {
       throw new InternalServerErrorException('ERR_CLIENT_OPTIONS_NOT_FOUND');
     }
 
-    return new ServiceProxy(service, options);
+    return new ServiceProxy(serviceName, service, options);
   }
 }
