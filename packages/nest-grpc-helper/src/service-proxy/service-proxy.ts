@@ -69,6 +69,19 @@ export class ServiceProxy {
 
     return this.service[method](data, metadata).pipe(
       map((reply: GrpcReply) => {
+        if (Array.isArray(reply.data)) {
+          if (!reply.data[0]['@type']) {
+            return reply;
+          }
+
+          const { data, ...other } = reply;
+
+          return {
+            data: data.map(({ ['@type']: _, ...o }) => o),
+            ...other,
+          };
+        }
+
         if (!reply.data || !reply.data['@type']) {
           return reply;
         }

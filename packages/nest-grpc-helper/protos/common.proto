@@ -26,4 +26,10 @@ message Reply {
   optional ReplyError error = 3;
 }
 
+message ArrayReply {
+  repeated google.protobuf.Any data = 1;
+  optional ReplyMeta meta = 2;
+  optional ReplyError error = 3;
+}
+
 message EmptyRequest {}
