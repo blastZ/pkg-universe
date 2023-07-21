@@ -1,0 +1,30 @@
+{
+  "name": "nest-typeorm-helper",
+  "root": "packages/nest-typeorm-helper",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tools/scripts/pkgx/index.mjs build nest-typeorm-helper"
+      }
+    },
+    "publish": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/nest-typeorm-helper/output"
+      },
+      "configurations": {
+        "file": {
+          "command": "npm pack"
+        },
+        "local": {
+          "command": "npm link"
+        },
+        "prod": {
+          "command": "npm publish --access public --registry=https://registry.npmjs.org"
+        }
+      }
+    }
+  }
+}

@@ -74,6 +74,8 @@ importers:
         specifier: ^7.2.1
         version: 7.2.1
 
+  packages/address-parser: {}
+
   packages/inject-config:
     dependencies:
       deepmerge:
@@ -425,6 +427,83 @@ importers:
         version: 0.3.0
 
   packages/nest-otel-k8s/output:
+    devDependencies:
+      '@nestjs/common':
+        specifier: ^9.3.9
+        version: 9.3.10(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/core':
+        specifier: ^9.3.9
+        version: 9.3.10(@nestjs/common@9.3.10)(@nestjs/microservices@9.3.10)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/schedule':
+        specifier: ^3.0.0
+        version: 3.0.0(@nestjs/common@9.3.10)(@nestjs/core@9.3.10)(reflect-metadata@0.1.13)
+      '@opentelemetry/api':
+        specifier: ^1.4.1
+        version: 1.4.1
+      '@opentelemetry/auto-instrumentations-node':
+        specifier: ^0.37.0
+        version: 0.37.0(@opentelemetry/api@1.4.1)
+      '@opentelemetry/context-async-hooks':
+        specifier: ^1.14.0
+        version: 1.14.0(@opentelemetry/api@1.4.1)
+      '@opentelemetry/core':
+        specifier: ^1.14.0
+        version: 1.14.0(@opentelemetry/api@1.4.1)
+      '@opentelemetry/resource-detector-container':
+        specifier: ^0.2.4
+        version: 0.2.4(@opentelemetry/api@1.4.1)
+      '@opentelemetry/resources':
+        specifier: ^1.14.0
+        version: 1.14.0(@opentelemetry/api@1.4.1)
+      '@opentelemetry/sdk-node':
+        specifier: ^0.40.0
+        version: 0.40.0(@opentelemetry/api@1.4.1)
+      '@opentelemetry/sdk-trace-base':
+        specifier: ^1.14.0
+        version: 1.14.0(@opentelemetry/api@1.4.1)
+      '@opentelemetry/semantic-conventions':
+        specifier: ^1.14.0
+        version: 1.14.0
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      fast-glob:
+        specifier: ^3.2.12
+        version: 3.2.12
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.13
+      rxjs:
+        specifier: ^7.8.0
+        version: 7.8.0
+      typeorm:
+        specifier: ^0.3.0
+        version: 0.3.0
+
+  packages/nest-otel-k8s/output/cjs: {}
+
+  packages/nest-typeorm-helper:
+    devDependencies:
+      '@nestjs/common':
+        specifier: ^9.3.9
+        version: 9.3.10(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/core':
+        specifier: ^9.3.9
+        version: 9.3.10(@nestjs/common@9.3.10)(@nestjs/microservices@9.3.10)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/typeorm':
+        specifier: ^10.0.0
+        version: 10.0.0(@nestjs/common@9.3.10)(@nestjs/core@9.3.10)(reflect-metadata@0.1.13)(rxjs@7.8.0)(typeorm@0.3.7)
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.13
+      rxjs:
+        specifier: ^7.8.0
+        version: 7.8.0
+      typeorm:
+        specifier: ^0.3.7
+        version: 0.3.7
+
+  packages/nest-typeorm-helper/output:
     dependencies:
       '@types/uuid':
         specifier: ^9.0.1
@@ -470,7 +549,7 @@ importers:
         specifier: ^7.8.0
         version: 7.8.0
 
-  packages/nest-otel-k8s/output/cjs: {}
+  packages/nest-typeorm-helper/output/cjs: {}
 
   packages/node-proxy: {}
 
@@ -1388,6 +1467,23 @@ packages:
       '@nestjs/core': 9.3.10(@nestjs/common@9.3.10)(@nestjs/microservices@9.3.10)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
       '@nestjs/platform-express': 9.4.0(@nestjs/common@9.3.10)(@nestjs/core@9.3.10)
       tslib: 2.5.0
+    dev: true
+
+  /@nestjs/typeorm@10.0.0(@nestjs/common@9.3.10)(@nestjs/core@9.3.10)(reflect-metadata@0.1.13)(rxjs@7.8.0)(typeorm@0.3.7):
+    resolution: {integrity: sha512-WQU4HCDTz4UavsFzvGUKDHqi0MO5K47yFoPXdmh+Z/hCNO7SHCMmV9jLiLukM8n5nKUqJ3jDqiljkWBcZPdCtA==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
+      reflect-metadata: ^0.1.13
+      rxjs: ^7.2.0
+      typeorm: ^0.3.0
+    dependencies:
+      '@nestjs/common': 9.3.10(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      '@nestjs/core': 9.3.10(@nestjs/common@9.3.10)(@nestjs/microservices@9.3.10)(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.0)
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.0
+      typeorm: 0.3.7
+      uuid: 9.0.0
     dev: true
 
   /@nodelib/fs.scandir@2.1.5:
@@ -6795,6 +6891,85 @@ packages:
       sql.js:
         optional: true
       sqlite3:
+        optional: true
+      typeorm-aurora-data-api-driver:
+        optional: true
+    dependencies:
+      '@sqltools/formatter': 1.2.5
+      app-root-path: 3.1.0
+      buffer: 6.0.3
+      chalk: 4.1.2
+      cli-highlight: 2.1.11
+      date-fns: 2.30.0
+      debug: 4.3.4
+      dotenv: 16.0.3
+      glob: 7.2.3
+      js-yaml: 4.1.0
+      mkdirp: 1.0.4
+      reflect-metadata: 0.1.13
+      sha.js: 2.4.11
+      tslib: 2.5.0
+      uuid: 8.3.2
+      xml2js: 0.4.23
+      yargs: 17.7.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /typeorm@0.3.7:
+    resolution: {integrity: sha512-MsPJeP6Zuwfe64c++l80+VRqpGEGxf0CkztIEnehQ+CMmQPSHjOnFbFxwBuZ2jiLqZTjLk2ZqQdVF0RmvxNF3Q==}
+    engines: {node: '>= 12.9.0'}
+    hasBin: true
+    peerDependencies:
+      '@google-cloud/spanner': ^5.18.0
+      '@sap/hana-client': ^2.12.25
+      better-sqlite3: ^7.1.2
+      hdb-pool: ^0.1.6
+      ioredis: ^5.0.4
+      mongodb: ^3.6.0
+      mssql: ^7.3.0
+      mysql2: ^2.2.5
+      oracledb: ^5.1.0
+      pg: ^8.5.1
+      pg-native: ^3.0.0
+      pg-query-stream: ^4.0.0
+      redis: ^3.1.1 || ^4.0.0
+      sql.js: ^1.4.0
+      sqlite3: ^5.0.3
+      ts-node: ^10.7.0
+      typeorm-aurora-data-api-driver: ^2.0.0
+    peerDependenciesMeta:
+      '@google-cloud/spanner':
+        optional: true
+      '@sap/hana-client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      hdb-pool:
+        optional: true
+      ioredis:
+        optional: true
+      mongodb:
+        optional: true
+      mssql:
+        optional: true
+      mysql2:
+        optional: true
+      oracledb:
+        optional: true
+      pg:
+        optional: true
+      pg-native:
+        optional: true
+      pg-query-stream:
+        optional: true
+      redis:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
+      ts-node:
         optional: true
       typeorm-aurora-data-api-driver:
         optional: true
