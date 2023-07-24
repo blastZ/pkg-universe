@@ -40,11 +40,7 @@ class SlsLogTransport extends Transport {
       },
       (error) => {
         if (error) {
-          if (error instanceof Error) {
-            throw error;
-          }
-
-          throw new Error(error.error_message);
+          console.error('ERR_TRANSPORT_SLS: ', error);
         }
 
         return next();
