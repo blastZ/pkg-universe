@@ -1,0 +1,25 @@
+{
+  "name": "@blastz/zhipuai",
+  "version": "0.1.0",
+  "description": "zhipuai nodejs sdk",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/zhipuai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "author": "blastz",
+  "license": "MIT",
+  "dependencies": {
+    "@types/jsonwebtoken": "^9.0.2",
+    "axios": "^1.4.0",
+    "jsonwebtoken": "^9.0.1"
+  }
+}
