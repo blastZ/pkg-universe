@@ -1,0 +1,30 @@
+{
+  "name": "nest-rabbitmq",
+  "root": "packages/nest-rabbitmq",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tools/scripts/pkgx/index.mjs build nest-rabbitmq"
+      }
+    },
+    "publish": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/nest-rabbitmq/output"
+      },
+      "configurations": {
+        "file": {
+          "command": "npm pack"
+        },
+        "local": {
+          "command": "npm link"
+        },
+        "prod": {
+          "command": "npm publish --access public --registry=https://registry.npmjs.org"
+        }
+      }
+    }
+  }
+}
