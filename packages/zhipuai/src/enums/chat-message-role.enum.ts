@@ -1,4 +1,4 @@
-export enum RequestMessageRole {
+export enum ChatMessageRole {
   User = 'user',
   Assistant = 'assistant',
 }

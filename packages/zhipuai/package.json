@@ -1,7 +1,7 @@
 {
-  "name": "@blastz/zhipuai",
+  "name": "zhipuai",
   "version": "0.1.0",
-  "description": "zhipuai nodejs sdk",
+  "description": "zhipuai sdk",
   "type": "module",
   "main": "./cjs/index.js",
   "exports": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.2",
     "axios": "^1.4.0",
+    "eventsource-parser": "^1.0.0",
     "jsonwebtoken": "^9.0.1"
   }
 }

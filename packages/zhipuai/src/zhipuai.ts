@@ -1,20 +1,14 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { createParser } from 'eventsource-parser';
 
 import { InvokeType } from './enums/invoke-type.enum.js';
-import { generateToken } from './generate-token.util.js';
-import { RequestOptions } from './interfaces/request.interface.js';
-import {
-  AsyncInvokeResponse,
-  InvokeResponse,
-} from './interfaces/response.interface.js';
-
-interface ZhipuAIOptions {
-  apiKey: string;
-  apiPrefix: string;
-  browser: boolean; // default is false
-  tokenTTL: number; // milliseconds, default is 3 * 60 * 1000
-  tokenRefreshTTL: number; // milliseconds, default is 30 * 1000
-}
+import { AsyncInvokeResponse } from './interfaces/async-invoke-response.interface.js';
+import { InvokeResponse } from './interfaces/invoke-response.interface.js';
+import { RequestOptions } from './interfaces/request-options.interface.js';
+import { Response } from './interfaces/response.interface.js';
+import { SSEResponse } from './interfaces/sse-response.interface.js';
+import { ZhipuAIOptions } from './interfaces/zhipu-ai-options.interface.js';
+import { generateToken } from './utils/generate-token.util.js';
 
 export class ZhipuAI {
   private cachedToken:
@@ -80,7 +74,11 @@ export class ZhipuAI {
     return token;
   }
 
-  private getRequestBody(options: RequestOptions) {
+  private buildApiUrl(model: string, invokeType: InvokeType) {
+    return `${this.options.apiPrefix}/${model}/${invokeType}`;
+  }
+
+  private buildRequestBody(options: RequestOptions) {
     return {
       prompt: options.messages,
       temperature: options.temperature || 0.95,
@@ -89,25 +87,48 @@ export class ZhipuAI {
     };
   }
 
-  private async request(invokeType: InvokeType, options: RequestOptions) {
+  private buildAxiosRequestConfig(
+    invokeType: InvokeType,
+    options: Pick<RequestOptions, 'timeout' | 'token'>,
+  ): AxiosRequestConfig {
     const token = this.getToken(options);
 
+    if (invokeType === InvokeType.SSE) {
+      return {
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+          Accept: 'text/event-stream',
+        },
+        timeout: options.timeout || 30 * 1000,
+        responseType: 'stream',
+      };
+    }
+
+    return {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      timeout: options.timeout || 30 * 1000,
+    };
+  }
+
+  private handleError(data: Response<any>) {
+    if (data.code !== 200) {
+      throw new Error(`ERR_REQUEST_FAILED: ${data.msg || 'unknowned error'}`);
+    }
+  }
+
+  private async request(invokeType: InvokeType, options: RequestOptions) {
     try {
       const { data } = await axios.post(
-        `${this.options.apiPrefix}/${options.model}/${invokeType}`,
-        this.getRequestBody(options),
-        {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-          },
-          timeout: options.timeout || 30 * 1000,
-        },
+        this.buildApiUrl(options.model, invokeType),
+        this.buildRequestBody(options),
+        this.buildAxiosRequestConfig(invokeType, options),
       );
 
-      if (data.code !== 200) {
-        throw new Error(`ERR_REQUEST_FAILED: ${data.msg || 'unknowned error'}`);
-      }
+      this.handleError(data);
 
       return data.data;
     } catch (err) {
@@ -128,24 +149,14 @@ export class ZhipuAI {
   async queryAsyncInvokeResult(
     taskId: string,
     options: Pick<RequestOptions, 'timeout' | 'token'> = {},
-  ) {
-    const token = this.getToken(options);
-
+  ): Promise<InvokeResponse['data']> {
     try {
       const { data } = await axios.get(
-        `${this.options.apiPrefix}/-/async-invoke/${taskId}`,
-        {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-          },
-          timeout: options.timeout || 30 * 1000,
-        },
+        `${this.buildApiUrl('-', InvokeType.Async)}/${taskId}`,
+        this.buildAxiosRequestConfig(InvokeType.Async, options),
       );
 
-      if (data.code !== 200) {
-        throw new Error(`ERR_REQUEST_FAILED: ${data.msg || 'unknowned error'}`);
-      }
+      this.handleError(data);
 
       return data.data;
     } catch (err) {
@@ -153,5 +164,37 @@ export class ZhipuAI {
     }
   }
 
-  sseInvoke() {}
+  async sseInvoke(options: RequestOptions) {
+    try {
+      const { data: stream } = await axios.post(
+        this.buildApiUrl(options.model, InvokeType.SSE),
+        this.buildRequestBody(options),
+        this.buildAxiosRequestConfig(InvokeType.SSE, options),
+      );
+
+      let sendEvent: (...args: any[]) => void = () => {};
+
+      function waitNextEvent(chunkStr: string): Promise<SSEResponse> {
+        return new Promise((resolve) => {
+          sendEvent = resolve;
+
+          parser.feed(chunkStr);
+        });
+      }
+
+      const parser = createParser((e) => {
+        sendEvent(e);
+      });
+
+      async function* events() {
+        for await (const chunk of stream) {
+          yield waitNextEvent(chunk.toString());
+        }
+      }
+
+      return events();
+    } catch (err) {
+      throw err;
+    }
+  }
 }
