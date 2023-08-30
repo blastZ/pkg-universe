@@ -52,20 +52,28 @@ describe('zhipuai', () => {
     expect(JSON.parse(taskResult.choices[0].content).trim()).toEqual('6');
   }, 10000);
 
-  it('should support sse invoke api', async () => {
-    const events = await zhipuai.sseInvoke({
-      model: ModelType.ChatGLMPro,
-      messages: prompt,
-    });
+  it(
+    'should support sse invoke api',
+    async () => {
+      const events = await zhipuai.sseInvoke({
+        model: ModelType.ChatGLMPro,
+        messages: prompt,
+      });
 
-    let result = '';
+      let result = '';
 
-    for await (const event of events) {
-      console.log(event);
+      for await (const event of events) {
+        console.log(event);
 
-      result += event.data;
-    }
+        if (event.event === 'add' || event.event === 'finish') {
+          result += event.data;
+        }
+      }
 
-    expect(result.trim()).toEqual('6');
-  });
+      console.log('result: ', result);
+
+      expect(result.trim()).toEqual('6');
+    },
+    5 * 60 * 1000,
+  );
 });

@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { createParser } from 'eventsource-parser';
 
 import { InvokeType } from './enums/invoke-type.enum.js';
 import { AsyncInvokeResponse } from './interfaces/async-invoke-response.interface.js';
@@ -8,6 +7,7 @@ import { RequestOptions } from './interfaces/request-options.interface.js';
 import { Response } from './interfaces/response.interface.js';
 import { SSEResponse } from './interfaces/sse-response.interface.js';
 import { ZhipuAIOptions } from './interfaces/zhipu-ai-options.interface.js';
+import { ParseEvent, createParser } from './libs/eventsource-parser/index.js';
 import { generateToken } from './utils/generate-token.util.js';
 
 export class ZhipuAI {
@@ -166,29 +166,48 @@ export class ZhipuAI {
 
   async sseInvoke(options: RequestOptions) {
     try {
+      const pendingEvent: ParseEvent = {
+        type: 'event',
+        id: '',
+        event: 'pending',
+        data: '',
+      };
+
+      let lastEvent: ParseEvent = pendingEvent;
+
       const { data: stream } = await axios.post(
         this.buildApiUrl(options.model, InvokeType.SSE),
         this.buildRequestBody(options),
         this.buildAxiosRequestConfig(InvokeType.SSE, options),
       );
 
-      let sendEvent: (...args: any[]) => void = () => {};
-
-      function waitNextEvent(chunkStr: string): Promise<SSEResponse> {
-        return new Promise((resolve) => {
-          sendEvent = resolve;
-
-          parser.feed(chunkStr);
-        });
-      }
-
-      const parser = createParser((e) => {
-        sendEvent(e);
-      });
+      const parser = createParser(
+        (e) => {
+          lastEvent = e;
+        },
+        {
+          customFields: ['meta'],
+        },
+      );
 
       async function* events() {
         for await (const chunk of stream) {
-          yield waitNextEvent(chunk.toString());
+          lastEvent = pendingEvent;
+
+          parser.feed(chunk.toString());
+
+          if (lastEvent.type === 'event') {
+            if (lastEvent.event === 'finish') {
+              try {
+                // @ts-ignore
+                lastEvent.meta = JSON.parse(lastEvent.meta);
+              } catch {
+                throw new Error('ERR_INVALID_FINISH_META');
+              }
+            }
+          }
+
+          yield lastEvent as SSEResponse;
         }
       }
 

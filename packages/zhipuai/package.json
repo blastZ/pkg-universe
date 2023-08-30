@@ -1,6 +1,6 @@
 {
   "name": "zhipuai",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "zhipuai sdk",
   "type": "module",
   "main": "./cjs/index.js",
@@ -20,7 +20,6 @@
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.2",
     "axios": "^1.4.0",
-    "eventsource-parser": "^1.0.0",
     "jsonwebtoken": "^9.0.1"
   }
 }
