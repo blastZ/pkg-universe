@@ -208,7 +208,7 @@ export class ZhipuAI {
       }
 
       async function* events() {
-        let eventChunk: Buffer | undefined;
+        let eventChunk: Buffer | undefined = undefined;
         for await (const chunk of stream) {
           if (eventChunk == null) {
             eventChunk = chunk;
