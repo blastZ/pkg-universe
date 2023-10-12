@@ -190,25 +190,46 @@ export class ZhipuAI {
         },
       );
 
-      async function* events() {
-        for await (const chunk of stream) {
-          lastEvent = pendingEvent;
+      function parse(chunk: Buffer) {
+        parser.feed(chunk.toString());
 
-          parser.feed(chunk.toString());
-
-          if (lastEvent.type === 'event') {
-            if (lastEvent.event === 'finish') {
-              try {
-                // @ts-ignore
-                lastEvent.meta = JSON.parse(lastEvent.meta);
-              } catch {
-                throw new Error('ERR_INVALID_FINISH_META');
-              }
+        if (lastEvent.type === 'event') {
+          if (lastEvent.event === 'finish') {
+            try {
+              // @ts-ignore
+              lastEvent.meta = JSON.parse(lastEvent.meta);
+            } catch {
+              throw new Error('ERR_INVALID_FINISH_META');
             }
           }
+        }
+      }
+
+      async function* events() {
+        let eventChunk: Buffer | undefined;
+        for await (const chunk of stream) {
+          if (eventChunk == null) {
+            eventChunk = chunk;
+            continue;
+          }
+
+          if (!chunk.includes('event:')) {
+            eventChunk = Buffer.concat([eventChunk, chunk]);
+            continue;
+          }
+          lastEvent = pendingEvent;
+
+          parse(eventChunk);
 
           yield lastEvent as SSEResponse;
+
+          eventChunk = chunk;
         }
+        if (eventChunk) {
+          parse(eventChunk);
+        }
+
+        yield lastEvent as SSEResponse;
       }
 
       return events();
