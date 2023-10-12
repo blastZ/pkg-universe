@@ -191,6 +191,8 @@ export class ZhipuAI {
       );
 
       function parse(chunk: Buffer) {
+        lastEvent = pendingEvent;
+
         parser.feed(chunk.toString());
 
         if (lastEvent.type === 'event') {
@@ -217,7 +219,6 @@ export class ZhipuAI {
             eventChunk = Buffer.concat([eventChunk, chunk]);
             continue;
           }
-          lastEvent = pendingEvent;
 
           parse(eventChunk);
 
