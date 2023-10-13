@@ -8,6 +8,7 @@ export * from './interfaces/invoke-response.interface.js';
 export * from './interfaces/request-options.interface.js';
 export * from './interfaces/response.interface.js';
 export * from './interfaces/sse-response.interface.js';
+export * from './interfaces/usage.interface.js';
 export * from './interfaces/zhipu-ai-options.interface.js';
 
 export * from './utils/generate-token.util.js';

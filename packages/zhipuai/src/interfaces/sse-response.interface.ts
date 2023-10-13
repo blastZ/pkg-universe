@@ -1,4 +1,5 @@
 import { TaskStatus } from '../index.js';
+import { Usage } from './usage.interface.js';
 
 export interface ZhipuSSEResponse {
   id: string;
@@ -19,7 +20,7 @@ export type SSEResponse =
       data: string;
       meta: {
         task_status: TaskStatus;
-        usage: { total_tokens: string };
+        usage: Usage;
         task_id: string;
         request_id: string;
       };

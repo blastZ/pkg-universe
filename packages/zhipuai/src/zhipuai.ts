@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { StringDecoder } from 'node:string_decoder';
 
 import { InvokeType } from './enums/invoke-type.enum.js';
 import { AsyncInvokeResponse } from './interfaces/async-invoke-response.interface.js';
@@ -190,11 +191,16 @@ export class ZhipuAI {
         },
       );
 
+      const decoder = new StringDecoder();
+
       async function* events() {
         for await (const chunk of stream) {
           lastEvent = pendingEvent;
 
-          parser.feed(chunk.toString());
+          // Ensure the decoded string does not contain any incomplete multibyte characters
+          const chunkString = decoder.write(chunk);
+
+          parser.feed(chunkString);
 
           if (lastEvent.type === 'event') {
             if (lastEvent.event === 'finish') {
