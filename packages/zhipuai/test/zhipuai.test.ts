@@ -43,7 +43,7 @@ describe('zhipuai', () => {
       messages: prompt,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     const taskResult = await zhipuai.queryAsyncInvokeResult(result.task_id);
 
