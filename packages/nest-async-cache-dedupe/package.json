@@ -1,0 +1,36 @@
+{
+  "name": "@blastz/nest-async-cache-dedupe",
+  "version": "0.1.0",
+  "description": "nestjs async cache dedupe",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/nest-async-cache-dedupe",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "keywords": [],
+  "author": "blastz",
+  "license": "MIT",
+  "devDependencies": {
+    "@nestjs/common": "^9.3.9",
+    "@nestjs/core": "^9.3.9",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.3.9",
+    "@nestjs/core": "^9.3.9",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0"
+  },
+  "dependencies": {
+    "async-cache-dedupe": "^2.0.0"
+  }
+}
