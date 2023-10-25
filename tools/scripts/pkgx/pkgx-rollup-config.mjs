@@ -45,6 +45,9 @@ function getCjsOutput(pkgxOptions) {
       typescript({
         outDir: 'output/cjs',
         declaration: false,
+        compilerOptions: {
+          module: 'NodeNext',
+        },
       }),
       nodeResolve(getNodeResolveOptions(pkgxOptions)),
       commonjs(),
@@ -75,6 +78,9 @@ function getEsmOutput(pkgxOptions) {
         outDir: esmOutputDir,
         declaration: true,
         declarationDir: esmOutputDir + '/.dts',
+        compilerOptions: {
+          module: 'NodeNext',
+        },
       }),
     ],
     external: pkgxOptions.external,
