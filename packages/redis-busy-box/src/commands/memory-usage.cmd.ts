@@ -1,8 +1,9 @@
+import { RedisOptions } from '../interfaces/redis-options.interface.js';
 import { getMemoryUsage } from '../utils/get-memory-usage.util.js';
 
 export async function memoryUsageCommand(
   pattern: string,
-  options: { host: string; port: string; password?: string },
+  options: RedisOptions,
 ) {
   const memory = await getMemoryUsage(pattern, { redisOptions: options });
 
