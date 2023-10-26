@@ -4,6 +4,7 @@ import { program } from 'commander';
 
 import { countKeysCommand } from './commands/count-keys.cmd.js';
 import { exportKeysCommand } from './commands/export-keys.cmd.js';
+import { listKeysCommand } from './commands/list-keys.cmd.js';
 import { memoryUsageCommand } from './commands/memory-usage.cmd.js';
 import { getCliVersion } from './utils/get-sdk-version.util.js';
 
@@ -18,6 +19,14 @@ program
   .description('Get count of keys by pattern')
   .argument('<pattern>', 'pattern to match')
   .action(countKeysCommand);
+
+program
+  .command('list-keys')
+  .description('List keys by pattern')
+  .argument('<pattern>', 'pattern to match')
+  .option('--count <count>', 'scan count for each iteration', '1000')
+  .option('--show-values', 'show values')
+  .action(listKeysCommand);
 
 program
   .command('export-keys')

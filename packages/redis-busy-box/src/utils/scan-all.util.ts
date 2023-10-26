@@ -3,7 +3,10 @@ import { Redis } from 'ioredis';
 export async function scanAll(
   client: Redis,
   options: { pattern: string; count?: number },
-  callback: (elements: string[]) => Promise<void> | void,
+  callback: (
+    elements: string[],
+    nextCursor: string,
+  ) => Promise<void | boolean> | void | boolean,
 ) {
   let cursor = '0';
 
@@ -21,8 +24,12 @@ export async function scanAll(
       scanOptions.count,
     );
 
-    await callback(nextElements);
+    const isContinue = await callback(nextElements, nextCursor);
 
-    cursor = nextCursor;
+    if (isContinue === false) {
+      cursor = '0';
+    } else {
+      cursor = nextCursor;
+    }
   } while (cursor != '0');
 }

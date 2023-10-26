@@ -71,7 +71,7 @@ program
         .map((o) => o.toLowerCase()[0])
         .join('');
 
-      await $`pwd && pkg . -t node18-linux-x64 -o ${binaryName}`;
+      await $`pkg . -o ${binaryName}`;
     }
   });
 

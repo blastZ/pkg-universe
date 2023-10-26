@@ -22,6 +22,12 @@ Get count of keys by pattern
 $ rbb count-keys '*'
 ```
 
+List keys by pattern
+
+```bash
+$ rbb list-keys '*' --count 10 --show-values
+```
+
 Export keys by pattern
 
 ```bash
