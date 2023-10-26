@@ -7,6 +7,7 @@ export async function getRedisClient(options: RedisOptions) {
     host: options.host,
     port: Number(options.port),
     password: options.password,
+    db: Number(options.db),
   });
 
   return client;

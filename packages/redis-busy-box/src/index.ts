@@ -3,6 +3,7 @@
 import { program } from 'commander';
 
 import { countKeysCommand } from './commands/count-keys.cmd.js';
+import { deleteKeysCommand } from './commands/delete-keys.cmd.js';
 import { exportKeysCommand } from './commands/export-keys.cmd.js';
 import { listKeysCommand } from './commands/list-keys.cmd.js';
 import { memoryUsageCommand } from './commands/memory-usage.cmd.js';
@@ -34,11 +35,20 @@ program
   .argument('<pattern>', 'pattern to match')
   .action(exportKeysCommand);
 
+program
+  .command('delete-keys')
+  .description('Delete keys by pattern')
+  .argument('<pattern>', 'pattern to match')
+  .option('--count <count>', 'scan count for each iteration', '1000')
+  .option('--show-values', 'show values')
+  .action(deleteKeysCommand);
+
 program.commands.map((command) => {
   command
     .option('-H, --host <host>', 'redis host', 'localhost')
     .option('-p, --port <port>', 'redis port', '6379')
-    .option('-a, --password <password>', 'redis password');
+    .option('-a, --password <password>', 'redis password')
+    .option('-n --db <db>', 'redis db', '0');
 });
 
 program.version(getCliVersion(), '-v --version');
