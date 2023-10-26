@@ -1,7 +1,9 @@
 #! /usr/bin/env node
 
 import { program } from 'commander';
+
 import { countKeysCommand } from './commands/count-keys.cmd.js';
+import { exportKeysCommand } from './commands/export-keys.cmd.js';
 import { memoryUsageCommand } from './commands/memory-usage.cmd.js';
 
 program
@@ -15,6 +17,12 @@ program
   .description('Get count of keys by pattern')
   .argument('<pattern>', 'pattern to match')
   .action(countKeysCommand);
+
+program
+  .command('export-keys')
+  .description('Export keys by pattern')
+  .argument('<pattern>', 'pattern to match')
+  .action(exportKeysCommand);
 
 program.commands.map((command) => {
   command

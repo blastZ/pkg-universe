@@ -16,6 +16,18 @@ Get memory usage by pattern
 $ rbb memory-usage 'app:user:*'
 ```
 
+Get count of keys by pattern
+
+```bash
+$ rbb count-keys '*'
+```
+
+Export keys by pattern
+
+```bash
+$ rbb export-keys 'app:user:*'
+```
+
 ## License
 
 MIT
