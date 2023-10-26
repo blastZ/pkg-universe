@@ -5,6 +5,7 @@ import { program } from 'commander';
 import { countKeysCommand } from './commands/count-keys.cmd.js';
 import { exportKeysCommand } from './commands/export-keys.cmd.js';
 import { memoryUsageCommand } from './commands/memory-usage.cmd.js';
+import { getCliVersion } from './utils/get-sdk-version.util.js';
 
 program
   .command('memory-usage')
@@ -30,5 +31,7 @@ program.commands.map((command) => {
     .option('-p, --port <port>', 'redis port', '6379')
     .option('-a, --password <password>', 'redis password');
 });
+
+program.version(getCliVersion(), '-v --version');
 
 program.parse();
