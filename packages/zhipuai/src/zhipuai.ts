@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { StringDecoder } from 'node:string_decoder';
 
 import { InvokeType } from './enums/invoke-type.enum.js';
+import { ModelType } from './index.js';
 import { AsyncInvokeResponse } from './interfaces/async-invoke-response.interface.js';
 import { InvokeResponse } from './interfaces/invoke-response.interface.js';
 import { RequestOptions } from './interfaces/request-options.interface.js';
@@ -80,6 +81,19 @@ export class ZhipuAI {
   }
 
   private buildRequestBody(options: RequestOptions) {
+    if (options.model === ModelType.CharacterGLM) {
+      return {
+        prompt: options.messages,
+        meta: {
+          user_info: options.meta.userInfo,
+          user_name: options.meta.userName,
+          bot_info: options.meta.botInfo,
+          bot_name: options.meta.botName,
+        },
+        request_id: options.requestId,
+      };
+    }
+
     return {
       prompt: options.messages,
       temperature: options.temperature || 0.95,

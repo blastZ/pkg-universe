@@ -32,13 +32,13 @@ const prompt = [
 
 // Invoke API
 const invokeData = await zhipuai.invoke({
-  model: ModelType.ChatGLMPro,
+  model: ModelType.ChatGLMTurbo,
   messages: prompt,
 });
 
 // Async Invoke API
 const asyncInvokeData = await zhipuai.asyncInvoke({
-  model: ModelType.ChatGLMPro,
+  model: ModelType.ChatGLMTurbo,
   messages: prompt,
 });
 
@@ -49,13 +49,40 @@ const queryAsyncInvokeResultData = await zhipuai.queryAsyncInvokeResult(
 
 // SSE Invoke API
 const events = await zhipuai.sseInvoke({
-  model: ModelType.ChatGLMPro,
+  model: ModelType.ChatGLMTurbo,
   messages: prompt,
 });
 
 for await (const event of events) {
   // handle event
 }
+
+// CharacterGLM
+const events = await zhipuai.sseInvoke({
+  model: ModelType.CharacterGLM,
+  messages: [
+    {
+      role: ChatMessageRole.User,
+      content: 'What is your name?',
+    },
+  ],
+  meta: {
+    userInfo: 'I am pigteetee',
+    userName: 'pigteetee',
+    botInfo: 'I am Lego Master',
+    botName: 'blastz',
+  },
+});
+
+let result = '';
+
+for await (const event of events) {
+  if (event.event === 'add' || event.event === 'finish') {
+    result += event.data;
+  }
+}
+
+// handle result
 ```
 
 ## License
