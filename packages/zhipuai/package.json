@@ -1,6 +1,6 @@
 {
   "name": "zhipuai",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "zhipuai sdk",
   "type": "module",
   "main": "./cjs/index.js",

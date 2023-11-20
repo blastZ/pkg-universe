@@ -150,4 +150,15 @@ describe('zhipuai character model', () => {
     },
     5 * 60 * 1000,
   );
+
+  it('should support create embedding', async () => {
+    const result = await zhipuai.invoke({
+      model: ModelType.TextEmbedding,
+      input: 'I am blastz',
+    });
+
+    console.log('result: ', result);
+
+    expect(result.embedding[0]).toEqual(-0.2861032485961914);
+  });
 });

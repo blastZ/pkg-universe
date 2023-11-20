@@ -2,10 +2,16 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { StringDecoder } from 'node:string_decoder';
 
 import { InvokeType } from './enums/invoke-type.enum.js';
-import { ModelType } from './index.js';
+import { ModelType } from './enums/model-type.enum.js';
 import { AsyncInvokeResponse } from './interfaces/async-invoke-response.interface.js';
+import { CreateEmbeddingResponse } from './interfaces/create-embedding-response.interface.js';
 import { InvokeResponse } from './interfaces/invoke-response.interface.js';
-import { RequestOptions } from './interfaces/request-options.interface.js';
+import {
+  CharacterModelRequestOptions,
+  ChatModelRequestOptions,
+  EmbeddingModelRequestOptions,
+  RequestOptions,
+} from './interfaces/request-options.interface.js';
 import { Response } from './interfaces/response.interface.js';
 import { SSEResponse } from './interfaces/sse-response.interface.js';
 import { ZhipuAIOptions } from './interfaces/zhipu-ai-options.interface.js';
@@ -94,6 +100,13 @@ export class ZhipuAI {
       };
     }
 
+    if (options.model === ModelType.TextEmbedding) {
+      return {
+        prompt: options.input,
+        request_id: options.requestId,
+      };
+    }
+
     return {
       prompt: options.messages,
       temperature: options.temperature || 0.95,
@@ -151,12 +164,18 @@ export class ZhipuAI {
     }
   }
 
-  async invoke(options: RequestOptions): Promise<InvokeResponse['data']> {
+  async invoke(
+    options: ChatModelRequestOptions | CharacterModelRequestOptions,
+  ): Promise<InvokeResponse['data']>;
+  async invoke(
+    options: EmbeddingModelRequestOptions,
+  ): Promise<CreateEmbeddingResponse['data']>;
+  async invoke(options: RequestOptions) {
     return this.request(InvokeType.Sync, options);
   }
 
   async asyncInvoke(
-    options: RequestOptions,
+    options: ChatModelRequestOptions | CharacterModelRequestOptions,
   ): Promise<AsyncInvokeResponse['data']> {
     return this.request(InvokeType.Async, options);
   }
@@ -179,7 +198,9 @@ export class ZhipuAI {
     }
   }
 
-  async sseInvoke(options: RequestOptions) {
+  async sseInvoke(
+    options: ChatModelRequestOptions | CharacterModelRequestOptions,
+  ) {
     try {
       const pendingEvent: ParseEvent = {
         type: 'event',

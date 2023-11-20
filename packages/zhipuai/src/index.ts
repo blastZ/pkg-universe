@@ -4,6 +4,7 @@ export * from './enums/task-status.enum.js';
 
 export * from './interfaces/async-invoke-response.interface.js';
 export * from './interfaces/chat-message.interface.js';
+export * from './interfaces/create-embedding-response.interface.js';
 export * from './interfaces/invoke-response.interface.js';
 export * from './interfaces/request-options.interface.js';
 export * from './interfaces/response.interface.js';

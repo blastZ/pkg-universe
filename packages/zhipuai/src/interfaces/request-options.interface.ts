@@ -30,6 +30,12 @@ export interface CharacterModelRequestOptions extends CommonRequestOptions {
   };
 }
 
+export interface EmbeddingModelRequestOptions extends CommonRequestOptions {
+  model: ModelType.TextEmbedding;
+  input: string;
+}
+
 export type RequestOptions =
   | ChatModelRequestOptions
-  | CharacterModelRequestOptions;
+  | CharacterModelRequestOptions
+  | EmbeddingModelRequestOptions;

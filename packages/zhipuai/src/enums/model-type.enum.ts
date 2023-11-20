@@ -7,4 +7,5 @@ export enum ModelType {
   // Current models
   ChatGLMTurbo = 'chatglm_turbo',
   CharacterGLM = 'characterglm',
+  TextEmbedding = 'text_embedding',
 }
