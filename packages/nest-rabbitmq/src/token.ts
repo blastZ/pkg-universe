@@ -1,1 +1,3 @@
 export const CONNECTION_MANAGER = Symbol('CONNECTION_MANAGER');
+
+export const MODULE_OPTIONS = Symbol('MODULE_OPTIONS');
