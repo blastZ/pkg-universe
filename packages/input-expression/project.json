@@ -1,0 +1,38 @@
+{
+  "name": "input-expression",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/input-expression",
+        "command": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js -c './jest.config.js'"
+      }
+    },
+    "build": {
+      "dependsOn": ["test"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tools/scripts/pkgx/index.mjs build input-expression"
+      }
+    },
+    "publish": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/input-expression/output"
+      },
+      "configurations": {
+        "file": {
+          "command": "npm pack"
+        },
+        "local": {
+          "command": "npm link"
+        },
+        "prod": {
+          "command": "npm publish --access public --registry=https://registry.npmjs.org"
+        }
+      }
+    }
+  }
+}
