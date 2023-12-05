@@ -106,7 +106,23 @@ export class TraceInterceptor implements NestInterceptor {
     if (type === 'ws') {
       const data = context.switchToWs().getData();
 
-      const requestId = data?.headers?.[REQUEST_ID_HEADER] || uuid();
+      if (!data) {
+        return uuid();
+      }
+
+      if (!data.headers) {
+        data.headers = {};
+      }
+
+      let requestId;
+
+      requestId = data.headers[REQUEST_ID_HEADER];
+
+      if (!requestId) {
+        requestId = uuid();
+
+        data.headers[REQUEST_ID_HEADER] = requestId;
+      }
 
       return requestId;
     }
