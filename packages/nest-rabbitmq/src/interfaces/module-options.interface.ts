@@ -10,4 +10,5 @@ export interface ModuleOptions {
   trace?: TraceOptions;
   propagation?: PropagationOptions;
   canary?: CanaryOptions;
+  onError?: (err: unknown) => void;
 }

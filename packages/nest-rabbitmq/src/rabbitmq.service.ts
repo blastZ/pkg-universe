@@ -109,8 +109,21 @@ export class RabbitMQService {
             { requestId: headers['x-request-id'] || randomUUID() },
             () => {
               if (this.options.propagation?.context) {
-                return this.options.propagation.context.run({ headers }, () =>
-                  originCb(msg),
+                return this.options.propagation.context.run(
+                  { headers },
+                  async () => {
+                    try {
+                      return await originCb(msg);
+                    } catch (err) {
+                      if (this.options.onError) {
+                        this.options.onError(err);
+
+                        return;
+                      }
+
+                      throw err;
+                    }
+                  },
                 );
               }
 
