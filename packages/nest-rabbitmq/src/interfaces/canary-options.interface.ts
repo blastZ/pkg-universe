@@ -1,5 +1,14 @@
-export interface CanaryOptions {
+import { CanaryStrategy } from '../enums/canary-strategy.enum.js';
+
+export type CanaryOptions = {
   enabled: boolean;
   isCanary: boolean;
-  canaryHeaders: string[];
-}
+} & (
+  | {
+      strategy: CanaryStrategy.Requeue;
+      canaryHeaders: string[];
+    }
+  | {
+      strategy: CanaryStrategy.CanaryQueue;
+    }
+);

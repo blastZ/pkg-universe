@@ -1,6 +1,6 @@
 {
   "name": "@blastz/nest-rabbitmq",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "nestjs rabbitmq",
   "type": "module",
   "main": "./cjs/index.js",
@@ -33,7 +33,6 @@
   "dependencies": {
     "@types/amqplib": "^0.10.1",
     "amqp-connection-manager": "^4.1.14",
-    "amqplib": "^0.10.3",
-    "promise-breaker": "^6.0.0"
+    "amqplib": "^0.10.3"
   }
 }

@@ -10,6 +10,7 @@ export * from './rabbitmq.service.js';
 export * from './connection-manager.decorator.js';
 export * from './token.js';
 
+export * from './enums/canary-strategy.enum.js';
 export * from './enums/channel-event.enum.js';
 export * from './enums/connection-event.enum.js';
 
