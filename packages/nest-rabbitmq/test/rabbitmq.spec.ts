@@ -9,6 +9,7 @@ describe('RabbitMQModule', () => {
       imports: [
         RabbitMQModule.forRoot({
           urls: ['amqp://guest:guest@localhost:5672'],
+          messageContentLengthLimit: 1 * 1024,
         }),
       ],
     }).compile();
@@ -22,6 +23,32 @@ describe('RabbitMQModule', () => {
     await channel.assertQueue('test');
 
     await channel.sendToQueue('test', { data: { total: 10 } });
+
+    await channel.close();
+    await rabbitmq.close();
+  });
+
+  it('should throw error when message content length is too long', async () => {
+    const channel = rabbitmq.createChannel();
+
+    await channel.assertQueue('test');
+
+    await expect(
+      channel.sendToQueue('test', {
+        data: {
+          total: 10,
+        },
+      }),
+    ).resolves.not.toThrowError();
+
+    await expect(
+      channel.sendToQueue('test', {
+        data: {
+          total: 10,
+          longString: 'a'.repeat(1024),
+        },
+      }),
+    ).rejects.toThrowError();
 
     await channel.close();
     await rabbitmq.close();

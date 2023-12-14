@@ -33,6 +33,20 @@ export class MessageService {
       content = await this.compressService.compressMessageContent(content);
     }
 
+    const contentLength = Buffer.byteLength(content);
+
+    if (this.options.messageContentLengthLimit) {
+      if (contentLength > this.options.messageContentLengthLimit) {
+        throw new Error(
+          `Message content length is too long (${
+            isCompressed ? 'compressed' : 'uncompressed'
+          }), limit: ${
+            this.options.messageContentLengthLimit
+          }, current: ${contentLength}`,
+        );
+      }
+    }
+
     return {
       isCompressed,
       content: content as Buffer,
