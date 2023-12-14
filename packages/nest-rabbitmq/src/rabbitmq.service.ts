@@ -5,15 +5,14 @@ import {
   type CreateChannelOpts,
 } from 'amqp-connection-manager';
 import { type ConsumeMessage } from 'amqplib';
-
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { randomUUID } from 'node:crypto';
 
 import { ConnectionManager } from './connection-manager.decorator.js';
-import { COMMON_PROPAGATION_HEADERS } from './constants/common-propagation-headers.constant.js';
 import { CanaryStrategy } from './enums/canary-strategy.enum.js';
 import { ConnectionEvent } from './enums/connection-event.enum.js';
 import { ModuleOptions } from './interfaces/module-options.interface.js';
+import { MessageService } from './services/message.service.js';
 import { MODULE_OPTIONS } from './token.js';
 
 @Injectable()
@@ -21,50 +20,30 @@ export class RabbitMQService {
   constructor(
     @Inject(MODULE_OPTIONS) private options: ModuleOptions,
     @ConnectionManager() private manager: AmqpConnectionManager,
+    private messageService: MessageService,
   ) {}
 
   addListener(event: ConnectionEvent, listener: (...args: any[]) => void) {
     this.manager.addListener(event, listener);
   }
 
-  private getPublishOptions(originOptions: any) {
-    const headers: Record<string, string> = {};
-
-    const store = this.options.propagation?.context.getStore();
-
-    if (store) {
-      const propagationHeaders = COMMON_PROPAGATION_HEADERS.concat(
-        this.options.propagation?.headers || [],
-      );
-
-      propagationHeaders.map((key) => {
-        const value = store.headers[key];
-
-        if (value) {
-          headers[key] = String(value);
-        }
-      });
-    }
-
-    return {
-      ...originOptions,
-      headers: {
-        ...headers,
-        ...originOptions.headers,
-      },
-    };
-  }
-
   private packSendToQueue(origin: any) {
     return new Proxy(origin.sendToQueue, {
-      apply: (target, thisArg, argumentsList) => {
+      apply: async (target, thisArg, argumentsList) => {
         const originQueueName = argumentsList[0];
+        const originContent = argumentsList[1];
         const originOptions = argumentsList[2] || {};
 
         const queueName = this.getQueueName(originQueueName);
 
+        const { content, options } = await this.messageService.packMessage(
+          originContent,
+          originOptions,
+        );
+
         argumentsList[0] = queueName;
-        argumentsList[2] = this.getPublishOptions(originOptions);
+        argumentsList[1] = content;
+        argumentsList[2] = options;
 
         return Reflect.apply(target, thisArg, argumentsList);
       },
@@ -73,14 +52,21 @@ export class RabbitMQService {
 
   private packPublish(origin: any) {
     return new Proxy(origin.publish, {
-      apply: (target, thisArg, argumentsList) => {
+      apply: async (target, thisArg, argumentsList) => {
         const originExchangeName = argumentsList[0];
+        const originContent = argumentsList[2];
         const originOptions = argumentsList[3] || {};
 
         const exchangeName = this.getExchangeName(originExchangeName);
 
+        const { content, options } = await this.messageService.packMessage(
+          originContent,
+          originOptions,
+        );
+
         argumentsList[0] = exchangeName;
-        argumentsList[3] = this.getPublishOptions(originOptions);
+        argumentsList[2] = content;
+        argumentsList[3] = options;
 
         return Reflect.apply(target, thisArg, argumentsList);
       },
@@ -95,8 +81,8 @@ export class RabbitMQService {
 
         const queueName = this.getQueueName(originQueueName);
 
-        const newCb = async (msg: ConsumeMessage) => {
-          const headers = msg.properties.headers;
+        const newCb = async (originMsg: ConsumeMessage) => {
+          const headers = originMsg.properties.headers;
 
           if (
             this.options.canary?.enabled &&
@@ -112,13 +98,15 @@ export class RabbitMQService {
               (!isCanary && isCanaryMessage) ||
               (isCanary && !isCanaryMessage)
             ) {
-              return thisArg.nack(msg, false, true);
+              return thisArg.nack(originMsg, false, true);
             }
           }
 
           const context =
             this.options.trace?.context ||
             new AsyncLocalStorage<Record<string, unknown>>();
+
+          const { msg } = await this.messageService.unpackMessage(originMsg);
 
           return context.run(
             { requestId: headers['x-request-id'] || randomUUID() },
@@ -254,9 +242,10 @@ export class RabbitMQService {
     });
   }
 
-  createChannel(opts?: Omit<CreateChannelOpts, 'setup'>): ChannelWrapper {
+  createChannel(
+    opts?: Omit<CreateChannelOpts, 'setup' | 'json'>,
+  ): ChannelWrapper {
     const channelWrapper = this.manager.createChannel({
-      json: true,
       ...opts,
     });
 

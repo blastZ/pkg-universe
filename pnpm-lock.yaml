@@ -440,6 +440,9 @@ importers:
       '@nestjs/core':
         specifier: ^9.3.9
         version: 9.4.3(@nestjs/common@9.4.3)(@nestjs/microservices@9.4.3)(@nestjs/platform-express@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/testing':
+        specifier: ^9.4.0
+        version: 9.4.3(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(@nestjs/platform-express@9.4.3)
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.13
@@ -465,6 +468,9 @@ importers:
       '@nestjs/core':
         specifier: ^9.3.9
         version: 9.4.3(@nestjs/common@9.4.3)(@nestjs/microservices@9.4.3)(@nestjs/platform-express@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/testing':
+        specifier: ^9.4.0
+        version: 9.4.3(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(@nestjs/platform-express@9.4.3)
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.13
