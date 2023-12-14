@@ -254,7 +254,9 @@ export class RabbitMQService {
     channelWrapper.assertQueue = this.packAssertQueue(channelWrapper);
     channelWrapper.assertExchange = this.packAssertExchange(channelWrapper);
     channelWrapper.bindQueue = this.packBindQueue(channelWrapper);
-    channelWrapper.consume = this.packConsume(channelWrapper);
+
+    // No need to pack channelWrapper consume, because it will call addSetup
+    // channelWrapper.consume = this.packConsume(channelWrapper);
 
     channelWrapper.sendToQueue = this.packSendToQueue(channelWrapper);
     channelWrapper.publish = this.packPublish(channelWrapper);
