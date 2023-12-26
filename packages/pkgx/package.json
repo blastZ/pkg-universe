@@ -1,0 +1,38 @@
+{
+  "name": "@blastz/pkgx",
+  "version": "0.1.0",
+  "description": "package executor",
+  "type": "module",
+  "main": "./cjs/index.js",
+  "exports": {
+    "types": "./index.d.ts",
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
+  },
+  "types": "./index.d.ts",
+  "bin": {
+    "pkgx": "./bin/index.js"
+  },
+  "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/pkgx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blastZ/pkg-universe.git"
+  },
+  "author": "blastz",
+  "license": "MIT",
+  "dependencies": {
+    "@rollup/plugin-typescript": "^11.1.5",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2",
+    "rollup-plugin-dts": "^6.1.0",
+    "zx": "^7.2.3"
+  },
+  "devDependencies": {
+    "rollup": "^4.9.1"
+  },
+  "peerDependencies": {
+    "rollup": "^4.9.1"
+  }
+}
