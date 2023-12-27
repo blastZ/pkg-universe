@@ -6,10 +6,10 @@ import { $, cd } from 'zx';
 import { getCliVersion } from '../utils/get-cli-version.util.js';
 import { getRollupConfigPath } from '../utils/get-rollup-config-path.util.js';
 
-async function build(pkg: string) {
+async function build(pkgRootPath: string) {
   console.log(chalk.underline(`pkgx v${getCliVersion()}`));
 
-  const pkgPath = resolve(process.cwd(), `./packages/${pkg}`);
+  const pkgPath = resolve(process.cwd(), pkgRootPath);
 
   cd(pkgPath);
 
