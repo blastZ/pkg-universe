@@ -11,14 +11,14 @@ program.version(getCliVersion(), '-v --version');
 program
   .command('build')
   .description('build package')
-  .argument('<pkg-root-path>', 'package root path')
+  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .option('-w, --watch', 'watch mode')
   .action(buildCommand);
 
 program
   .command('serve')
   .description('serve package')
-  .argument('<pkg-root-path>', 'package root path')
+  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(serveCommand);
 
 program.parse();

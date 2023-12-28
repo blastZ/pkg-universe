@@ -25,15 +25,11 @@
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "concurrently": "^8.2.2",
-    "nodemon": "^3.0.2",
+    "dayjs": "^1.11.10",
+    "pretty-ms": "^8.0.0",
+    "rollup": "^4.9.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.0",
     "zx": "^7.2.3"
-  },
-  "devDependencies": {
-    "rollup": "^4.9.1"
-  },
-  "peerDependencies": {
-    "rollup": "^4.9.1"
   }
 }

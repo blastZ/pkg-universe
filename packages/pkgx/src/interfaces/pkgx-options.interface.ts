@@ -1,6 +1,6 @@
 import { ExternalOption } from 'rollup';
 
-export interface CustomRollupOptions {
+export interface PkgxOptions {
   input?: string;
   esmOutputDir?: string;
   external?: ExternalOption;

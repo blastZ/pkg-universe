@@ -1,12 +1,10 @@
-import { resolve } from 'node:path';
-
 import typescript from '@rollup/plugin-typescript';
 import { RollupOptions } from 'rollup';
 import copy from 'rollup-plugin-copy';
 
-import { CustomRollupOptions } from '../interfaces/custom-rollup-options.interface.js';
+import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
-export function getEsmOutput(pkgPath: string, options: CustomRollupOptions) {
+export function getEsmOutput(options: PkgxOptions) {
   const outputDir = options.esmOutputDir || 'output/esm';
 
   const output: RollupOptions = {
@@ -36,7 +34,7 @@ export function getEsmOutput(pkgPath: string, options: CustomRollupOptions) {
       }),
       (copy as unknown as typeof copy.default)({
         targets: options.assets?.map((o) => ({
-          src: resolve(pkgPath, o),
+          src: o,
           dest: outputDir,
         })),
       }),

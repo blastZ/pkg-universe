@@ -1,1 +1,1 @@
-export * from './rollup-utils/get-rollup-config.js';
+export * from './rollup-utils/get-rollup-options.js';
