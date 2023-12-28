@@ -12,7 +12,6 @@ program
   .command('build')
   .description('build package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
-  .option('-w, --watch', 'watch mode')
   .action(buildCommand);
 
 program
