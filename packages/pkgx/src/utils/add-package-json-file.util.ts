@@ -25,7 +25,26 @@ const templatePkgJson: PkgJson = {
   },
   author: 'REPLACE_WITH_PACKAGE_AUTHOR',
   license: 'REPLACE_WITH_PACKAGE_LICENSE',
+  dependencies: {},
+  peerDependencies: {},
 };
+
+function getDependencies(
+  originDependencies: Record<string, string>,
+  options: Required<PkgxOptions>,
+) {
+  const targetDependencies: Record<string, string> = {};
+
+  Object.keys(originDependencies).map((key) => {
+    if (options.excludeFromExternal.includes(key)) {
+      // do noting
+    } else {
+      targetDependencies[key] = originDependencies[key];
+    }
+  });
+
+  return targetDependencies;
+}
 
 export async function addPackageJsonFile(options: Required<PkgxOptions>) {
   const pkgJson = getPkgJson();
@@ -37,6 +56,15 @@ export async function addPackageJsonFile(options: Required<PkgxOptions>) {
   ) {
     templatePkgJson.repository = undefined;
   }
+
+  templatePkgJson.dependencies = getDependencies(
+    pkgJson.dependencies || {},
+    options,
+  );
+  templatePkgJson.peerDependencies = getDependencies(
+    pkgJson.peerDependencies || {},
+    options,
+  );
 
   let str = JSON.stringify(templatePkgJson, null, 2);
 

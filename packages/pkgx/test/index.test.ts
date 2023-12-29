@@ -1,4 +1,4 @@
-describe('redis-busy-box', () => {
+describe('pkgx', () => {
   it('should be tested', () => {
     expect(true).toBe(true);
   });

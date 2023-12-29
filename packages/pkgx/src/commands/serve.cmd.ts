@@ -7,8 +7,8 @@ import ms from 'pretty-ms';
 import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
-import { getRollupOptions } from '../index.js';
 import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
+import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
 import { getStartFilePath } from '../rollup-utils/get-start-file-path.util.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';

@@ -1,8 +1,8 @@
 import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
-import { PkgxOptions } from '../index.js';
 import { PkgJson } from '../interfaces/pkg-json.interface.js';
+import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
 import { getPkgJson } from './get-pkg-json.util.js';
 

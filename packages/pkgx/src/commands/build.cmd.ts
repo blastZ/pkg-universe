@@ -11,9 +11,9 @@ import {
 } from 'rollup';
 import { $, cd } from 'zx';
 
-import { getRollupOptions } from '../index.js';
 import { CmdBuildOptions } from '../interfaces/cmd-build-options.interface.js';
 import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
+import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
 import { addCjsPackageJsonFile } from '../utils/add-cjs-package-json-file.util.js';

@@ -1,8 +1,11 @@
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { RollupOptions } from 'rollup';
 import copy from 'rollup-plugin-copy';
 
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
+
+import { getNodeResolveOptions } from './get-node-resolve-options.js';
 
 export function getEsmOutput(options: Required<PkgxOptions>) {
   const outputDir = `${options.outputDirName}/esm`;
@@ -27,6 +30,7 @@ export function getEsmOutput(options: Required<PkgxOptions>) {
         exclude: options.exclude,
         sourceMap: options.sourceMap,
       }),
+      nodeResolve(getNodeResolveOptions()),
       (copy as unknown as typeof copy.default)({
         targets: options.assets?.map((o) => ({
           src: o,

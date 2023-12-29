@@ -3,10 +3,15 @@ import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 import { getExternal } from './get-external.js';
 
 export function fillOptionsWithDefaultValue(options: PkgxOptions) {
+  let external = options.external || getExternal();
+  const excludeFromExternal = options.excludeFromExternal || [];
+
+  external = external.filter((o) => !excludeFromExternal.includes(o));
+
   const filledOptions: Required<PkgxOptions> = {
     inputFileName: options.inputFileName || 'index.ts',
     outputDirName: options.outputDirName || 'output',
-    external: options.external || getExternal(),
+    external,
     assets: options.assets || [],
     exclude: [
       'node_modules',
@@ -18,7 +23,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
     ].concat(options.exclude || []),
     sourceMap:
       typeof options.sourceMap === 'boolean' ? options.sourceMap : false,
-    cjsResolve: options.cjsResolve || null,
+    excludeFromExternal,
   };
 
   return filledOptions;
