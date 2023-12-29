@@ -2,18 +2,15 @@ import { type RollupOptions } from 'rollup';
 
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
-import { fillOptionsWithDefaultValue } from './fill-options-with-default-value.js';
 import { getDtsOutput } from './get-dts-output.js';
 import { getEsmOutput } from './get-esm-output.js';
 
-export function getRollupOptions(options: PkgxOptions = {}) {
+export function getRollupOptions(options: Required<PkgxOptions>) {
   // const cjsOutput = getCjsOutput(options);
 
-  const filledOptions = fillOptionsWithDefaultValue(options);
+  const esmOutput = getEsmOutput(options);
 
-  const esmOutput = getEsmOutput(filledOptions);
-
-  const dtsOutput = getDtsOutput(filledOptions);
+  const dtsOutput = getDtsOutput(options);
 
   const outputs: RollupOptions[] = [esmOutput, dtsOutput];
 

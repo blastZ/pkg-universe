@@ -6,7 +6,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
   const filledOptions: Required<PkgxOptions> = {
     inputFileName: options.inputFileName || 'index.ts',
     outputDirName: options.outputDirName || 'output',
-    external: options.external || getExternal('.'),
+    external: options.external || getExternal(),
     assets: options.assets || [],
     exclude: [
       'node_modules',

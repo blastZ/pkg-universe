@@ -8,6 +8,7 @@ import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
 import { getRollupOptions } from '../index.js';
+import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
 import { getStartFilePath } from '../rollup-utils/get-start-file-path.util.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
@@ -90,7 +91,9 @@ async function serve(pkgRelativePath: string) {
 
   const pkgxOptions = await getPkgxOptions();
 
-  const rollupOptions = getRollupOptions(pkgxOptions);
+  const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
+
+  const rollupOptions = getRollupOptions(filledPkgxOptions);
 
   startWatch(rollupOptions);
 }

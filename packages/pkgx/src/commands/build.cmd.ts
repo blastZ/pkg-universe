@@ -12,8 +12,10 @@ import {
 import { $, cd } from 'zx';
 
 import { getRollupOptions } from '../index.js';
+import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
+import { addPackageJsonFile } from '../utils/add-package-json-file.util.js';
 import { getCliVersion } from '../utils/get-cli-version.util.js';
 import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
 
@@ -83,7 +85,9 @@ async function build(pkgRelativePath: string) {
 
   const pkgxOptions = await getPkgxOptions();
 
-  const rollupOptions = getRollupOptions(pkgxOptions);
+  const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
+
+  const rollupOptions = getRollupOptions(filledPkgxOptions);
 
   const outputDir = (rollupOptions[0].output as OutputOptions[])[0].dir!.split(
     '/',
@@ -96,6 +100,8 @@ async function build(pkgRelativePath: string) {
   }
 
   await $`rm -rf ${outputDir}/esm/.dts`.quiet();
+
+  await addPackageJsonFile(filledPkgxOptions);
 }
 
 export async function buildCommand(pkgRelativePath: string) {

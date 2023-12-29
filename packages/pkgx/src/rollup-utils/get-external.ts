@@ -2,8 +2,8 @@ import { ExternalOption } from 'rollup';
 
 import { getPkgJson } from '../utils/get-pkg-json.util.js';
 
-export function getExternal(pkgPath: string): ExternalOption {
-  const pkgJson = getPkgJson(`${pkgPath}/package.json`);
+export function getExternal(): ExternalOption {
+  const pkgJson = getPkgJson();
 
   const dependencies = Object.keys(pkgJson.dependencies || {});
   const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
