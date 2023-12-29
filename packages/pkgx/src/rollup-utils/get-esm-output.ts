@@ -4,11 +4,11 @@ import copy from 'rollup-plugin-copy';
 
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
-export function getEsmOutput(options: PkgxOptions) {
-  const outputDir = options.esmOutputDir || 'output/esm';
+export function getEsmOutput(options: Required<PkgxOptions>) {
+  const outputDir = `${options.outputDirName}/esm`;
 
   const output: RollupOptions = {
-    input: options.input || 'src/index.ts',
+    input: `src/${options.inputFileName}`,
     output: [
       {
         dir: outputDir,
@@ -24,13 +24,8 @@ export function getEsmOutput(options: PkgxOptions) {
         compilerOptions: {
           module: 'NodeNext',
         },
-        exclude: [
-          'node_modules',
-          'test',
-          'dist',
-          '**/*.spec.ts',
-          '**/*.test.ts',
-        ].concat(options.exclude || []),
+        exclude: options.exclude,
+        sourceMap: options.sourceMap,
       }),
       (copy as unknown as typeof copy.default)({
         targets: options.assets?.map((o) => ({

@@ -5,19 +5,18 @@ import dts from 'rollup-plugin-dts';
 
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
-export function getDtsOutput(options: PkgxOptions) {
-  const outputDir = options.esmOutputDir || 'output/esm';
-  const inputFile = (options.input || 'src/index.ts').slice(0, -3) + '.d.ts';
-
+export function getDtsOutput(options: Required<PkgxOptions>) {
   const pkgName = basename(process.cwd());
+  const inputFileName = options.inputFileName.slice(0, -3) + '.d.ts';
+  const outputDir = `${options.outputDirName}`;
 
-  const dtsInput = `${outputDir}/.dts/packages/${pkgName}/${inputFile}`;
+  const dtsInput = `${outputDir}/esm/.dts/packages/${pkgName}/src/${inputFileName}`;
 
   const output: RollupOptions = {
     input: dtsInput,
     output: [
       {
-        file: 'output/index.d.ts',
+        file: `${outputDir}/index.d.ts`,
         format: 'esm',
         sourcemap: options.sourceMap,
       },

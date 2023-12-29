@@ -1,10 +1,10 @@
 import { ExternalOption } from 'rollup';
 
 export interface PkgxOptions {
-  input?: string; // src/index.ts
-  esmOutputDir?: string;
+  inputFileName?: string;
+  outputDirName?: string;
   external?: ExternalOption;
-  assets?: string[]; // []
+  assets?: string[];
   exclude?: string[];
-  sourceMap?: boolean; // false
+  sourceMap?: boolean;
 }
