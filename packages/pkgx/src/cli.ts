@@ -12,6 +12,7 @@ program
   .command('build')
   .description('build package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
+  .option('--pack', 'pack package after build')
   .action(buildCommand);
 
 program

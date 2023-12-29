@@ -12,9 +12,11 @@ import {
 import { $, cd } from 'zx';
 
 import { getRollupOptions } from '../index.js';
+import { CmdBuildOptions } from '../interfaces/cmd-build-options.interface.js';
 import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
+import { addCjsPackageJsonFile } from '../utils/add-cjs-package-json-file.util.js';
 import { addPackageJsonFile } from '../utils/add-package-json-file.util.js';
 import { getCliVersion } from '../utils/get-cli-version.util.js';
 import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
@@ -76,7 +78,7 @@ async function startBundle(options: RollupOptions) {
   );
 }
 
-async function build(pkgRelativePath: string) {
+async function build(pkgRelativePath: string, cmdOptions: CmdBuildOptions) {
   console.log(chalk.underline(`pkgx v${getCliVersion()}`));
 
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
@@ -102,8 +104,16 @@ async function build(pkgRelativePath: string) {
   await $`rm -rf ${outputDir}/esm/.dts`.quiet();
 
   await addPackageJsonFile(filledPkgxOptions);
+  await addCjsPackageJsonFile(filledPkgxOptions);
+
+  if (cmdOptions.pack) {
+    await $`cd ${outputDir} && npm pack`.quiet();
+  }
 }
 
-export async function buildCommand(pkgRelativePath: string) {
-  await build(pkgRelativePath);
+export async function buildCommand(
+  pkgRelativePath: string,
+  options: CmdBuildOptions,
+) {
+  await build(pkgRelativePath, options);
 }

@@ -18,6 +18,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
     ].concat(options.exclude || []),
     sourceMap:
       typeof options.sourceMap === 'boolean' ? options.sourceMap : false,
+    cjsResolve: options.cjsResolve || null,
   };
 
   return filledOptions;
