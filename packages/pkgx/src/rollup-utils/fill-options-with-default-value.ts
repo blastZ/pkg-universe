@@ -8,8 +8,12 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
 
   external = external.filter((o) => !excludeFromExternal.includes(o));
 
+  const inputFileName = options.inputFileName || 'index.ts';
+
   const filledOptions: Required<PkgxOptions> = {
-    inputFileName: options.inputFileName || 'index.ts',
+    inputFileName,
+    cjsInputFileName: options.cjsInputFileName || inputFileName,
+    esmInputFileName: options.esmInputFileName || inputFileName,
     outputDirName: options.outputDirName || 'output',
     external,
     assets: options.assets || [],

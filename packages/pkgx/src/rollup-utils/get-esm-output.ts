@@ -6,30 +6,24 @@ import copy from 'rollup-plugin-copy';
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
 import { getNodeResolveOptions } from './get-node-resolve-options.js';
+import { getTypescriptOptions } from './get-typescript-options.js';
 
 export function getEsmOutput(options: Required<PkgxOptions>) {
   const outputDir = `${options.outputDirName}/esm`;
 
   const output: RollupOptions = {
-    input: `src/${options.inputFileName}`,
+    input: `src/${options.esmInputFileName}`,
     output: [
       {
-        dir: outputDir,
+        file: `${outputDir}/index.js`,
         format: 'esm',
         sourcemap: options.sourceMap,
       },
     ],
     plugins: [
-      (typescript as unknown as typeof typescript.default)({
-        outDir: outputDir,
-        declaration: true,
-        declarationDir: outputDir + '/.dts',
-        compilerOptions: {
-          module: 'NodeNext',
-        },
-        exclude: options.exclude,
-        sourceMap: options.sourceMap,
-      }),
+      (typescript as unknown as typeof typescript.default)(
+        getTypescriptOptions('esm', options),
+      ),
       nodeResolve(getNodeResolveOptions()),
       (copy as unknown as typeof copy.default)({
         targets: options.assets?.map((o) => ({

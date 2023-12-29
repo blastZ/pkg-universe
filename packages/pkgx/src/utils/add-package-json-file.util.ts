@@ -1,5 +1,4 @@
 import { writeFile } from 'node:fs/promises';
-import { basename } from 'node:path';
 
 import { PkgJson } from '../interfaces/pkg-json.interface.js';
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
@@ -11,11 +10,11 @@ const templatePkgJson: PkgJson = {
   version: 'REPLACE_WITH_PACKAGE_VERSION',
   description: 'REPLACE_WITH_PACKAGE_DESCRIPTION',
   type: 'module',
-  main: './cjs/REPLACE_WITH_INPUT_FILE_BASE_NAME.js',
+  main: './cjs/index.js',
   exports: {
     types: './index.d.ts',
-    require: './cjs/REPLACE_WITH_INPUT_FILE_BASE_NAME.js',
-    import: './esm/REPLACE_WITH_INPUT_FILE_BASE_NAME.js',
+    require: './cjs/index.js',
+    import: './esm/index.js',
   },
   types: './index.d.ts',
   homepage: 'REPLACE_WITH_PACKAGE_HOMEPAGE',
@@ -72,10 +71,6 @@ export async function addPackageJsonFile(options: Required<PkgxOptions>) {
     .replace('REPLACE_WITH_PACKAGE_NAME', pkgJson.name)
     .replace('REPLACE_WITH_PACKAGE_VERSION', pkgJson.version || '1.0.0')
     .replace('REPLACE_WITH_PACKAGE_DESCRIPTION', pkgJson.description || '')
-    .replaceAll(
-      'REPLACE_WITH_INPUT_FILE_BASE_NAME',
-      basename(options.inputFileName, '.ts'),
-    )
     .replace('REPLACE_WITH_PACKAGE_HOMEPAGE', pkgJson.homepage || '')
     .replace(
       'REPLACE_WITH_PACKAGE_REPOSITORY_TYPE',

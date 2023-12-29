@@ -91,23 +91,21 @@ async function build(pkgRelativePath: string, cmdOptions: CmdBuildOptions) {
 
   const rollupOptions = getRollupOptions(filledPkgxOptions);
 
-  const outputDir = (rollupOptions[0].output as OutputOptions[])[0].dir!.split(
-    '/',
-  )[0];
+  const outputDirName = filledPkgxOptions.outputDirName;
 
-  await $`rm -rf ${outputDir}`.quiet();
+  await $`rm -rf ${outputDirName}`.quiet();
 
   for (const options of rollupOptions) {
     await startBundle(options);
   }
 
-  await $`rm -rf ${outputDir}/esm/.dts`.quiet();
+  await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 
   await addPackageJsonFile(filledPkgxOptions);
   await addCjsPackageJsonFile(filledPkgxOptions);
 
   if (cmdOptions.pack) {
-    await $`cd ${outputDir} && npm pack`.quiet();
+    await $`cd ${outputDirName} && npm pack`.quiet();
   }
 }
 

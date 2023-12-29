@@ -7,17 +7,19 @@ import ms from 'pretty-ms';
 import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
+import { PkgxOptions } from '../index.js';
 import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
 import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
-import { getStartFilePath } from '../rollup-utils/get-start-file-path.util.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
 import { getCliVersion } from '../utils/get-cli-version.util.js';
 import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
+('');
 
-function startWatch(rollupOptions: RollupOptions[]) {
-  const startFilePath = getStartFilePath(rollupOptions as any);
-
+function startWatch(
+  pkgxOptions: Required<PkgxOptions>,
+  rollupOptions: RollupOptions[],
+) {
   let child: ChildProcess | null = null;
   const watcher = watch(rollupOptions);
 
@@ -70,7 +72,7 @@ function startWatch(rollupOptions: RollupOptions[]) {
           child = null;
         }
 
-        child = fork(startFilePath);
+        child = fork(`${pkgxOptions.outputDirName}/esm/index.js`);
 
         break;
       }
@@ -95,7 +97,7 @@ async function serve(pkgRelativePath: string) {
 
   const rollupOptions = getRollupOptions(filledPkgxOptions);
 
-  startWatch(rollupOptions);
+  startWatch(filledPkgxOptions, rollupOptions);
 }
 
 export async function serveCommand(pkgRelativePath: string) {

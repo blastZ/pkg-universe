@@ -1,5 +1,7 @@
 export interface PkgxOptions {
   inputFileName?: string;
+  cjsInputFileName?: string;
+  esmInputFileName?: string;
   outputDirName?: string;
   external?: (string | RegExp)[];
   assets?: string[];
