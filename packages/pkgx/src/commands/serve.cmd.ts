@@ -65,7 +65,7 @@ function startWatch(rollupOptions: RollupOptions[]) {
 
         if (child) {
           child.kill();
-          child.disconnect();
+
           child = null;
         }
 

@@ -13,7 +13,7 @@ export function getEsmOutput(options: PkgxOptions) {
       {
         dir: outputDir,
         format: 'esm',
-        sourcemap: true,
+        sourcemap: options.sourceMap,
       },
     ],
     plugins: [

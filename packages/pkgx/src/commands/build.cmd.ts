@@ -42,7 +42,9 @@ async function startBundle(options: RollupOptions) {
   const outputOptionsList = options.output as OutputOptions[];
 
   const inputFiles = inputOptions.input;
-  const outputFiles = outputOptionsList.map((o) => relativeId(o.dir!));
+  const outputFiles = outputOptionsList.map((o) =>
+    relativeId(o.file || o.dir!),
+  );
 
   console.log(
     chalk.cyan(
@@ -92,6 +94,8 @@ async function build(pkgRelativePath: string) {
   for (const options of rollupOptions) {
     await startBundle(options);
   }
+
+  await $`rm -rf ${outputDir}/esm/.dts`.quiet();
 }
 
 export async function buildCommand(pkgRelativePath: string) {
