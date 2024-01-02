@@ -8,4 +8,7 @@ export interface PkgxOptions {
   exclude?: string[];
   sourceMap?: boolean;
   excludeFromExternal?: (string | RegExp)[];
+  disableEsmOutput?: boolean;
+  disableCjsOutput?: boolean;
+  disableDtsOutput?: boolean;
 }

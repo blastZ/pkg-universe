@@ -28,6 +28,9 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
     sourceMap:
       typeof options.sourceMap === 'boolean' ? options.sourceMap : false,
     excludeFromExternal,
+    disableEsmOutput: false,
+    disableCjsOutput: false,
+    disableDtsOutput: false,
   };
 
   return filledOptions;

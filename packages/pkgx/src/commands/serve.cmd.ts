@@ -95,6 +95,10 @@ async function serve(pkgRelativePath: string) {
 
   const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
 
+  filledPkgxOptions.disableCjsOutput = true;
+  filledPkgxOptions.disableDtsOutput = true;
+  filledPkgxOptions.sourceMap = true;
+
   const rollupOptions = getRollupOptions(filledPkgxOptions);
 
   startWatch(filledPkgxOptions, rollupOptions);

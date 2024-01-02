@@ -7,13 +7,25 @@ import { getDtsOutput } from './get-dts-output.js';
 import { getEsmOutput } from './get-esm-output.js';
 
 export function getRollupOptions(options: Required<PkgxOptions>) {
-  const esmOutput = getEsmOutput(options);
+  const outputs: RollupOptions[] = [];
 
-  const cjsOutput = getCjsOutput(options);
+  if (!options.disableEsmOutput) {
+    const esmOutput = getEsmOutput(options);
 
-  const dtsOutput = getDtsOutput(options);
+    outputs.push(esmOutput);
+  }
 
-  const outputs: RollupOptions[] = [esmOutput, cjsOutput, dtsOutput];
+  if (!options.disableCjsOutput) {
+    const cjsOutput = getCjsOutput(options);
+
+    outputs.push(cjsOutput);
+  }
+
+  if (!options.disableDtsOutput) {
+    const dtsOutput = getDtsOutput(options);
+
+    outputs.push(dtsOutput);
+  }
 
   return outputs;
 }
