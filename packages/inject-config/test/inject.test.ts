@@ -1,6 +1,6 @@
 import './init-env.js';
 
-import { inject } from '../src/index.js';
+import { inject } from '../src/index.esm.js';
 
 test('inject object without global config', () => {
   type MongoConfig = {
@@ -71,7 +71,7 @@ test('inject array with global config', () => {
     [{ target: 'localhost' }],
     {
       arrayMerge: (_, sourceArray) => sourceArray,
-    }
+    },
   );
 
   expect(Array.isArray(proxiesConfig)).toEqual(true);
