@@ -11,4 +11,5 @@ export interface PkgxOptions {
   disableEsmOutput?: boolean;
   disableCjsOutput?: boolean;
   disableDtsOutput?: boolean;
+  incremental?: boolean;
 }

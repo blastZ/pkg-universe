@@ -15,7 +15,7 @@ export function getTypescriptOptions(
     },
     exclude: options.exclude,
     sourceMap: options.sourceMap,
-    rootDir: '.',
+    incremental: options.incremental,
   };
 
   if (type === 'esm') {
