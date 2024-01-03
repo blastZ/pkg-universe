@@ -18,7 +18,6 @@ export function getDtsOutput(options: Required<PkgxOptions>) {
       {
         file: `${outputDir}/index.d.ts`,
         format: 'esm',
-        sourcemap: options.sourceMap,
       },
     ],
     plugins: [dts()],

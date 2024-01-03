@@ -25,8 +25,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
       '**/*.test.ts',
       'output',
     ].concat(options.exclude || []),
-    sourceMap:
-      typeof options.sourceMap === 'boolean' ? options.sourceMap : false,
+    sourceMap: options.sourceMap ?? false,
     excludeFromExternal,
     disableEsmOutput: options.disableEsmOutput ?? false,
     disableCjsOutput: options.disableCjsOutput ?? false,

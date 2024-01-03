@@ -72,7 +72,9 @@ function startWatch(
           child = null;
         }
 
-        child = fork(`${pkgxOptions.outputDirName}/esm/index.js`);
+        child = fork(`${pkgxOptions.outputDirName}/esm/index.js`, {
+          execArgv: ['--enable-source-maps'],
+        });
 
         break;
       }

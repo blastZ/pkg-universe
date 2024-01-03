@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+
 import { type RollupTypescriptOptions as RollupTypeScriptOptions } from '@rollup/plugin-typescript';
 
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
@@ -15,6 +17,9 @@ export function getTypescriptOptions(
     },
     exclude: options.exclude,
     sourceMap: options.sourceMap,
+    sourceRoot: options.sourceMap
+      ? resolve(process.cwd(), '../../') // fix relativeSourcePath
+      : undefined,
     incremental: options.incremental,
   };
 

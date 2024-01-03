@@ -18,6 +18,7 @@ export function getCjsOutput(options: Required<PkgxOptions>) {
       {
         file: `${outputDir}/index.js`,
         format: 'cjs',
+        sourcemap: options.sourceMap,
       },
     ],
     plugins: [
