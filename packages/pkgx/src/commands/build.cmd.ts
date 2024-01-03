@@ -78,7 +78,10 @@ async function startBundle(options: RollupOptions) {
   );
 }
 
-async function build(pkgRelativePath: string, cmdOptions: CmdBuildOptions) {
+export async function build(
+  pkgRelativePath: string,
+  cmdOptions: CmdBuildOptions,
+) {
   console.log(chalk.underline(`pkgx v${getCliVersion()}`));
 
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
