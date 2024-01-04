@@ -92,6 +92,11 @@ export async function build(
 
   const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
 
+  if (cmdOptions.app) {
+    filledPkgxOptions.disableCjsOutput = true;
+    filledPkgxOptions.disableDtsOutput = true;
+  }
+
   const rollupOptions = getRollupOptions(filledPkgxOptions);
 
   const outputDirName = filledPkgxOptions.outputDirName;

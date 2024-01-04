@@ -14,6 +14,10 @@ program
   .description('build package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .option('--pack', 'pack package after build')
+  .option(
+    '--app',
+    'change default options for application, like disable cjs and dts outputs',
+  )
   .action(buildCommand);
 
 program
