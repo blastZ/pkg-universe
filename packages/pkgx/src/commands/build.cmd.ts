@@ -1,7 +1,5 @@
 import { resolve } from 'node:path';
 
-import chalk from 'chalk';
-import ms from 'pretty-ms';
 import {
   rollup,
   type InputOptions,
@@ -18,8 +16,8 @@ import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
 import { addCjsPackageJsonFile } from '../utils/add-cjs-package-json-file.util.js';
 import { addPackageJsonFile } from '../utils/add-package-json-file.util.js';
-import { getCliVersion } from '../utils/get-cli-version.util.js';
 import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
+import { logger } from '../utils/loggin.util.js';
 
 async function generateOutputs(
   bundle: RollupBuild,
@@ -50,11 +48,7 @@ async function startBundle(options: RollupOptions) {
     relativeId(o.file || o.dir!),
   );
 
-  console.log(
-    chalk.cyan(
-      `\n${chalk.bold(inputFiles!)} → ${chalk.bold(outputFiles.join(', '))}...`,
-    ),
-  );
+  logger.bundleInfo(String(inputFiles!), outputFiles.join(', '));
 
   let bundle: RollupBuild | undefined;
   try {
@@ -69,20 +63,14 @@ async function startBundle(options: RollupOptions) {
     }
   }
 
-  console.log(
-    chalk.green(
-      `created ${chalk.bold(outputFiles.join(', '))} in ${chalk.bold(
-        ms(Date.now() - start),
-      )}`,
-    ),
-  );
+  logger.bundleTime(outputFiles.join(', '), Date.now() - start);
 }
 
 export async function build(
   pkgRelativePath: string,
   cmdOptions: CmdBuildOptions,
 ) {
-  console.log(chalk.underline(`pkgx v${getCliVersion()}`));
+  logger.cliVersion();
 
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 

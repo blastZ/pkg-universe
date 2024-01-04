@@ -1,9 +1,7 @@
 import { ChildProcess, fork } from 'node:child_process';
 import { resolve } from 'node:path';
+import { clearTimeout } from 'node:timers';
 
-import chalk from 'chalk';
-import dayjs from 'dayjs';
-import ms from 'pretty-ms';
 import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
@@ -12,9 +10,8 @@ import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-d
 import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
-import { getCliVersion } from '../utils/get-cli-version.util.js';
 import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
-('');
+import { logger } from '../utils/loggin.util.js';
 
 function startWatch(
   pkgxOptions: Required<PkgxOptions>,
@@ -46,48 +43,58 @@ function startWatch(
             : Object.values(input as Record<string, string>).join(', ');
         }
 
-        console.log(
-          chalk.cyan(
-            `bundles ${chalk.bold(input)} → ${chalk.bold(
-              event.output.map(relativeId).join(', '),
-            )}...`,
-          ),
-        );
+        logger.bundleInfo(input, event.output.map(relativeId).join(', '));
 
         break;
       }
 
       case 'BUNDLE_END': {
-        console.log(
-          chalk.green(
-            `created ${chalk.bold(
-              event.output.map(relativeId).join(', '),
-            )} in ${chalk.bold(ms(event.duration))}`,
-          ),
+        logger.bundleTime(
+          event.output.map(relativeId).join(', '),
+          event.duration,
         );
 
+        const startChild = () => {
+          child = fork(`${pkgxOptions.outputDirName}/esm/index.js`, {
+            execArgv: ['--enable-source-maps'],
+          });
+        };
+
         if (child) {
-          child.kill();
+          let isExited = false;
 
-          child = null;
+          child.kill('SIGTERM');
+
+          const timer = setTimeout(() => {
+            if (child && !isExited) {
+              logger.forceRestart();
+
+              child.kill('SIGKILL');
+            }
+          }, 5000);
+
+          child.on('exit', () => {
+            isExited = true;
+            clearTimeout(timer);
+
+            startChild();
+          });
+        } else {
+          startChild();
         }
-
-        child = fork(`${pkgxOptions.outputDirName}/esm/index.js`, {
-          execArgv: ['--enable-source-maps'],
-        });
 
         break;
       }
 
       case 'END': {
-        console.log(`\n[${dayjs().format()}] waiting for changes...`);
+        logger.waitingForChanges();
       }
     }
   });
 }
 
 async function serve(pkgRelativePath: string) {
-  console.log(chalk.underline(`pkgx v${getCliVersion()}`));
+  logger.cliVersion();
 
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
