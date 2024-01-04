@@ -32,6 +32,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
     disableDtsOutput: options.disableDtsOutput ?? false,
     incremental: options.incremental ?? false,
     cache: false,
+    addStartScript: false,
   };
 
   return filledOptions;

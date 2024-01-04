@@ -83,6 +83,7 @@ export async function build(
   if (cmdOptions.app) {
     filledPkgxOptions.disableCjsOutput = true;
     filledPkgxOptions.disableDtsOutput = true;
+    filledPkgxOptions.addStartScript = true;
   }
 
   const rollupOptions = getRollupOptions(filledPkgxOptions);

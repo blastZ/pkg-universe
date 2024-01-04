@@ -42,6 +42,10 @@ function getDependencies(
     }
   });
 
+  if (Object.keys(targetDependencies).length < 1) {
+    return undefined;
+  }
+
   return targetDependencies;
 }
 
@@ -64,6 +68,12 @@ export async function addPackageJsonFile(options: Required<PkgxOptions>) {
     pkgJson.peerDependencies || {},
     options,
   );
+
+  if (options.addStartScript) {
+    templatePkgJson.scripts = {
+      start: 'node esm/index.js',
+    };
+  }
 
   let str = JSON.stringify(templatePkgJson, null, 2);
 

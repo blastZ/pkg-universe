@@ -13,4 +13,5 @@ export interface PkgxOptions {
   disableDtsOutput?: boolean;
   incremental?: boolean;
   cache?: boolean;
+  addStartScript?: boolean;
 }
