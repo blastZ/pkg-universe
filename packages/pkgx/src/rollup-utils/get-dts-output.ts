@@ -22,6 +22,7 @@ export function getDtsOutput(options: Required<PkgxOptions>) {
     ],
     plugins: [dts()],
     external: options.external,
+    cache: options.cache,
   };
 
   return output;

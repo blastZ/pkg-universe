@@ -12,4 +12,5 @@ export interface PkgxOptions {
   disableCjsOutput?: boolean;
   disableDtsOutput?: boolean;
   incremental?: boolean;
+  cache?: boolean;
 }

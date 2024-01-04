@@ -31,6 +31,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
     disableCjsOutput: options.disableCjsOutput ?? false,
     disableDtsOutput: options.disableDtsOutput ?? false,
     incremental: options.incremental ?? false,
+    cache: false,
   };
 
   return filledOptions;

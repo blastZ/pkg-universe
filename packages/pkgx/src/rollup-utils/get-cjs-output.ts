@@ -30,6 +30,7 @@ export function getCjsOutput(options: Required<PkgxOptions>) {
       (json as unknown as typeof json.default)(),
     ],
     external: options.external,
+    cache: options.cache,
   };
 
   return output;

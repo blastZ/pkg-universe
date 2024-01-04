@@ -18,6 +18,13 @@ function startWatch(
   rollupOptions: RollupOptions[],
 ) {
   let child: ChildProcess | null = null;
+
+  const startChild = () => {
+    child = fork(`${pkgxOptions.outputDirName}/esm/index.js`, {
+      execArgv: ['--enable-source-maps'],
+    });
+  };
+
   const watcher = watch(rollupOptions);
 
   watcher.on('event', (event) => {
@@ -54,12 +61,10 @@ function startWatch(
           event.duration,
         );
 
-        const startChild = () => {
-          child = fork(`${pkgxOptions.outputDirName}/esm/index.js`, {
-            execArgv: ['--enable-source-maps'],
-          });
-        };
+        break;
+      }
 
+      case 'END': {
         if (child) {
           let isExited = false;
 
@@ -79,16 +84,20 @@ function startWatch(
 
             startChild();
           });
+
+          child.on('error', (err) => {
+            logger.error(err.message);
+          });
         } else {
           startChild();
         }
 
-        break;
-      }
-
-      case 'END': {
         logger.waitingForChanges();
       }
+    }
+
+    if ('result' in event && event.result) {
+      event.result.close().catch((error) => handleError(error, true));
     }
   });
 }
@@ -107,6 +116,7 @@ async function serve(pkgRelativePath: string) {
   filledPkgxOptions.disableCjsOutput = true;
   filledPkgxOptions.disableDtsOutput = true;
   filledPkgxOptions.sourceMap = true;
+  filledPkgxOptions.cache = true;
 
   const rollupOptions = getRollupOptions(filledPkgxOptions);
 

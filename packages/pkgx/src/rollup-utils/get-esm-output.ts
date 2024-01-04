@@ -33,6 +33,7 @@ export function getEsmOutput(options: Required<PkgxOptions>) {
       }),
     ],
     external: options.external,
+    cache: options.cache,
   };
 
   return output;
