@@ -27,8 +27,6 @@ function getNamespace(
 }
 
 async function build(appName: string, options: CmdBuildImageOptions) {
-  logger.cliVersion();
-
   const filesInDirectory = new Set(await readdir(process.cwd()));
 
   if (!filesInDirectory.has('Dockerfile')) {
@@ -82,6 +80,8 @@ export async function buildImageCommand(
   appName: string,
   options: CmdBuildImageOptions,
 ) {
+  logger.cliVersion();
+
   if (!options.target) {
     logger.error('target is required');
 

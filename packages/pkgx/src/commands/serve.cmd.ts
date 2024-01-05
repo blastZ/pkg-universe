@@ -103,8 +103,6 @@ function startWatch(
 }
 
 async function serve(pkgRelativePath: string) {
-  logger.cliVersion();
-
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
@@ -124,5 +122,7 @@ async function serve(pkgRelativePath: string) {
 }
 
 export async function serveCommand(pkgRelativePath: string) {
+  logger.cliVersion();
+
   await serve(pkgRelativePath);
 }

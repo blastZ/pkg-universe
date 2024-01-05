@@ -70,8 +70,6 @@ export async function build(
   pkgRelativePath: string,
   cmdOptions: CmdBuildOptions,
 ) {
-  logger.cliVersion();
-
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
@@ -110,5 +108,7 @@ export async function buildCommand(
   pkgRelativePath: string,
   options: CmdBuildOptions,
 ) {
+  logger.cliVersion();
+
   await build(pkgRelativePath, options);
 }

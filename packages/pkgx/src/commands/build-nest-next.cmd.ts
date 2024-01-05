@@ -7,8 +7,6 @@ import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
 import { logger } from '../utils/loggin.util.js';
 
 async function build(pkgRelativePath: string) {
-  logger.cliVersion();
-
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
@@ -33,5 +31,7 @@ async function build(pkgRelativePath: string) {
 }
 
 export async function buildNestNextCommand(pkgRelativePath: string) {
+  logger.cliVersion();
+
   await build(pkgRelativePath);
 }

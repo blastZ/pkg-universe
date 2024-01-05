@@ -1,5 +1,7 @@
 import { $, cd } from 'zx';
 
+import { logger } from '../utils/loggin.util.js';
+
 import { build } from './build.cmd.js';
 
 async function publish(pkgRelativePath: string) {
@@ -13,5 +15,7 @@ async function publish(pkgRelativePath: string) {
 }
 
 export async function publishCommand(pkgRelativePath: string) {
+  logger.cliVersion();
+
   await publish(pkgRelativePath);
 }
