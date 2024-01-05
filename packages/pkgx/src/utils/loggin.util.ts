@@ -23,7 +23,7 @@ class Logger {
   }
 
   error(msg: string) {
-    console.log(`${ERROR_TAG} ${msg}`);
+    console.log(`${ERROR_TAG} ${chalk.red(msg)}`);
   }
 
   cliVersion() {
@@ -43,7 +43,7 @@ class Logger {
   }
 
   forceRestart() {
-    this.error(chalk.red('app did not exit in time, forcing restart...'));
+    this.error('app did not exit in time, forcing restart...');
   }
 }
 

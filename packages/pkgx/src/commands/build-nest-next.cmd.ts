@@ -6,7 +6,7 @@ import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-d
 import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
 import { logger } from '../utils/loggin.util.js';
 
-export async function build(pkgRelativePath: string) {
+async function build(pkgRelativePath: string) {
   logger.cliVersion();
 
   const pkgPath = resolve(process.cwd(), pkgRelativePath);

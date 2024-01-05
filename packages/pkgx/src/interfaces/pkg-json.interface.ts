@@ -17,4 +17,12 @@ export interface PkgJson {
     type: string;
     url: string;
   };
+  images?: {
+    [target: string]: {
+      registry: string;
+      namespaces: {
+        [namespace: string]: string[];
+      };
+    };
+  };
 }

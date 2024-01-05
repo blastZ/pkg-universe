@@ -2,6 +2,7 @@
 
 import { program } from 'commander';
 
+import { buildImageCommand } from './commands/build-image.cmd.js';
 import { buildNestNextCommand } from './commands/build-nest-next.cmd.js';
 import { buildCommand } from './commands/build.cmd.js';
 import { publishCommand } from './commands/publish.cmd.js';
@@ -26,6 +27,13 @@ program
   .description('build next in nest application')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(buildNestNextCommand);
+
+program
+  .command('build-image')
+  .description('build docker image')
+  .argument('<app-name>', 'name of the app')
+  .option('-t, --target <target>', 'target image')
+  .action(buildImageCommand);
 
 program
   .command('serve')
