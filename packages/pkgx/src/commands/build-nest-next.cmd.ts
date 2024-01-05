@@ -28,6 +28,8 @@ export async function build(pkgRelativePath: string) {
   await $`mkdir -p ${outputDirName}/next`.quiet();
 
   await $`mv src/next/.next ${outputDirName}/next`.quiet();
+
+  await $`rm -rf ${outputDirName}/next/.next/cache`.quiet();
 }
 
 export async function buildNestNextCommand(pkgRelativePath: string) {
