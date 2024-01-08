@@ -6,6 +6,7 @@ import { buildImageCommand } from './commands/build-image.cmd.js';
 import { buildNestNextCommand } from './commands/build-nest-next.cmd.js';
 import { buildCommand } from './commands/build.cmd.js';
 import { publishCommand } from './commands/publish.cmd.js';
+import { replaceModuleSuffixCommand } from './commands/replace-module-suffix.cmd.js';
 import { serveCommand } from './commands/serve.cmd.js';
 import { getCliVersion } from './utils/get-cli-version.util.js';
 
@@ -46,5 +47,13 @@ program
   .description('publish package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(publishCommand);
+
+program
+  .command('replace-module-suffix')
+  .description('replace module suffix')
+  .argument('<relative-path>', 'relative path to file or folder')
+  .argument('<old-suffix>', 'old suffix')
+  .argument('<new-suffix>', 'new suffix')
+  .action(replaceModuleSuffixCommand);
 
 program.parse();
