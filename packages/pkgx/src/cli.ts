@@ -54,6 +54,7 @@ program
   .argument('<relative-path>', 'relative path to file or folder')
   .argument('<old-suffix>', 'old suffix')
   .argument('<new-suffix>', 'new suffix')
+  .option('--index-dirs [indexDirs...]', 'replace suffix with index file path')
   .action(replaceModuleSuffixCommand);
 
 program.parse();
