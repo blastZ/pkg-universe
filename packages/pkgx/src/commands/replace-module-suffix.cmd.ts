@@ -125,7 +125,7 @@ export async function replaceModuleSuffixCommand(
   newSuffix: string,
   options: CmdReplaceModuleSuffixOptions,
 ) {
-  logger.cliVersion();
+  logger.logCliVersion();
 
   const regExp = getRegExp();
 

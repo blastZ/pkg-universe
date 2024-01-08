@@ -15,7 +15,7 @@ async function publish(pkgRelativePath: string) {
 }
 
 export async function publishCommand(pkgRelativePath: string) {
-  logger.cliVersion();
+  logger.logCliVersion();
 
   await publish(pkgRelativePath);
 }

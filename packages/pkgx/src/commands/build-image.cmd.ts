@@ -80,7 +80,7 @@ export async function buildImageCommand(
   appName: string,
   options: CmdBuildImageOptions,
 ) {
-  logger.cliVersion();
+  logger.logCliVersion();
 
   if (!options.target) {
     logger.error('target is required');

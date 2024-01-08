@@ -26,24 +26,38 @@ class Logger {
     console.log(`${ERROR_TAG} ${chalk.red(msg)}`);
   }
 
-  cliVersion() {
+  logCliVersion() {
     this.info(chalk.underline(`v${getCliVersion()}`));
   }
 
-  bundleInfo(origin: string, target: string) {
+  logBundleInfo(origin: string, target: string) {
     this.info(`${cyanBold(origin)} → ${cyanBold(target)}...`);
   }
 
-  bundleTime(id: string, time: number) {
+  logBundleTime(id: string, time: number) {
     this.info(`created ${greenBold(id)} in ${greenBold(ms(time))}`);
   }
 
-  waitingForChanges() {
+  logWaitingForChanges() {
     this.info(`(${dayjs().format()}) waiting for changes...`);
   }
 
-  forceRestart() {
+  logForceRestart() {
     this.error('app did not exit in time, forcing restart...');
+  }
+
+  logServeStaticRequest(method: string = 'GET', url: string = '/') {
+    this.info(chalk.cyan(`${method} ${url}`));
+  }
+
+  logServeStaticTime(statusCode: number, time: number) {
+    const str = `returned ${statusCode} in ${ms(time)}`;
+
+    if (statusCode < 400) {
+      return this.info(chalk.green(str));
+    }
+
+    return this.error(str);
   }
 }
 

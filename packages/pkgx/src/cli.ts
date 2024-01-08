@@ -7,6 +7,7 @@ import { buildNestNextCommand } from './commands/build-nest-next.cmd.js';
 import { buildCommand } from './commands/build.cmd.js';
 import { publishCommand } from './commands/publish.cmd.js';
 import { replaceModuleSuffixCommand } from './commands/replace-module-suffix.cmd.js';
+import { serveStaticCommand } from './commands/serve-static.cmd.js';
 import { serveCommand } from './commands/serve.cmd.js';
 import { getCliVersion } from './utils/get-cli-version.util.js';
 
@@ -41,6 +42,13 @@ program
   .description('serve package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(serveCommand);
+
+program
+  .command('serve-static')
+  .description('serve static folder')
+  .argument('<relative-path>', 'relative path to root folder')
+  .option('-p, --port <port>', 'port to listen')
+  .action(serveStaticCommand);
 
 program
   .command('publish')

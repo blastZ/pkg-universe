@@ -31,7 +31,7 @@ async function build(pkgRelativePath: string) {
 }
 
 export async function buildNestNextCommand(pkgRelativePath: string) {
-  logger.cliVersion();
+  logger.logCliVersion();
 
   await build(pkgRelativePath);
 }

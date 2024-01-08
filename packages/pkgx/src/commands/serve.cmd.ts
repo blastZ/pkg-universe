@@ -50,13 +50,13 @@ function startWatch(
             : Object.values(input as Record<string, string>).join(', ');
         }
 
-        logger.bundleInfo(input, event.output.map(relativeId).join(', '));
+        logger.logBundleInfo(input, event.output.map(relativeId).join(', '));
 
         break;
       }
 
       case 'BUNDLE_END': {
-        logger.bundleTime(
+        logger.logBundleTime(
           event.output.map(relativeId).join(', '),
           event.duration,
         );
@@ -72,7 +72,7 @@ function startWatch(
 
           const timer = setTimeout(() => {
             if (child && !isExited) {
-              logger.forceRestart();
+              logger.logForceRestart();
 
               child.kill('SIGKILL');
             }
@@ -92,7 +92,7 @@ function startWatch(
           startChild();
         }
 
-        logger.waitingForChanges();
+        logger.logWaitingForChanges();
       }
     }
 
@@ -122,7 +122,7 @@ async function serve(pkgRelativePath: string) {
 }
 
 export async function serveCommand(pkgRelativePath: string) {
-  logger.cliVersion();
+  logger.logCliVersion();
 
   await serve(pkgRelativePath);
 }

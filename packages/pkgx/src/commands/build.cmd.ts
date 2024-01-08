@@ -48,7 +48,7 @@ async function startBundle(options: RollupOptions) {
     relativeId(o.file || o.dir!),
   );
 
-  logger.bundleInfo(String(inputFiles!), outputFiles.join(', '));
+  logger.logBundleInfo(String(inputFiles!), outputFiles.join(', '));
 
   let bundle: RollupBuild | undefined;
   try {
@@ -63,7 +63,7 @@ async function startBundle(options: RollupOptions) {
     }
   }
 
-  logger.bundleTime(outputFiles.join(', '), Date.now() - start);
+  logger.logBundleTime(outputFiles.join(', '), Date.now() - start);
 }
 
 export async function build(
@@ -108,7 +108,7 @@ export async function buildCommand(
   pkgRelativePath: string,
   options: CmdBuildOptions,
 ) {
-  logger.cliVersion();
+  logger.logCliVersion();
 
   await build(pkgRelativePath, options);
 }
