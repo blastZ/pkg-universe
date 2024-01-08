@@ -14,6 +14,7 @@ export function fillOptionsWithDefaultValue(options: PkgxOptions) {
     inputFileName,
     cjsInputFileName: options.cjsInputFileName || inputFileName,
     esmInputFileName: options.esmInputFileName || inputFileName,
+    inputDir: options.inputDir || 'src',
     outputDirName: options.outputDirName || 'output',
     external,
     assets: options.assets || [],

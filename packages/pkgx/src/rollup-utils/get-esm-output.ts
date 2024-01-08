@@ -14,7 +14,7 @@ export function getEsmOutput(options: Required<PkgxOptions>) {
   const outputDir = `${options.outputDirName}/esm`;
 
   const output: RollupOptions = {
-    input: `src/${options.esmInputFileName}`,
+    input: `${options.inputDir}/${options.esmInputFileName}`,
     output: [
       {
         file: `${outputDir}/index.js`,

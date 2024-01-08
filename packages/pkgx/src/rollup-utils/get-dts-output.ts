@@ -10,7 +10,7 @@ export function getDtsOutput(options: Required<PkgxOptions>) {
   const outputDir = `${options.outputDirName}`;
   const targetDir = relative(resolve('.', '../../'), resolve('.'));
 
-  const dtsInput = `${outputDir}/esm/.dts/${targetDir}/src/${inputFileName}`;
+  const dtsInput = `${outputDir}/esm/.dts/${targetDir}/${options.inputDir}/${inputFileName}`;
 
   const output: RollupOptions = {
     input: dtsInput,

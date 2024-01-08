@@ -13,7 +13,7 @@ export function getCjsOutput(options: Required<PkgxOptions>) {
   const outputDir = `${options.outputDirName}/cjs`;
 
   const output: RollupOptions = {
-    input: `src/${options.cjsInputFileName}`,
+    input: `${options.inputDir}/${options.cjsInputFileName}`,
     output: [
       {
         file: `${outputDir}/index.js`,
