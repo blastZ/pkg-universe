@@ -1,6 +1,6 @@
 {
   "name": "@blastz/pkgx",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "package executor",
   "type": "module",
   "main": "./cjs/index.js",
@@ -25,14 +25,15 @@
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.5",
+    "@types/serve-handler": "^6.1.4",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
-    "concurrently": "^8.2.2",
     "dayjs": "^1.11.10",
     "pretty-ms": "^8.0.0",
     "rollup": "^4.9.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.0",
+    "serve-handler": "^6.1.5",
     "zx": "^7.2.3"
   }
 }
