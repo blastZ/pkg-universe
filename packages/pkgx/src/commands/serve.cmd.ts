@@ -18,10 +18,27 @@ function startWatch(
   rollupOptions: RollupOptions[],
 ) {
   let child: ChildProcess | null = null;
+  let timer: NodeJS.Timeout | null = null;
 
   const startChild = () => {
     child = fork(`${pkgxOptions.outputDirName}/esm/index.js`, {
       execArgv: ['--enable-source-maps'],
+    });
+
+    child.on('close', (code, signal) => {
+      timer && clearTimeout(timer);
+
+      if (code !== null && code !== 0) {
+        logger.warn(
+          `process exited with code ${code}, waiting for changes to restart...`,
+        );
+      } else {
+        startChild();
+      }
+    });
+
+    child.on('error', (err) => {
+      logger.error(err.message);
     });
   };
 
@@ -65,29 +82,16 @@ function startWatch(
       }
 
       case 'END': {
-        if (child) {
-          let isExited = false;
-
+        if (child && child.exitCode === null) {
           child.kill('SIGTERM');
 
-          const timer = setTimeout(() => {
-            if (child && !isExited) {
+          timer = setTimeout(() => {
+            if (child && child.exitCode === null) {
               logger.logForceRestart();
 
               child.kill('SIGKILL');
             }
           }, 5000);
-
-          child.on('exit', () => {
-            isExited = true;
-            clearTimeout(timer);
-
-            startChild();
-          });
-
-          child.on('error', (err) => {
-            logger.error(err.message);
-          });
         } else {
           startChild();
         }

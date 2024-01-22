@@ -6,11 +6,11 @@ import { logger } from '../utils/loggin.util.js';
 import { build } from './build.cmd.js';
 
 async function publish(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
-  await build(pkgRelativePath, cmdOptions, {
+  const { pkgxOptions } = await build(pkgRelativePath, cmdOptions, {
     cmdName: 'publish',
   });
 
-  cd('./output');
+  cd(pkgxOptions.outputDirName);
 
   await $`npm publish --access public --registry=https://registry.npmjs.org`;
 }

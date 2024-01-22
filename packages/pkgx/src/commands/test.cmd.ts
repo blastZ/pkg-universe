@@ -10,7 +10,7 @@ async function test(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
     cmdName: 'test',
   });
 
-  $`node ${pkgxOptions.outputDirName}/esm/index.js`;
+  $`node --enable-source-maps ${pkgxOptions.outputDirName}/esm/index.js`;
 }
 
 export async function testCommand(
