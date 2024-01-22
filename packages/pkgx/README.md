@@ -1,6 +1,6 @@
-# Package Executor
+# Pkgx
 
-Package executor is a tool to execute a command in a package based monorepo.
+Pkgx is a zero configuration tool for the monorepo. It support build, test, serve and more.
 
 ## License
 
