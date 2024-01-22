@@ -10,14 +10,15 @@ import {
 import { $, cd } from 'zx';
 
 import { CmdBuildOptions } from '../interfaces/cmd-build-options.interface.js';
-import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
+import { InternalOptions } from '../interfaces/internal-options.interface.js';
+import { PkgxCmdOptions } from '../interfaces/pkgx-cmd-options.interface.js';
 import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
 import { addCjsPackageJsonFile } from '../utils/add-cjs-package-json-file.util.js';
 import { addPackageJsonFile } from '../utils/add-package-json-file.util.js';
-import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
 import { logger } from '../utils/loggin.util.js';
+import { getPkgxOptions } from '../utils/pkgx-options/get-pkgx-options.util.js';
 
 async function generateOutputs(
   bundle: RollupBuild,
@@ -68,25 +69,24 @@ async function startBundle(options: RollupOptions) {
 
 export async function build(
   pkgRelativePath: string,
-  cmdOptions: CmdBuildOptions,
+  cmdOptions: CmdBuildOptions & PkgxCmdOptions,
+  internalOptions: InternalOptions,
 ) {
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
 
-  const pkgxOptions = await getPkgxOptions();
-
-  const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
+  const pkgxOptions = await getPkgxOptions(cmdOptions, internalOptions);
 
   if (cmdOptions.app) {
-    filledPkgxOptions.disableCjsOutput = true;
-    filledPkgxOptions.disableDtsOutput = true;
-    filledPkgxOptions.addStartScript = true;
+    pkgxOptions.disableCjsOutput = true;
+    pkgxOptions.disableDtsOutput = true;
+    pkgxOptions.addStartScript = true;
   }
 
-  const rollupOptions = getRollupOptions(filledPkgxOptions);
+  const rollupOptions = getRollupOptions(pkgxOptions);
 
-  const outputDirName = filledPkgxOptions.outputDirName;
+  const outputDirName = pkgxOptions.outputDirName;
 
   await $`rm -rf ${outputDirName}`.quiet();
 
@@ -96,19 +96,23 @@ export async function build(
 
   await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 
-  await addPackageJsonFile(filledPkgxOptions);
-  await addCjsPackageJsonFile(filledPkgxOptions);
+  await addPackageJsonFile(pkgxOptions);
+  await addCjsPackageJsonFile(pkgxOptions);
 
   if (cmdOptions.pack) {
     await $`cd ${outputDirName} && npm pack`.quiet();
   }
+
+  return {
+    pkgxOptions,
+  };
 }
 
 export async function buildCommand(
   pkgRelativePath: string,
-  options: CmdBuildOptions,
+  cmdOptions: CmdBuildOptions & PkgxCmdOptions,
 ) {
   logger.logCliVersion();
 
-  await build(pkgRelativePath, options);
+  await build(pkgRelativePath, cmdOptions, { cmdName: 'build' });
 }

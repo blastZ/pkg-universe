@@ -2,20 +2,17 @@ import { resolve } from 'node:path';
 
 import { $, cd } from 'zx';
 
-import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
-import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
 import { logger } from '../utils/loggin.util.js';
+import { getPkgxOptions } from '../utils/pkgx-options/get-pkgx-options.util.js';
 
 async function build(pkgRelativePath: string) {
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
 
-  const pkgxOptions = await getPkgxOptions();
+  const pkgxOptions = await getPkgxOptions({}, { cmdName: 'build-nest-next' });
 
-  const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
-
-  const outputDirName = filledPkgxOptions.outputDirName;
+  const outputDirName = pkgxOptions.outputDirName;
 
   await $`rm -rf src/next/.next`.quiet();
 

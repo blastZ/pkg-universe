@@ -6,12 +6,12 @@ import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
 import { PkgxOptions } from '../index.js';
-import { fillOptionsWithDefaultValue } from '../rollup-utils/fill-options-with-default-value.js';
+import { PkgxCmdOptions } from '../interfaces/pkgx-cmd-options.interface.js';
 import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
 import { handleError } from '../rollup-utils/handle-error.js';
 import relativeId from '../rollup-utils/relative-id.js';
-import { getPkgxOptions } from '../utils/get-pkgx-options.util.js';
 import { logger } from '../utils/loggin.util.js';
+import { getPkgxOptions } from '../utils/pkgx-options/get-pkgx-options.util.js';
 
 function startWatch(
   pkgxOptions: Required<PkgxOptions>,
@@ -102,27 +102,23 @@ function startWatch(
   });
 }
 
-async function serve(pkgRelativePath: string) {
+async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
 
-  const pkgxOptions = await getPkgxOptions();
+  const pkgxOptions = await getPkgxOptions(cmdOptions, { cmdName: 'serve' });
 
-  const filledPkgxOptions = fillOptionsWithDefaultValue(pkgxOptions);
+  const rollupOptions = getRollupOptions(pkgxOptions);
 
-  filledPkgxOptions.disableCjsOutput = true;
-  filledPkgxOptions.disableDtsOutput = true;
-  filledPkgxOptions.sourceMap = true;
-  filledPkgxOptions.cache = true;
-
-  const rollupOptions = getRollupOptions(filledPkgxOptions);
-
-  startWatch(filledPkgxOptions, rollupOptions);
+  startWatch(pkgxOptions, rollupOptions);
 }
 
-export async function serveCommand(pkgRelativePath: string) {
+export async function serveCommand(
+  pkgRelativePath: string,
+  cmdOptions: PkgxCmdOptions,
+) {
   logger.logCliVersion();
 
-  await serve(pkgRelativePath);
+  await serve(pkgRelativePath, cmdOptions);
 }
