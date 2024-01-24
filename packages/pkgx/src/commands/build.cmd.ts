@@ -78,12 +78,6 @@ export async function build(
 
   const pkgxOptions = await getPkgxOptions(cmdOptions, internalOptions);
 
-  if (cmdOptions.app) {
-    pkgxOptions.disableCjsOutput = true;
-    pkgxOptions.disableDtsOutput = true;
-    pkgxOptions.addStartScript = true;
-  }
-
   const rollupOptions = getRollupOptions(pkgxOptions);
 
   const outputDirName = pkgxOptions.outputDirName;
@@ -114,5 +108,5 @@ export async function buildCommand(
 ) {
   logger.logCliVersion();
 
-  await build(pkgRelativePath, cmdOptions, { cmdName: 'build' });
+  await build(pkgRelativePath, cmdOptions, { cmdName: 'build', cmdOptions });
 }

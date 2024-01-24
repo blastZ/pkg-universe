@@ -60,6 +60,15 @@ export function fillOptionsWithDefaultValue(
     watchExtra: options.watchExtra ?? [],
   };
 
+  if (internalOptions.cmdName === 'build') {
+    if (internalOptions.cmdOptions.app) {
+      filledOptions.disableCjsOutput = true;
+      filledOptions.disableDtsOutput = true;
+
+      filledOptions.addStartScript = true;
+    }
+  }
+
   if (
     internalOptions.cmdName === 'test' ||
     internalOptions.cmdName === 'serve'
