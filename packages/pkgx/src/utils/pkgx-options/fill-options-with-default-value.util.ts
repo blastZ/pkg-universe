@@ -1,16 +1,40 @@
 import { InternalOptions } from '../../interfaces/internal-options.interface.js';
 import { PkgxCmdOptions } from '../../interfaces/pkgx-cmd-options.interface.js';
 import { PkgxOptions } from '../../interfaces/pkgx-options.interface.js';
-import { getExternal as getDefaultExternal } from '../../rollup-utils/get-external.js';
+import { getPkgJson } from '../get-pkg-json.util.js';
+
+function getPackageBasedExternal(internalOptions: InternalOptions) {
+  const pkgJson = getPkgJson();
+
+  const dependencies = Object.keys(pkgJson.dependencies || {});
+  const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
+
+  const external: (string | RegExp)[] = dependencies.concat(peerDependencies);
+
+  if (internalOptions.cmdName === 'test') {
+    const devDependecies = Object.keys(pkgJson.devDependencies || {});
+
+    external.push(...devDependecies);
+  }
+
+  external.push(/^node:.+$/);
+
+  return external;
+}
 
 function getExternal(
   options: PkgxOptions,
   cmdOptions: PkgxCmdOptions,
   internalOptions: InternalOptions,
 ) {
-  let external = options.external || getDefaultExternal(internalOptions);
-
+  const packageBasedExternal = options.packageBasedExternal ?? true;
   const excludeFromExternal = options.excludeFromExternal || [];
+
+  let external = packageBasedExternal
+    ? getPackageBasedExternal(internalOptions)
+    : [];
+
+  external = external.concat(options.external || []);
 
   external = external.filter((o) => !excludeFromExternal.includes(o));
 
@@ -46,10 +70,11 @@ export function fillOptionsWithDefaultValue(
     inputDir: cmdOptions.inputDir || options.inputDir || 'src',
     outputDirName: options.outputDirName || 'output',
     external: getExternal(options, cmdOptions, internalOptions),
+    packageBasedExternal: options.packageBasedExternal ?? true,
+    excludeFromExternal: options.excludeFromExternal || [],
     assets: options.assets || [],
     exclude: getExclude(options, cmdOptions, internalOptions),
     sourceMap: options.sourceMap ?? false,
-    excludeFromExternal: options.excludeFromExternal || [],
     disableEsmOutput: options.disableEsmOutput ?? false,
     disableCjsOutput: options.disableCjsOutput ?? false,
     disableDtsOutput: options.disableDtsOutput ?? false,

@@ -5,10 +5,11 @@ export interface PkgxOptions {
   inputDir?: string;
   outputDirName?: string;
   external?: (string | RegExp)[];
+  packageBasedExternal?: boolean;
+  excludeFromExternal?: (string | RegExp)[];
   assets?: string[];
   exclude?: string[];
   sourceMap?: boolean;
-  excludeFromExternal?: (string | RegExp)[];
   disableEsmOutput?: boolean;
   disableCjsOutput?: boolean;
   disableDtsOutput?: boolean;
