@@ -15,4 +15,5 @@ export interface PkgxOptions {
   incremental?: boolean;
   cache?: boolean;
   addStartScript?: boolean;
+  esmShim?: boolean;
 }

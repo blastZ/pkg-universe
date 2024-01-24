@@ -56,6 +56,7 @@ export function fillOptionsWithDefaultValue(
     incremental: options.incremental ?? false,
     cache: false,
     addStartScript: false,
+    esmShim: options.esmShim ?? false,
   };
 
   if (
