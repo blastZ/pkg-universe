@@ -16,4 +16,5 @@ export interface PkgxOptions {
   cache?: boolean;
   addStartScript?: boolean;
   esmShim?: boolean;
+  watchExtra?: string[];
 }

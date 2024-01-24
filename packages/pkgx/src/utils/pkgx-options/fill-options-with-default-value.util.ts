@@ -57,6 +57,7 @@ export function fillOptionsWithDefaultValue(
     cache: false,
     addStartScript: false,
     esmShim: options.esmShim ?? false,
+    watchExtra: options.watchExtra ?? [],
   };
 
   if (

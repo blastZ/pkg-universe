@@ -59,6 +59,10 @@ class Logger {
 
     return this.error(str);
   }
+
+  logExtraWatcherChange(path: string) {
+    return this.info(`(watcher) file ${chalk.cyan(path)} changed.`);
+  }
 }
 
 export const logger = new Logger();

@@ -2,6 +2,7 @@ import { ChildProcess, fork } from 'node:child_process';
 import { resolve } from 'node:path';
 import { clearTimeout } from 'node:timers';
 
+import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
@@ -40,6 +41,22 @@ function startWatch(
     child.on('error', (err) => {
       logger.error(err.message);
     });
+  };
+
+  const reloadChild = () => {
+    if (child && child.exitCode === null) {
+      child.kill('SIGTERM');
+
+      timer = setTimeout(() => {
+        if (child && child.exitCode === null) {
+          logger.logForceRestart();
+
+          child.kill('SIGKILL');
+        }
+      }, 5000);
+    } else {
+      startChild();
+    }
   };
 
   const watcher = watch(rollupOptions);
@@ -82,19 +99,7 @@ function startWatch(
       }
 
       case 'END': {
-        if (child && child.exitCode === null) {
-          child.kill('SIGTERM');
-
-          timer = setTimeout(() => {
-            if (child && child.exitCode === null) {
-              logger.logForceRestart();
-
-              child.kill('SIGKILL');
-            }
-          }, 5000);
-        } else {
-          startChild();
-        }
+        reloadChild();
 
         logger.logWaitingForChanges();
       }
@@ -104,6 +109,16 @@ function startWatch(
       event.result.close().catch((error) => handleError(error, true));
     }
   });
+
+  if (pkgxOptions.watchExtra.length > 0) {
+    const extraWatcher = chokidar.watch(pkgxOptions.watchExtra);
+
+    extraWatcher.on('change', (path) => {
+      logger.logExtraWatcherChange(path);
+
+      reloadChild();
+    });
+  }
 }
 
 async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
