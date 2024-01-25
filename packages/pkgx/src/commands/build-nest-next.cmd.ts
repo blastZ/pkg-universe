@@ -2,7 +2,6 @@ import { resolve } from 'node:path';
 
 import { $, cd } from 'zx';
 
-import { logger } from '../utils/loggin.util.js';
 import { getPkgxOptions } from '../utils/pkgx-options/get-pkgx-options.util.js';
 
 async function build(pkgRelativePath: string) {
@@ -28,7 +27,5 @@ async function build(pkgRelativePath: string) {
 }
 
 export async function buildNestNextCommand(pkgRelativePath: string) {
-  logger.logCliVersion();
-
   await build(pkgRelativePath);
 }

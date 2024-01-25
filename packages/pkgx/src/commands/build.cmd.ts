@@ -106,7 +106,5 @@ export async function buildCommand(
   pkgRelativePath: string,
   cmdOptions: CmdBuildOptions & PkgxCmdOptions,
 ) {
-  logger.logCliVersion();
-
   await build(pkgRelativePath, cmdOptions, { cmdName: 'build', cmdOptions });
 }

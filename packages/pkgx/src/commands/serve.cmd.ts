@@ -137,7 +137,5 @@ export async function serveCommand(
   pkgRelativePath: string,
   cmdOptions: PkgxCmdOptions,
 ) {
-  logger.logCliVersion();
-
   await serve(pkgRelativePath, cmdOptions);
 }

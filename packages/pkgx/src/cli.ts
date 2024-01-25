@@ -5,12 +5,14 @@ import { program } from 'commander';
 import { buildImageCommand } from './commands/build-image.cmd.js';
 import { buildNestNextCommand } from './commands/build-nest-next.cmd.js';
 import { buildCommand } from './commands/build.cmd.js';
+import { generateConfigCommand } from './commands/generate/generate-config.cmd.js';
 import { publishCommand } from './commands/publish.cmd.js';
 import { replaceModuleSuffixCommand } from './commands/replace-module-suffix.cmd.js';
 import { serveStaticCommand } from './commands/serve-static.cmd.js';
 import { serveCommand } from './commands/serve.cmd.js';
 import { testCommand } from './commands/test.cmd.js';
 import { getCliVersion } from './utils/get-cli-version.util.js';
+import { logger } from './utils/loggin.util.js';
 
 program.version(getCliVersion(), '-v --version');
 
@@ -79,6 +81,21 @@ program.commands.map((command) => {
       .option('--input-file-name <inputFileName>', 'input file name')
       .option('--input-dir <inputDir>', 'input dir');
   }
+});
+
+const generate = program
+  .command('generate')
+  .alias('g')
+  .description('generate resources');
+
+generate
+  .command('config')
+  .description('generate config file')
+  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
+  .action(generateConfigCommand);
+
+program.hook('preAction', () => {
+  logger.logCliVersion();
 });
 
 program.parse();

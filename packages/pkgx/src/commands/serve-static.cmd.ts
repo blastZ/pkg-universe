@@ -29,7 +29,5 @@ export async function serveStaticCommand(
   relativePath: string,
   options: CmdServeStaticOptions,
 ) {
-  logger.logCliVersion();
-
   await serve(relativePath, options);
 }
