@@ -43,8 +43,8 @@ build
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(buildAppCommand);
 
-program
-  .command('build-nest-next')
+build
+  .command('nest-next')
   .description('build next in nest application')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(buildNestNextCommand);
