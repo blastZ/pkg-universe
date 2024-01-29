@@ -1,7 +1,10 @@
-import { InternalOptions } from '../../interfaces/internal-options.interface.js';
-import { PkgxCmdOptions } from '../../interfaces/pkgx-cmd-options.interface.js';
-import { PkgxOptions } from '../../interfaces/pkgx-options.interface.js';
 import { getPkgJson } from '../get-pkg-json.util.js';
+
+import {
+  InternalOptions,
+  PkgxCmdOptions,
+  PkgxOptions,
+} from '@/pkgx/interfaces';
 
 function getPackageBasedExternal(internalOptions: InternalOptions) {
   const pkgJson = getPkgJson();
@@ -11,7 +14,7 @@ function getPackageBasedExternal(internalOptions: InternalOptions) {
 
   const external: (string | RegExp)[] = dependencies.concat(peerDependencies);
 
-  if (internalOptions.cmdName === 'test') {
+  if (internalOptions.isTest) {
     const devDependecies = Object.keys(pkgJson.devDependencies || {});
 
     external.push(...devDependecies);
@@ -48,7 +51,7 @@ function getExclude(
 ) {
   const exclude = ['node_modules', 'dist', 'output'];
 
-  if (internalOptions.cmdName !== 'test') {
+  if (!internalOptions.isTest) {
     exclude.push('test', '**/*.spec.ts', '**/*.test.ts');
   }
 
@@ -58,7 +61,7 @@ function getExclude(
 export function fillOptionsWithDefaultValue(
   options: PkgxOptions,
   cmdOptions: PkgxCmdOptions,
-  internalOptions: InternalOptions,
+  internalOptions: InternalOptions = {},
 ) {
   const inputFileName =
     cmdOptions.inputFileName || options.inputFileName || 'index.ts';
@@ -85,22 +88,20 @@ export function fillOptionsWithDefaultValue(
     watchExtra: options.watchExtra ?? [],
   };
 
-  if (internalOptions.cmdName === 'build') {
-    if (internalOptions.cmdOptions.app) {
-      filledOptions.disableCjsOutput = true;
-      filledOptions.disableDtsOutput = true;
-
-      filledOptions.addStartScript = true;
-    }
-  }
-
   if (
-    internalOptions.cmdName === 'test' ||
-    internalOptions.cmdName === 'serve'
+    internalOptions.isApp ||
+    internalOptions.isServe ||
+    internalOptions.isTest
   ) {
     filledOptions.disableCjsOutput = true;
     filledOptions.disableDtsOutput = true;
+  }
 
+  if (internalOptions.isApp) {
+    filledOptions.addStartScript = true;
+  }
+
+  if (internalOptions.isServe || internalOptions.isTest) {
     filledOptions.sourceMap = true;
 
     filledOptions.cache = true;

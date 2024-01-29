@@ -15,7 +15,9 @@ async function build(
 ) {
   await changeWorkingDirectory(pkgRelativePath);
 
-  const pkgxOptions = await getPkgxOptions(cmdOptions);
+  const pkgxOptions = await getPkgxOptions(cmdOptions, {
+    isApp: true,
+  });
 
   const outputDirName = pkgxOptions.outputDirName;
 
@@ -28,12 +30,12 @@ async function build(
   await addPackageJsonFile(pkgxOptions);
   await addCjsPackageJsonFile(pkgxOptions);
 
-  if (cmdOptions.pack) {
-    await $`cd ${outputDirName} && npm pack`.quiet();
-  }
+  return {
+    pkgxOptions,
+  };
 }
 
-export async function buildPackageCommand(
+export async function buildAppCommand(
   pkgRelativePath: string,
   cmdOptions: CmdBuildPackageOptions & PkgxCmdOptions,
 ) {

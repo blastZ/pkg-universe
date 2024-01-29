@@ -1,13 +1,29 @@
 import { $, cd } from 'zx';
 
-import { PkgxCmdOptions } from '../interfaces/pkgx-cmd-options.interface.js';
-
-import { build } from './build/build-package.cmd.js';
+import { PkgxCmdOptions } from '@/pkgx/interfaces';
+import { rollupBuild } from '@/pkgx/rollup-utils';
+import {
+  addCjsPackageJsonFile,
+  addPackageJsonFile,
+  changeWorkingDirectory,
+  getPkgxOptions,
+} from '@/pkgx/utils';
 
 async function publish(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
-  const { pkgxOptions } = await build(pkgRelativePath, cmdOptions, {
-    cmdName: 'publish',
-  });
+  await changeWorkingDirectory(pkgRelativePath);
+
+  const pkgxOptions = await getPkgxOptions(cmdOptions);
+
+  const outputDirName = pkgxOptions.outputDirName;
+
+  await $`rm -rf ${outputDirName}`.quiet();
+
+  await rollupBuild(pkgxOptions);
+
+  await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
+
+  await addPackageJsonFile(pkgxOptions);
+  await addCjsPackageJsonFile(pkgxOptions);
 
   cd(pkgxOptions.outputDirName);
 

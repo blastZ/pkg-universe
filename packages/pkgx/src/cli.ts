@@ -3,6 +3,7 @@
 import { program } from 'commander';
 
 import {
+  buildAppCommand,
   buildImageCommand,
   buildNestNextCommand,
   buildPackageCommand,
@@ -24,10 +25,6 @@ build
   .description('build package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .option('--pack', 'pack package after build')
-  .option(
-    '--app',
-    'change default options for application, like disable cjs and dts outputs',
-  )
   .action(buildPackageCommand);
 
 build
@@ -38,6 +35,13 @@ build
   .option('--namespace <namespace>', 'namespace')
   .option('--repo <repo>', 'repo')
   .action(buildImageCommand);
+
+build
+  .command('application')
+  .alias('app')
+  .description('build application based package')
+  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
+  .action(buildAppCommand);
 
 program
   .command('build-nest-next')

@@ -2,14 +2,14 @@ import { resolve } from 'node:path';
 
 import { $, cd } from 'zx';
 
-import { getPkgxOptions } from '../utils/pkgx-options/get-pkgx-options.util.js';
+import { getPkgxOptions } from '@/pkgx/utils';
 
 async function build(pkgRelativePath: string) {
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
 
   cd(pkgPath);
 
-  const pkgxOptions = await getPkgxOptions({}, { cmdName: 'build-nest-next' });
+  const pkgxOptions = await getPkgxOptions();
 
   const outputDirName = pkgxOptions.outputDirName;
 

@@ -26,7 +26,7 @@ function relative(from: string, to: string): string {
   return toParts.join('/');
 }
 
-export default function relativeId(id: string): string {
+export function relativeId(id: string): string {
   if (!isAbsolute(id)) return id;
 
   return relative(resolve(), id);

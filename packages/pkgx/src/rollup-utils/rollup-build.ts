@@ -11,7 +11,7 @@ import { logger } from '../utils/loggin.util.js';
 
 import { getRollupOptions } from './get-rollup-options.js';
 import { handleError } from './handle-error.js';
-import relativeId from './relative-id.js';
+import { relativeId } from './relative-id.js';
 
 async function generateOutputs(
   bundle: RollupBuild,

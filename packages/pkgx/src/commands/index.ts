@@ -1,4 +1,5 @@
 export * from './build-nest-next.cmd.js';
+export * from './build/build-app.cmd.js';
 export * from './build/build-image.cmd.js';
 export * from './build/build-package.cmd.js';
 export * from './generate/generate-config.cmd.js';

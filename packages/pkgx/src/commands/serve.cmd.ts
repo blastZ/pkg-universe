@@ -6,13 +6,9 @@ import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
 import { cd } from 'zx';
 
-import { PkgxOptions } from '../index.js';
-import { PkgxCmdOptions } from '../interfaces/pkgx-cmd-options.interface.js';
-import { getRollupOptions } from '../rollup-utils/get-rollup-options.js';
-import { handleError } from '../rollup-utils/handle-error.js';
-import relativeId from '../rollup-utils/relative-id.js';
-import { logger } from '../utils/loggin.util.js';
-import { getPkgxOptions } from '../utils/pkgx-options/get-pkgx-options.util.js';
+import { PkgxCmdOptions, PkgxOptions } from '@/pkgx/interfaces';
+import { getRollupOptions, handleError, relativeId } from '@/pkgx/rollup-utils';
+import { getPkgxOptions, logger } from '@/pkgx/utils';
 
 function startWatch(
   pkgxOptions: Required<PkgxOptions>,
@@ -126,7 +122,7 @@ async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   cd(pkgPath);
 
-  const pkgxOptions = await getPkgxOptions(cmdOptions, { cmdName: 'serve' });
+  const pkgxOptions = await getPkgxOptions(cmdOptions, { isServe: true });
 
   const rollupOptions = getRollupOptions(pkgxOptions);
 
