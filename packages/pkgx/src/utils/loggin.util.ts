@@ -14,16 +14,20 @@ const cyanBold = (msg: string) => chalk.cyan(chalk.bold(msg));
 const greenBold = (msg: string) => chalk.green(chalk.bold(msg));
 
 class Logger {
+  private write(msg: string) {
+    process.stderr.write(msg + '\n');
+  }
+
   info(msg: string) {
-    console.log(`${INFO_TAG} ${msg}`);
+    this.write(`${INFO_TAG} ${msg}`);
   }
 
   warn(msg: string) {
-    console.log(`${WARNING_TAG} ${msg}`);
+    this.write(`${WARNING_TAG} ${msg}`);
   }
 
   error(msg: string) {
-    console.log(`${ERROR_TAG} ${chalk.red(msg)}`);
+    this.write(`${ERROR_TAG} ${chalk.red(msg)}`);
   }
 
   logCliVersion() {

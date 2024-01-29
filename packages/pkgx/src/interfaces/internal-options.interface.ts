@@ -1,8 +1,8 @@
-import { CmdBuildOptions } from './cmd-build-options.interface.js';
+import { CmdBuildPackageOptions } from './build/cmd-build-package-options.interface.js';
 
 interface BuildInternalOptions {
   cmdName: 'build';
-  cmdOptions: CmdBuildOptions;
+  cmdOptions: CmdBuildPackageOptions;
 }
 
 interface TestInternalOptions {

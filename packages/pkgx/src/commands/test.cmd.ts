@@ -2,7 +2,7 @@ import { $ } from 'zx';
 
 import { PkgxCmdOptions } from '../interfaces/pkgx-cmd-options.interface.js';
 
-import { build } from './build.cmd.js';
+import { build } from './build/build-package.cmd.js';
 
 async function test(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
   const { pkgxOptions } = await build(pkgRelativePath, cmdOptions, {

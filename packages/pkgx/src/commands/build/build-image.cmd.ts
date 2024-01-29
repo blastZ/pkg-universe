@@ -1,12 +1,12 @@
 import { readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
+import { program } from 'commander';
 import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
-import { CmdBuildImageOptions } from '../../interfaces/build/cmd-build-image-options.interface.js';
-import { getPkgJson } from '../../utils/get-pkg-json.util.js';
-import { logger } from '../../utils/loggin.util.js';
+import { CmdBuildImageOptions } from '@/pkgx/interfaces';
+import { getPkgJson, logger } from '@/pkgx/utils';
 
 async function getTag() {
   const date = dayjs(new Date()).format('YYYYMMDD');
@@ -22,9 +22,7 @@ async function build(pkgRelativePath: string, options: CmdBuildImageOptions) {
   const filesInDirectory = new Set(await readdir(process.cwd()));
 
   if (!filesInDirectory.has('Dockerfile')) {
-    logger.error('Dockerfile not found');
-
-    return;
+    throw program.error('Dockerfile not found');
   }
 
   const pkgJson = getPkgJson(pkgDir);

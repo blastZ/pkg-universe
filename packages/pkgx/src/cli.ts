@@ -2,22 +2,25 @@
 
 import { program } from 'commander';
 
-import { buildImageCommand } from './commands/build-image.cmd.js';
-import { buildNestNextCommand } from './commands/build-nest-next.cmd.js';
-import { buildCommand } from './commands/build.cmd.js';
-import { generateConfigCommand } from './commands/generate/generate-config.cmd.js';
-import { publishCommand } from './commands/publish.cmd.js';
-import { replaceModuleSuffixCommand } from './commands/replace-module-suffix.cmd.js';
-import { serveStaticCommand } from './commands/serve-static.cmd.js';
-import { serveCommand } from './commands/serve.cmd.js';
-import { testCommand } from './commands/test.cmd.js';
-import { getCliVersion } from './utils/get-cli-version.util.js';
-import { logger } from './utils/loggin.util.js';
+import {
+  buildImageCommand,
+  buildNestNextCommand,
+  buildPackageCommand,
+  generateConfigCommand,
+  publishCommand,
+  replaceModuleSuffixCommand,
+  serveCommand,
+  serveStaticCommand,
+  testCommand,
+} from '@/pkgx/commands';
+import { getCliVersion, logger } from '@/pkgx/utils';
 
 program.version(getCliVersion(), '-v --version');
 
-program
-  .command('build')
+const build = program.command('build').description('build resources');
+
+build
+  .command('package', { isDefault: true })
   .description('build package')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .option('--pack', 'pack package after build')
@@ -25,20 +28,22 @@ program
     '--app',
     'change default options for application, like disable cjs and dts outputs',
   )
-  .action(buildCommand);
+  .action(buildPackageCommand);
+
+build
+  .command('image')
+  .description('build image')
+  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
+  .option('--host <host>', 'host name')
+  .option('--namespace <namespace>', 'namespace')
+  .option('--repo <repo>', 'repo')
+  .action(buildImageCommand);
 
 program
   .command('build-nest-next')
   .description('build next in nest application')
   .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(buildNestNextCommand);
-
-program
-  .command('build-image')
-  .description('build docker image')
-  .argument('<app-name>', 'name of the app')
-  .option('-t, --target <target>', 'target image')
-  .action(buildImageCommand);
 
 program
   .command('serve')
@@ -74,15 +79,6 @@ program
   .option('--index-dirs [indexDirs...]', 'replace suffix with index file path')
   .action(replaceModuleSuffixCommand);
 
-program.commands.map((command) => {
-  const name = command.name();
-  if (['build', 'serve', 'test', 'publish'].includes(name)) {
-    command
-      .option('--input-file-name <inputFileName>', 'input file name')
-      .option('--input-dir <inputDir>', 'input dir');
-  }
-});
-
 const generate = program
   .command('generate')
   .alias('g')
@@ -96,6 +92,25 @@ generate
 
 program.hook('preAction', () => {
   logger.logCliVersion();
+});
+
+program.commands.map((command) => {
+  const name = command.name();
+  if (['build', 'serve', 'test', 'publish'].includes(name)) {
+    command
+      .option('--input-file-name <inputFileName>', 'input file name')
+      .option('--input-dir <inputDir>', 'input dir');
+  }
+});
+
+program.configureOutput({
+  writeErr: (str) => {
+    if (str.startsWith('error: ')) {
+      str = str.replace('error: ', '');
+    }
+
+    logger.error(str);
+  },
 });
 
 program.parse();
