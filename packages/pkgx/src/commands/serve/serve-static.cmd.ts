@@ -2,8 +2,8 @@ import { createServer } from 'node:http';
 
 import handler from 'serve-handler';
 
-import { CmdServeStaticOptions } from '../interfaces/cmd-serve-static-options.interface.js';
-import { logger } from '../utils/loggin.util.js';
+import { CmdServeStaticOptions } from '../../interfaces/cmd-serve-static-options.interface.js';
+import { logger } from '../../utils/loggin.util.js';
 
 async function serve(relativePath: string, options: CmdServeStaticOptions) {
   const server = createServer(async (request, response) => {

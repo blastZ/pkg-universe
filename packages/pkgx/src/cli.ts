@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
+import { program, type Command } from 'commander';
 
 import {
   buildAppCommand,
@@ -10,7 +10,7 @@ import {
   generateConfigCommand,
   publishCommand,
   replaceModuleSuffixCommand,
-  serveCommand,
+  serveAppCommand,
   serveStaticCommand,
   testCommand,
 } from '@/pkgx/commands';
@@ -20,58 +20,53 @@ program.version(getCliVersion(), '-v --version');
 
 const build = program.command('build').description('build resources');
 
-build
+const buildPackage = build
   .command('package', { isDefault: true })
   .description('build package')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .option('--pack', 'pack package after build')
   .action(buildPackageCommand);
 
-build
+const buildImage = build
   .command('image')
   .description('build image')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .option('--host <host>', 'host name')
   .option('--namespace <namespace>', 'namespace')
   .option('--repo <repo>', 'repo')
   .action(buildImageCommand);
 
-build
+const buildApp = build
   .command('application')
   .alias('app')
   .description('build application based package')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(buildAppCommand);
 
-build
+const buildNestNext = build
   .command('nest-next')
   .description('build next in nest application')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(buildNestNextCommand);
 
-program
-  .command('serve')
-  .description('serve package')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
-  .action(serveCommand);
+const serve = program.command('serve').description('serve resources');
 
-program
-  .command('serve-static')
-  .description('serve static folder')
-  .argument('<relative-path>', 'relative path to root folder')
+const serveApp = serve
+  .command('application', { isDefault: true })
+  .alias('app')
+  .description('serve application based package')
+  .action(serveAppCommand);
+
+const serveStatic = serve
+  .command('static')
+  .description('serve static based package')
   .option('-p, --port <port>', 'port to listen')
   .action(serveStaticCommand);
 
-program
+const test = program
   .command('test')
   .description('test package')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(testCommand);
 
-program
+const publish = program
   .command('publish')
   .description('publish package')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(publishCommand);
 
 program
@@ -88,24 +83,48 @@ const generate = program
   .alias('g')
   .description('generate resources');
 
-generate
+const generateConfig = generate
   .command('config')
   .description('generate config file')
-  .argument('<pkg-relative-path>', 'relative path to pkg root folder')
   .action(generateConfigCommand);
 
 program.hook('preAction', () => {
   logger.logCliVersion();
 });
 
-program.commands.map((command) => {
-  const name = command.name();
-  if (['build', 'serve', 'test', 'publish'].includes(name)) {
-    command
-      .option('--input-file-name <inputFileName>', 'input file name')
-      .option('--input-dir <inputDir>', 'input dir');
-  }
-});
+function addPkgxCmdOptions(commands: readonly Command[]) {
+  commands.forEach((command) => {
+    command.option('--input-file-name <inputFileName>', 'input file name');
+    command.option('--input-dir <inputDir>', 'input dir');
+  });
+}
+
+function addPackageRelativePathOption(commands: readonly Command[]) {
+  commands.forEach((command) => {
+    command.argument('<pkg-relative-path>', 'relative path to pkg root folder');
+  });
+}
+
+addPackageRelativePathOption([
+  buildPackage,
+  buildImage,
+  buildApp,
+  buildNestNext,
+  serveApp,
+  serveStatic,
+  test,
+  publish,
+  generateConfig,
+]);
+
+addPkgxCmdOptions([
+  buildPackage,
+  buildApp,
+  buildNestNext,
+  serveApp,
+  test,
+  publish,
+]);
 
 program.configureOutput({
   writeErr: (str) => {

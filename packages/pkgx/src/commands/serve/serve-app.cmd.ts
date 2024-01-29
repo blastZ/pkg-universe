@@ -129,7 +129,7 @@ async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
   startWatch(pkgxOptions, rollupOptions);
 }
 
-export async function serveCommand(
+export async function serveAppCommand(
   pkgRelativePath: string,
   cmdOptions: PkgxCmdOptions,
 ) {
