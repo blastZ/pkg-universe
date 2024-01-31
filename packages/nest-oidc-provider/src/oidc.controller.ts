@@ -1,5 +1,5 @@
 import { All, Controller, Inject, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { type Request, type Response } from 'express';
 import Provider from 'oidc-provider';
 
 import { OIDC_CONFIG, OidcConfig } from './oidc.config.js';

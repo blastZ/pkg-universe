@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'node:http';
+
+import { Injectable } from '@nestjs/common';
 import Provider, { KoaContextWithOIDC } from 'oidc-provider';
 
 @Injectable()
