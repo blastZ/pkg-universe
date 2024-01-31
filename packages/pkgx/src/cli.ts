@@ -8,6 +8,7 @@ import {
   buildNestNextCommand,
   buildPackageCommand,
   generateConfigCommand,
+  generateDockerCommand,
   publishCommand,
   replaceModuleSuffixCommand,
   serveAppCommand,
@@ -32,6 +33,14 @@ const buildImage = build
   .option('--host <host>', 'host name')
   .option('--namespace <namespace>', 'namespace')
   .option('--repo <repo>', 'repo')
+  .option(
+    '--progress <progress>',
+    'type of progress output (auto, plain, tty). Use plain to show container output (default "auto")',
+  )
+  .option('--no-cache', 'do not use cache when building the image')
+  .option('--target <target>', 'set target build stage to build')
+  .option('--debug', 'debug mode, set progress to plain and no-cache to true')
+  .option('--dry-run', 'dry run')
   .action(buildImageCommand);
 
 const buildApp = build
@@ -87,6 +96,11 @@ const generateConfig = generate
   .command('config')
   .description('generate config file')
   .action(generateConfigCommand);
+
+generate
+  .command('docker')
+  .description('generate docker file')
+  .action(generateDockerCommand);
 
 program.hook('preAction', () => {
   logger.logCliVersion();

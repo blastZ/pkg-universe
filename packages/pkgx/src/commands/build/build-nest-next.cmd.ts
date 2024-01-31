@@ -17,7 +17,7 @@ async function build(pkgRelativePath: string) {
 
   await $`rm -rf ${dotNextDirPath}`.quiet();
 
-  await $`./node_modules/.bin/next build ${nextDirPath}`;
+  await $`pnpm next build ${nextDirPath}`;
 
   await $`rm -rf ${outputNextDirPath}`.quiet();
 

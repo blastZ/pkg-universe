@@ -1,0 +1,17 @@
+.vscode
+.nx
+.git
+.gitignore
+README.md
+*eslintrc*
+.prettierrc
+.prettierignore
+*Dockerfile*
+*docker-compose*
+.dockerignore
+**/node_modules
+**/dist
+**/output
+log
+config
+tools

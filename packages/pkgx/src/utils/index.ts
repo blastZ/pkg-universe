@@ -1,3 +1,4 @@
+export * from './__dirname.util.js';
 export * from './add-cjs-package-json-file.util.js';
 export * from './add-package-json-file.util.js';
 export * from './change-working-directory.util.js';
