@@ -11,6 +11,13 @@ async function serve(relativePath: string, options: CmdServeStaticOptions) {
 
     logger.logServeStaticRequest(request.method, request.url);
 
+    if (options.cors) {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Headers', '*');
+      response.setHeader('Access-Control-Allow-Credentials', 'true');
+      response.setHeader('Access-Control-Allow-Private-Network', 'true');
+    }
+
     await handler(request, response, {
       public: relativePath,
     });

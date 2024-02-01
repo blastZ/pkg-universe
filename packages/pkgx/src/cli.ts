@@ -66,6 +66,7 @@ const serveStatic = serve
   .command('static')
   .description('serve static based package')
   .option('-p, --port <port>', 'port to listen')
+  .option('--cors', 'enable cors')
   .action(serveStaticCommand);
 
 const test = program
