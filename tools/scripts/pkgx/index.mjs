@@ -51,28 +51,4 @@ program
     await build(pkg, options);
   });
 
-program
-  .command('build-cli')
-  .description('build cli package')
-  .argument('<pkg>', 'package name to build')
-  .option('-b, --binary', 'build binary')
-  .action(async (pkg, options) => {
-    console.log(options);
-
-    await build(pkg, options);
-
-    cd('./output');
-
-    await $`npm uninstall -g && npm install -g`.quiet();
-
-    if (options.binary) {
-      const binaryName = pkg
-        .split('-')
-        .map((o) => o.toLowerCase()[0])
-        .join('');
-
-      await $`pkg . -o ${binaryName}`;
-    }
-  });
-
 program.parse();
