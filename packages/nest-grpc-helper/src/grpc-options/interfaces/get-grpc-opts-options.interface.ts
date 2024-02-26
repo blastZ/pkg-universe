@@ -7,4 +7,5 @@ export interface GetGrpcOptsOptions {
   healthCheck?: boolean; // inject health proto
   dependentProtos?: string[];
   loader?: GrpcOptions['options']['loader'];
+  mainProtoDir?: string; // the root dir to find main proto file
 }
