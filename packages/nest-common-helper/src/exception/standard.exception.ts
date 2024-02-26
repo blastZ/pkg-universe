@@ -7,6 +7,7 @@ interface Payload {
     message?: string;
   };
   meta?: any;
+  [index: string]: unknown;
 }
 
 export class StandardException extends HttpException {
