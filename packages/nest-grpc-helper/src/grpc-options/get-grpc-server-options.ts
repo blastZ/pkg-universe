@@ -11,14 +11,7 @@ import { GetGrpcOptsOptions } from './interfaces/get-grpc-opts-options.interface
 import { getProtoPath } from './utils/get-proto-path.util.js';
 
 export function getGrpcServerOptions(opts: GetGrpcOptsOptions): GrpcOptions {
-  const {
-    packageName,
-    url,
-    healthCheck,
-    dependentProtos,
-    loader = {},
-    mainProtoDir,
-  } = opts;
+  const { packageName, url, healthCheck, loader = {} } = opts;
 
   const packages: string[] = [packageName];
 
@@ -30,11 +23,7 @@ export function getGrpcServerOptions(opts: GetGrpcOptsOptions): GrpcOptions {
     transport: Transport.GRPC,
     options: {
       package: packages,
-      protoPath: getProtoPath(packageName, {
-        dependentProtos,
-        healthCheck,
-        mainProtoDir,
-      }),
+      protoPath: getProtoPath(packageName, opts),
       url,
       loader: { ...PROTO_LOADER_OPTIONS, ...loader },
       keepalive: {

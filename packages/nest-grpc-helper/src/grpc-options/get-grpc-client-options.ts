@@ -13,14 +13,14 @@ import {
 export function getGrpcClientOptions(
   opts: GetGrpcOptsOptions,
 ): ClientProviderOptions {
-  const { packageName, url, dependentProtos, loader = {}, mainProtoDir } = opts;
+  const { packageName, url, loader = {} } = opts;
 
   const name = opts.name ? opts.name : Symbol(packageName);
 
   const protoPath =
     packageName === HEALTH_PACKAGE_NAME
       ? getHealthProtoPath()
-      : getProtoPath(packageName, { dependentProtos, mainProtoDir });
+      : getProtoPath(packageName, opts);
 
   return {
     name,

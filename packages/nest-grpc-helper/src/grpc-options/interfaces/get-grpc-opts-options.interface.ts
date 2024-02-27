@@ -8,4 +8,6 @@ export interface GetGrpcOptsOptions {
   dependentProtos?: string[];
   loader?: GrpcOptions['options']['loader'];
   mainProtoDir?: string; // the root dir to find main proto file
+  customHealthProtoPath?: string; // custom health proto file
+  customCommonProtoPath?: string; // custom common proto file
 }
