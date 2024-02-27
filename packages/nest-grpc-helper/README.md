@@ -10,12 +10,13 @@ npm install @blastz/nest-grpc-helper
 
 ## Protos
 
-Proto file loader path is based on package name, if the package name is `pkgUniverse.accountManager`,
-then the proto file will be load from `protos/pkg-universe/account-manager/main.proto`.
+Proto file loader will load `main.proto` from `process.cwd()` defaultly.
 
-The `protos` folder should in the top of the current working directory.
+change it by `mainProtoDir` option
 
 ## Examples
+
+### Server Side
 
 Create grpc app
 
@@ -23,10 +24,12 @@ Create grpc app
 import { createGrpcApp } from '@blastz/nest-grpc-helper';
 
 const app = await createGrpcApp(AppModule, {
-  packageName: 'pkgUniverse.accountManager',
+  packageName: 'accountManager',
   url: '0.0.0.0:3000',
 });
 ```
+
+### Client Side
 
 Register grpc clients
 
@@ -37,9 +40,8 @@ import { GrpcClientsModule } from '@blastz/nest-grpc-helper';
   imports: [
     GrpcClientsModule.forRoot([
       {
-        packageName: 'pkgUniverse.accountManager',
+        packageName: 'accountManager',
         url: '0.0.0.0:3000',
-        services: ['UsersService'],
         // change default request options
         timeout: 1000, // default is 3000ms
         retryCount: 10, // default is 3
@@ -59,7 +61,7 @@ import { ServiceProxyDec, ServiceProxy } from '@blastz/nest-grpc-helper';
 @Injectable()
 export class AppService {
   constructor(
-    @ServiceProxyDec('pkgUniverse.accountManager', 'UsersService')
+    @ServiceProxyDec('accountManager', 'UsersService')
     private usersService: ServiceProxy,
   ) {}
 
@@ -90,6 +92,8 @@ export class AppService implements OnModuleInit {
 ## Health check
 
 This feature depends on [gRPC Health Checking Protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md)
+
+### Server Side
 
 Enable `healthCheck` feature
 

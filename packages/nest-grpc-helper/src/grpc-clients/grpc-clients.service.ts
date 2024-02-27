@@ -6,6 +6,7 @@ import {
 
 import { healthClientKey } from '../grpc-health/health-client-key.util.js';
 import { ServiceProxy } from '../service-proxy/index.js';
+
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
 import {

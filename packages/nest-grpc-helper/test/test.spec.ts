@@ -13,9 +13,7 @@ describe('grpc helper', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [
-        GrpcClientsModule.forRoot([{ ...config, services: ['UsersService'] }]),
-      ],
+      imports: [GrpcClientsModule.forRoot([config])],
       providers: [UsersService],
       exports: [],
     }).compile();

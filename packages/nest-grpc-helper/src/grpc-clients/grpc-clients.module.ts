@@ -1,3 +1,4 @@
+import loader from '@grpc/proto-loader';
 import { DynamicModule, Provider } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
 
@@ -7,6 +8,7 @@ import {
   HEALTH_SERVICE_NAME,
 } from '../grpc-health/index.js';
 import { getGrpcClientOptions } from '../grpc-options/index.js';
+import { getProtoPath } from '../grpc-options/utils/get-proto-path.util.js';
 import { serviceProxyToken } from '../service-proxy/service-proxy-token.util.js';
 
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
@@ -16,33 +18,45 @@ import { GrpcClientsOptions } from './interfaces/grpc-clients-options.interface.
 import { GrpcClients } from './interfaces/grpc-clients.interface.js';
 
 export class GrpcClientsModule {
-  static forRoot(options: GrpcClientsOptions): DynamicModule {
+  static async forRoot(options: GrpcClientsOptions): Promise<DynamicModule> {
     const serviceProviders: Provider[] = [];
 
-    options.map((o) => {
-      const { packageName, services = [] } = o;
+    await Promise.all(
+      options.map(async (o) => {
+        const { packageName } = o;
 
-      const providers = services.map((serviceName) => {
-        const provider: Provider = {
-          provide: serviceProxyToken(packageName, serviceName),
-          useFactory: (clientsService: GrpcClientsService) => {
-            if (serviceName === HEALTH_SERVICE_NAME) {
-              return clientsService.getService(
-                healthClientKey(packageName),
-                HEALTH_SERVICE_NAME,
-              );
-            }
+        const services: string[] = [];
 
-            return clientsService.getService(packageName, serviceName);
-          },
-          inject: [GrpcClientsService],
-        };
+        const protoPath = getProtoPath(packageName, o);
+        const definition = await loader.load(protoPath);
+        Object.entries(definition).map(([key, value]) => {
+          if (key.startsWith(`${packageName}.`) && !value.format) {
+            services.push(key.replace(`${packageName}.`, ''));
+          }
+        });
 
-        return provider;
-      });
+        const providers = services.map((serviceName) => {
+          const provider: Provider = {
+            provide: serviceProxyToken(packageName, serviceName),
+            useFactory: (clientsService: GrpcClientsService) => {
+              if (serviceName === HEALTH_SERVICE_NAME) {
+                return clientsService.getService(
+                  healthClientKey(packageName),
+                  HEALTH_SERVICE_NAME,
+                );
+              }
 
-      serviceProviders.push(...providers);
-    });
+              return clientsService.getService(packageName, serviceName);
+            },
+            inject: [GrpcClientsService],
+          };
+
+          return provider;
+        });
+
+        serviceProviders.push(...providers);
+      }),
+    );
 
     return {
       module: GrpcClientsModule,
