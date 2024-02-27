@@ -1,6 +1,6 @@
 {
   "name": "@blastz/jest",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "jest config generator",
   "type": "module",
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/jest",
@@ -19,5 +19,8 @@
     "@types/jest": "^29",
     "jest": "^29",
     "ts-jest": "^29"
+  },
+  "dependencies": {
+    "globby": "^14.0.1"
   }
 }
