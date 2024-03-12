@@ -3,13 +3,6 @@
   "version": "0.1.0",
   "description": "input expression",
   "type": "module",
-  "main": "./cjs/index.js",
-  "exports": {
-    "types": "./index.d.ts",
-    "require": "./cjs/index.js",
-    "import": "./esm/index.js"
-  },
-  "types": "./index.d.ts",
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/input-expression",
   "repository": {
     "type": "git",
