@@ -15,12 +15,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/pkgx/*": [
-        "packages/pkgx/src/*/index.js"
-      ]
-    }
+    "baseUrl": "."
   },
   "exclude": [
     "**/node_modules/**",
