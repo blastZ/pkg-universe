@@ -1,4 +1,4 @@
-import { Context } from '../../../src';
+import { Context } from '../../../src/index.js';
 
 export default function ok(
   this: Context,

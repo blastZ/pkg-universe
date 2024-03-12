@@ -1,17 +1,23 @@
 import { Logger } from '@blastz/logger';
 import Router from '@koa/router';
 import { Files } from 'formidable';
-import Koa from 'koa';
-import serve from 'koa-static';
+import {
+  type DefaultContext as KoaDefaultContext,
+  type DefaultState as KoaDefaultState,
+  type Middleware as KoaMiddleware,
+  type Next as KoaNext,
+  type ParameterizedContext as KoaParameterizedContext,
+} from 'koa';
+import { type Options as ServeOptions } from 'koa-static';
 
-import { Options as BodyParserOpts } from '../middleware/body-parser/index.js';
+import { type Options as BodyParserOpts } from '../middleware/body-parser/index.js';
 import { Validate } from '../middleware/router/middleware/validator.js';
 
 export interface ConfigServe {
   root?: string;
   route?: string;
   traceLog?: boolean; // default is false
-  opts?: serve.Options;
+  opts?: ServeOptions;
 }
 
 export type ConfigRoute<TState = DefaultState, TCustom = DefaultCustom> = {
@@ -103,7 +109,7 @@ export type Config<TState = DefaultState, TCustom = DefaultCustom> = Required<
 
 export type HttpMethod = 'post' | 'get' | 'delete' | 'put' | 'patch';
 
-export interface DefaultState extends Koa.DefaultState {
+export interface DefaultState extends KoaDefaultState {
   query?: any;
   params?: any;
   body?: any;
@@ -115,7 +121,7 @@ export type DefaultHelper = {
   getExecuteTime: () => number;
 };
 
-export interface DefaultCustom extends Koa.DefaultContext {
+export interface DefaultCustom extends KoaDefaultContext {
   config: Config;
   logger: Logger;
   helper: {
@@ -124,25 +130,25 @@ export interface DefaultCustom extends Koa.DefaultContext {
 }
 
 export type Context<
-  TState = Koa.DefaultState,
-  TCustom = Koa.DefaultContext,
-> = Koa.ParameterizedContext<TState, TCustom>;
+  TState = KoaDefaultState,
+  TCustom = KoaDefaultContext,
+> = KoaParameterizedContext<TState, TCustom>;
 
-export type Next = Koa.Next;
+export type Next = KoaNext;
 
 export type Middleware<
-  TState = Koa.DefaultState,
-  TCustom = Koa.DefaultContext,
-> = Koa.Middleware<TState, TCustom>;
+  TState = KoaDefaultState,
+  TCustom = KoaDefaultContext,
+> = KoaMiddleware<TState, TCustom>;
 
 export type NicoContext<
   TState = DefaultState,
   TCustom = DefaultCustom,
-> = Koa.ParameterizedContext<TState, TCustom>;
+> = KoaParameterizedContext<TState, TCustom>;
 
 export type NicoNext = Next;
 
 export type NicoMiddleware<
   TState = DefaultState,
   TCustom = DefaultCustom,
-> = Koa.Middleware<TState, TCustom>;
+> = KoaMiddleware<TState, TCustom>;

@@ -373,14 +373,14 @@ export class Nico extends Koa {
   mergeConfigs = mergeConfigs;
 }
 
-let nico: Nico;
+let _nico: Nico;
 
 export function getNico() {
-  if (nico) return nico;
-  nico = new Nico();
-  return nico;
+  if (_nico) return _nico;
+  _nico = new Nico();
+  return _nico;
 }
 
-export default getNico();
+export const nico = getNico();
 
 export type SignalHandler = (this: Nico, error?: Error) => void;
