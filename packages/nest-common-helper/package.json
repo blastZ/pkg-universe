@@ -1,6 +1,6 @@
 {
   "name": "@blastz/nest-common-helper",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "nestjs common helper",
   "type": "module",
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/nest-common-helper",

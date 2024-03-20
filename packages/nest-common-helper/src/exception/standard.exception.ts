@@ -7,7 +7,6 @@ interface Payload {
     message?: string;
   };
   meta?: any;
-  [index: string]: unknown;
 }
 
 export class StandardException extends HttpException {
@@ -37,7 +36,7 @@ export class StandardException extends HttpException {
       }
     } else {
       super(
-        HttpException.createBody(emptyOrMessageOrPayloadOrCode),
+        HttpException.createBody({ ...emptyOrMessageOrPayloadOrCode }),
         HttpStatus.BAD_REQUEST,
       );
     }
