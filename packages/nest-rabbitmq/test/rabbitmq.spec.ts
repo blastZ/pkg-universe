@@ -1,4 +1,5 @@
 import { Test } from '@nestjs/testing';
+
 import { RabbitMQModule, RabbitMQService } from '../src/index.js';
 
 describe('RabbitMQModule', () => {
