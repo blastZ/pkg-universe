@@ -1,5 +1,6 @@
 import { TaskStatus } from '../index.js';
-import { Usage } from './usage.interface.js';
+
+import type { Usage } from './usage.interface.js';
 
 export interface ZhipuSSEResponse {
   id: string;

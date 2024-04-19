@@ -4,4 +4,5 @@ export interface ZhipuAIOptions {
   browser: boolean; // default is false
   tokenTTL: number; // milliseconds, default is 3 * 60 * 1000
   tokenRefreshTTL: number; // milliseconds, default is 30 * 1000
+  verbose?: boolean; // default is false
 }

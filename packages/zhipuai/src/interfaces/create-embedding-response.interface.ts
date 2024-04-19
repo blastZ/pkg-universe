@@ -1,6 +1,7 @@
 import { TaskStatus } from '../enums/task-status.enum.js';
-import { Response } from './response.interface.js';
-import { Usage } from './usage.interface.js';
+
+import type { Response } from './response.interface.js';
+import type { Usage } from './usage.interface.js';
 
 export type CreateEmbeddingResponse = Response<{
   request_id: string;

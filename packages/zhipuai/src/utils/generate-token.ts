@@ -5,6 +5,7 @@ export function generateToken(apiKey: string, timestamp: number, ttl: number) {
 
   const exp = timestamp + ttl;
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const token = jwt.sign(
     {
