@@ -1,11 +1,12 @@
 import { type DynamicModule } from '@nestjs/common';
 import { NestApplicationContextOptions } from '@nestjs/common/interfaces/nest-application-context-options.interface.js';
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import type { MicroserviceOptions } from '@nestjs/microservices';
 
+import { GrpcExceptionsFilter } from '../grpc-filter/index.js';
 import { getGrpcServerOptions } from '../grpc-options/index.js';
 
-import { CreateGrpcServerOptions } from './create-grpc-server-options.interface.js';
+import type { CreateGrpcServerOptions } from './create-grpc-server-options.interface.js';
 import { GRPC_SERVER_OPTIONS } from './grpc-server-options.constant.js';
 
 class AppModule {
@@ -42,6 +43,8 @@ export async function createGrpcApp(
       ...getGrpcServerOptions(options),
     },
   );
+
+  app.useGlobalFilters(new GrpcExceptionsFilter());
 
   return app;
 }

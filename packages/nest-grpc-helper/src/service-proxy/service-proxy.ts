@@ -76,7 +76,7 @@ export class ServiceProxy {
     const timeoutNumber = options?.timeout ?? this.options.timeout ?? 3000;
 
     return this.service[method](data, metadata).pipe(
-      map((reply: GrpcReply) => {
+      map((reply: GrpcReply<unknown & { '@type'?: string }>) => {
         if (Array.isArray(reply.data)) {
           if (!reply.data[0] || !reply.data[0]['@type']) {
             return reply;
