@@ -10,9 +10,8 @@ npm install @blastz/nest-grpc-helper
 
 ## Protos
 
-Proto file loader will load `main.proto` from `process.cwd()` defaultly.
-
-change it by `mainProtoDir` option
+By default, loader will load `main.proto` from `protos` folder under `process.cwd()`, you can change the
+`mainProtoDir` option to change the loading path of `main.proto`.
 
 ## Examples
 
@@ -89,6 +88,41 @@ export class AppService implements OnModuleInit {
 }
 ```
 
+## Error Handler
+
+The default exception filter will convert `Error` to standard response `GrpcReply<T>`.
+
+```ts
+throw new BadRequestException();
+```
+
+Above exception will be converted to
+
+```json
+{
+  "data": {},
+  "error": {
+    "code": "400",
+    "message": "Bad Request"
+  }
+}
+```
+
+If you want to customize the filter behavior, you can extend the default `GrpcExceptionFilter` to achieve it.
+
+```ts
+import { GrpcExceptionFilter } from '@blastz/nest-grpc-helper';
+
+@Catch()
+class CustomFilter extends GrpcExceptionsFilter {
+  catch(exception: any): any {
+    // do something
+
+    return super.catch(exception);
+  }
+}
+```
+
 ## Health check
 
 This feature depends on [gRPC Health Checking Protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md)
@@ -99,8 +133,7 @@ Enable `healthCheck` feature
 
 ```ts
 const app = await createGrpcApp(AppModule, {
-  packageName: 'accountManager',
-  url: '0.0.0.0:3000',
+  // ...
   healthCheck: true,
 });
 ```
