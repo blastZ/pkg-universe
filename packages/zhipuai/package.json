@@ -1,6 +1,6 @@
 {
   "name": "zhipuai",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "zhipuai sdk",
   "type": "module",
   "main": "./cjs/index.js",
@@ -19,7 +19,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.2",
+    "agentkeepalive": "^4.5.0",
     "axios": "^1.4.0",
-    "jsonwebtoken": "^9.0.1"
+    "jsonwebtoken": "^9.0.1",
+    "node-fetch": "^3.3.2"
   }
 }

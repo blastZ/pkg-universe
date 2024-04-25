@@ -1,5 +1,24 @@
-export type RequestOptions<Req = unknown | Record<string, unknown>> = {
-  body?: Req | null;
-  stream?: boolean;
-  timeout?: number; // milliseconds, default is 30 * 1000
+import type { Agent, HTTPMethod, Headers, Readable } from './shared-types.js';
+
+export type RequestOptions<Req = unknown | Record<string, unknown> | Readable> =
+  {
+    method?: HTTPMethod;
+    path?: string;
+    query?: Req;
+    body?: Req | null;
+    headers?: Headers;
+
+    stream?: boolean;
+    maxRetries?: number;
+    timeout?: number;
+    httpAgent?: Agent;
+    signal?: AbortSignal | null;
+    idempotencyKey?: string;
+  };
+
+export type FinalRequestOptions<
+  Req = unknown | Record<string, unknown> | Readable,
+> = RequestOptions<Req> & {
+  method: HTTPMethod;
+  path: string;
 };

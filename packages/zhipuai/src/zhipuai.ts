@@ -1,260 +1,67 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import { StringDecoder } from 'node:string_decoder';
+import { APIClient } from '@/core/api-client';
+import { ZhipuAIError } from '@/errors';
+import type { ZhipuAIClientOptions } from '@/interfaces';
+import { Chat } from '@/resources/chat';
+import { isRunningInBrowser, readEnv } from '@/utils';
 
-import { InvokeType } from './enums/invoke-type.enum.js';
-import { ModelType } from './enums/model-type.enum.js';
-import { AsyncInvokeResponse } from './interfaces/async-invoke-response.interface.js';
-import { CreateEmbeddingResponse } from './interfaces/create-embedding-response.interface.js';
-import { InvokeResponse } from './interfaces/invoke-response.interface.js';
-import {
-  CharacterModelRequestOptions,
-  ChatModelRequestOptions,
-  EmbeddingModelRequestOptions,
-  RequestOptions,
-} from './interfaces/request-options.interface.js';
-import { Response } from './interfaces/response.interface.js';
-import { SSEResponse } from './interfaces/sse-response.interface.js';
-import { ZhipuAIOptions } from './interfaces/zhipu-ai-options.interface.js';
-import { ParseEvent, createParser } from './libs/eventsource-parser/index.js';
-import { generateToken } from './utils/generate-token.util.js';
+export class ZhipuAI extends APIClient {
+  apiKey: string;
+  organization: string | null;
+  project: string | null;
 
-export class ZhipuAI {
-  private cachedToken:
-    | undefined
-    | {
-        token: string;
-        exp: number;
-      };
+  private options: ZhipuAIClientOptions;
 
-  private options: ZhipuAIOptions = {
-    apiKey: '',
-    apiPrefix: 'https://open.bigmodel.cn/api/paas/v3/model-api',
-    browser: false,
-    tokenTTL: 3 * 60 * 1000,
-    tokenRefreshTTL: 30 * 1000,
-  };
+  constructor({
+    baseURL = readEnv('ZHIPUAI_BASE_URL'),
+    apiKey = readEnv('ZHIPUAI_API_KEY'),
+    organization = readEnv('ZHIPUAI_ORG_ID') ?? null,
+    project = readEnv('ZHIPUAI_PROJECT_ID') ?? null,
+    ...opts
+  }: ZhipuAIClientOptions = {}) {
+    if (apiKey === undefined) {
+      throw new ZhipuAIError(
+        'The ZHIPUAI_API_KEY environment variable is missing or empty; ' +
+          'either provide it, or instantiate the ZhipuAI client with an apiKey option, ' +
+          "like new ZhipuAI({ apiKey: 'My API Key' }).",
+      );
+    }
 
-  constructor(opts: Partial<ZhipuAIOptions> = {}) {
-    this.options = {
-      ...this.options,
+    const options: ZhipuAIClientOptions = {
+      apiKey,
+      organization,
+      project,
       ...opts,
+      baseURL: baseURL || `https://open.bigmodel.cn/api/paas/v4`,
     };
 
-    if (!opts.browser && !opts.apiKey) {
-      this.options.apiKey = process.env['ZHIPU_AI_API_KEY'] || '';
-    }
-  }
-
-  private getToken(options: Pick<RequestOptions, 'token'>) {
-    if (this.options.browser) {
-      if (!options.token) {
-        throw new Error('ERR_INVALID_ZHIPU_AI_REQUEST_TOKEN');
-      }
-
-      return options.token;
-    }
-
-    if (!this.options.apiKey) {
-      throw new Error('ERR_INVALID_ZHIPU_AI_API_KEY');
-    }
-
-    if (
-      this.cachedToken &&
-      this.cachedToken.exp - this.options.tokenRefreshTTL > Date.now()
-    ) {
-      return this.cachedToken.token;
-    }
-
-    this.cachedToken = undefined;
-
-    const now = Date.now();
-    const token = generateToken(
-      this.options.apiKey,
-      now,
-      this.options.tokenTTL,
-    );
-
-    this.cachedToken = {
-      token,
-      exp: now + this.options.tokenTTL,
-    };
-
-    return token;
-  }
-
-  private buildApiUrl(model: string, invokeType: InvokeType) {
-    return `${this.options.apiPrefix}/${model}/${invokeType}`;
-  }
-
-  private buildRequestBody(options: RequestOptions) {
-    if (options.model === ModelType.CharacterGLM) {
-      return {
-        prompt: options.messages,
-        meta: {
-          user_info: options.meta.userInfo,
-          user_name: options.meta.userName,
-          bot_info: options.meta.botInfo,
-          bot_name: options.meta.botName,
-        },
-        request_id: options.requestId,
-      };
-    }
-
-    if (options.model === ModelType.TextEmbedding) {
-      return {
-        prompt: options.input,
-        request_id: options.requestId,
-      };
-    }
-
-    return {
-      prompt: options.messages,
-      temperature: options.temperature || 0.95,
-      top_p: options.topP || 0.7,
-      request_id: options.requestId,
-    };
-  }
-
-  private buildAxiosRequestConfig(
-    invokeType: InvokeType,
-    options: Pick<RequestOptions, 'timeout' | 'token'>,
-  ): AxiosRequestConfig {
-    const token = this.getToken(options);
-
-    if (invokeType === InvokeType.SSE) {
-      return {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-          Accept: 'text/event-stream',
-        },
-        timeout: options.timeout || 30 * 1000,
-        responseType: 'stream',
-      };
-    }
-
-    return {
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-      timeout: options.timeout || 30 * 1000,
-    };
-  }
-
-  private handleError(data: Response<any>) {
-    if (data.code !== 200) {
-      throw new Error(`ERR_REQUEST_FAILED: ${data.msg || 'unknowned error'}`);
-    }
-  }
-
-  private async request(invokeType: InvokeType, options: RequestOptions) {
-    try {
-      const { data } = await axios.post(
-        this.buildApiUrl(options.model, invokeType),
-        this.buildRequestBody(options),
-        this.buildAxiosRequestConfig(invokeType, options),
+    if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
+      throw new ZhipuAIError(
+        "It looks like you're running in a browser-like environment.\n\n" +
+          'This is disabled by default, as it risks exposing your secret API credentials to attackers.\n' +
+          'If you understand the risks and have appropriate mitigations in place,\n' +
+          'you can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\n' +
+          'new ZhipuAI({ apiKey, dangerouslyAllowBrowser: true });\n',
       );
-
-      this.handleError(data);
-
-      return data.data;
-    } catch (err) {
-      throw err;
     }
+
+    super({
+      baseURL: options.baseURL!,
+      timeout: options.timeout ?? 10 * 60 * 1000,
+      httpAgent: options.httpAgent,
+      maxRetries: options.maxRetries,
+      fetch: options.fetch,
+    });
+
+    this.options = options;
+
+    this.apiKey = apiKey;
+    this.organization = organization;
+    this.project = project;
   }
 
-  async invoke(
-    options: ChatModelRequestOptions | CharacterModelRequestOptions,
-  ): Promise<InvokeResponse['data']>;
-  async invoke(
-    options: EmbeddingModelRequestOptions,
-  ): Promise<CreateEmbeddingResponse['data']>;
-  async invoke(options: RequestOptions) {
-    return this.request(InvokeType.Sync, options);
-  }
+  chat = new Chat(this);
 
-  async asyncInvoke(
-    options: ChatModelRequestOptions | CharacterModelRequestOptions,
-  ): Promise<AsyncInvokeResponse['data']> {
-    return this.request(InvokeType.Async, options);
-  }
-
-  async queryAsyncInvokeResult(
-    taskId: string,
-    options: Pick<RequestOptions, 'timeout' | 'token'> = {},
-  ): Promise<InvokeResponse['data']> {
-    try {
-      const { data } = await axios.get(
-        `${this.buildApiUrl('-', InvokeType.Async)}/${taskId}`,
-        this.buildAxiosRequestConfig(InvokeType.Async, options),
-      );
-
-      this.handleError(data);
-
-      return data.data;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async sseInvoke(
-    options: ChatModelRequestOptions | CharacterModelRequestOptions,
-  ) {
-    try {
-      const pendingEvent: ParseEvent = {
-        type: 'event',
-        id: '',
-        event: 'pending',
-        data: '',
-      };
-
-      let lastEvent: ParseEvent = pendingEvent;
-
-      const { data: stream } = await axios.post(
-        this.buildApiUrl(options.model, InvokeType.SSE),
-        this.buildRequestBody(options),
-        this.buildAxiosRequestConfig(InvokeType.SSE, options),
-      );
-
-      const parser = createParser(
-        (e) => {
-          lastEvent = e;
-        },
-        {
-          customFields: ['meta'],
-        },
-      );
-
-      const decoder = new StringDecoder();
-
-      async function* events() {
-        for await (const chunk of stream) {
-          lastEvent = pendingEvent;
-
-          // Ensure the decoded string does not contain any incomplete multibyte characters
-          const chunkString = decoder.write(chunk);
-
-          parser.feed(chunkString);
-
-          if (lastEvent.type === 'event') {
-            if (lastEvent.event === 'finish') {
-              try {
-                // @ts-ignore
-                lastEvent.meta = JSON.parse(lastEvent.meta);
-              } catch {
-                throw new Error('ERR_INVALID_FINISH_META');
-              }
-            }
-          }
-
-          yield lastEvent as SSEResponse;
-        }
-      }
-
-      return events();
-    } catch (err) {
-      throw err;
-    }
+  protected override defaultQuery() {
+    return this.options.defaultQuery;
   }
 }
