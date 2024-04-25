@@ -1,4 +1,4 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
+import type { AsyncLocalStorage } from 'node:async_hooks';
 
 import type { GetGrpcOptsOptions } from '../../grpc-options/index.js';
 

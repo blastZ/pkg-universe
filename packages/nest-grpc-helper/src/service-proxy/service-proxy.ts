@@ -1,13 +1,13 @@
 import { Metadata } from '@grpc/grpc-js';
 import { InternalServerErrorException } from '@nestjs/common';
 import {
-  Observable,
   catchError,
   lastValueFrom,
   map,
   retry,
   throwError,
   timeout,
+  type Observable,
 } from 'rxjs';
 
 import type { GrpcClientOptions } from '../grpc-clients/index.js';
