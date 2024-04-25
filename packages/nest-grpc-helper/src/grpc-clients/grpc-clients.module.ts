@@ -1,5 +1,5 @@
 import loader from '@grpc/proto-loader';
-import { DynamicModule, Provider } from '@nestjs/common';
+import type { DynamicModule, Provider } from '@nestjs/common';
 import { ClientProxyFactory } from '@nestjs/microservices';
 
 import { healthClientKey } from '../grpc-health/health-client-key.util.js';
@@ -14,8 +14,8 @@ import { serviceProxyToken } from '../service-proxy/service-proxy-token.util.js'
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
 import { GrpcClientsService } from './grpc-clients.service.js';
-import { GrpcClientsOptions } from './interfaces/grpc-clients-options.interface.js';
-import { GrpcClients } from './interfaces/grpc-clients.interface.js';
+import type { GrpcClientsOptions } from './interfaces/grpc-clients-options.interface.js';
+import type { GrpcClients } from './interfaces/grpc-clients.interface.js';
 
 export class GrpcClientsModule {
   static async forRoot(options: GrpcClientsOptions): Promise<DynamicModule> {

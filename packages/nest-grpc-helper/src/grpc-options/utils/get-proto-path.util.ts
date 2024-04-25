@@ -1,7 +1,7 @@
 import path, { resolve } from 'node:path';
 import url from 'node:url';
 
-import { GetGrpcOptsOptions } from '../../grpc-options/index.js';
+import type { GetGrpcOptsOptions } from '../../grpc-options/index.js';
 
 type Options = Pick<
   GetGrpcOptsOptions,

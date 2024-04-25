@@ -9,11 +9,11 @@ import { ServiceProxy } from '../service-proxy/index.js';
 
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
-import {
+import type {
   GrpcClientOptions,
+  GrpcClients,
   GrpcClientsOptions,
-} from './interfaces/grpc-clients-options.interface.js';
-import { GrpcClients } from './interfaces/grpc-clients.interface.js';
+} from './interfaces/index.js';
 
 @Injectable()
 export class GrpcClientsService {
@@ -22,7 +22,7 @@ export class GrpcClientsService {
 
   constructor(
     @Inject(GRPC_CLIENTS) private clients: GrpcClients,
-    @Inject(GRPC_CLIENTS_OPTIONS) private options: GrpcClientsOptions,
+    @Inject(GRPC_CLIENTS_OPTIONS) options: GrpcClientsOptions,
   ) {
     options.map((o) => {
       this.optionsMap.set(o.packageName, o);

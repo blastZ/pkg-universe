@@ -1,4 +1,4 @@
-import { GrpcOptions, Transport } from '@nestjs/microservices';
+import { Transport, type GrpcOptions } from '@nestjs/microservices';
 
 import { HEALTH_PACKAGE_NAME } from '../grpc-health/index.js';
 
@@ -7,7 +7,7 @@ import {
   KEEPALIVE_SERVER_OPTIONS,
 } from './constants/keepalive-options.constant.js';
 import { PROTO_LOADER_OPTIONS } from './constants/proto-loader-options.constant.js';
-import { GetGrpcOptsOptions } from './interfaces/get-grpc-opts-options.interface.js';
+import type { GetGrpcOptsOptions } from './interfaces/get-grpc-opts-options.interface.js';
 import { getProtoPath } from './utils/get-proto-path.util.js';
 
 export function getGrpcServerOptions(opts: GetGrpcOptsOptions): GrpcOptions {
