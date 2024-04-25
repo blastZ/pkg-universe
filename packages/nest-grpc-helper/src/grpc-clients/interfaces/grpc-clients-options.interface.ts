@@ -1,8 +1,8 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
+import type { AsyncLocalStorage } from 'node:async_hooks';
 
-import { GetGrpcOptsOptions } from '../../grpc-options/index.js';
+import type { GetGrpcOptsOptions } from '../../grpc-options/index.js';
 
-import { GrpcClientRequestOptions } from './grpc-client-request-options.interface.js';
+import type { GrpcClientRequestOptions } from './grpc-client-request-options.interface.js';
 
 export type PropagationOptions = {
   headers?: string[];

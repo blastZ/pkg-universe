@@ -1,9 +1,9 @@
-import { ReplyMeta } from './interfaces/reply-meta.interface.js';
+import type { ReplyMeta } from './interfaces/reply-meta.interface.js';
 
 export class Reply {
   constructor(
     private type: string,
-    private originData: Record<string, any> & { length?: never },
+    private originData: Record<string, unknown>,
     private replyMeta?: ReplyMeta,
   ) {}
 

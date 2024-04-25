@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
-import { ArrayReply } from '../grpc-common/array-reply.js';
-import { Reply } from '../grpc-common/reply.js';
+import { ArrayReply, ErrorReply, Reply } from '../grpc-common/index.js';
+import { GrpcException } from '../grpc-filter/index.js';
 
 import { GRPC_SERVER_OPTIONS } from './grpc-server-options.constant.js';
 
@@ -10,6 +10,7 @@ interface Options {
   service?: string;
   method?: string;
   data?: string;
+  errorData?: string;
 }
 
 export function GrpcHelperMethod(options: Options = {}) {
@@ -26,20 +27,37 @@ export function GrpcHelperMethod(options: Options = {}) {
 
     const originName = descriptor.value.name;
 
-    const defaultDataName =
-      originName.slice(0, 1).toUpperCase() + originName.slice(1) + 'ReplyData';
+    const defaultBaseName =
+      originName.slice(0, 1).toUpperCase() + originName.slice(1);
+    const defaultDataName = defaultBaseName + 'ReplyData';
+    const defaultErrorDataName = defaultBaseName + 'ReplyErrorData';
 
     // console.log({
     //   serviceName,
     //   methodName,
-    //   defaultDataName,
+    //   defaultBaseName,
     // });
 
     const origin = descriptor.value;
 
     descriptor.value = async function (this: any, ...args: any[]) {
-      const result = await origin.call(this, ...args);
       const grpcServerOptions = this['grpcServerOptions'];
+
+      let result: any;
+      try {
+        result = await origin.call(this, ...args);
+      } catch (err) {
+        if (err instanceof GrpcException) {
+          const res = err.getResponse() as any;
+
+          const dataName = options.errorData ?? defaultErrorDataName;
+          const dataType = [grpcServerOptions.packageName, dataName].join('.');
+
+          return new ErrorReply(res.code, res.message, dataType, res.data);
+        }
+
+        throw err;
+      }
 
       // console.log({ result, grpcServerOptions });
 

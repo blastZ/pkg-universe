@@ -1,4 +1,4 @@
-import { GrpcOptions } from '@nestjs/microservices';
+import type { GrpcOptions } from '@nestjs/microservices';
 
 export interface GetGrpcOptsOptions {
   packageName: string;

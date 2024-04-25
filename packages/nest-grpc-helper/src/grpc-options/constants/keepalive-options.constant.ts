@@ -1,4 +1,4 @@
-import { GrpcOptions } from '@nestjs/microservices';
+import type { GrpcOptions } from '@nestjs/microservices';
 
 export const KEEPALIVE_CORE_OPTIONS: GrpcOptions['options']['keepalive'] = {
   keepaliveTimeMs: 10 * 60 * 1000,

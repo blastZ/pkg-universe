@@ -4,17 +4,21 @@ import {
   catchError,
   lastValueFrom,
   map,
-  Observable,
   retry,
   throwError,
   timeout,
+  type Observable,
 } from 'rxjs';
 
-import { GrpcClientOptions } from '../grpc-clients/index.js';
-import { GrpcReply } from '../grpc-common/index.js';
+import type { GrpcClientOptions } from '../grpc-clients/index.js';
+import type { GrpcReply } from '../grpc-common/index.js';
 
 import { COMMON_PROPAGATION_HEADERS } from './common-propagation-headers.constant.js';
-import { SendOptions } from './interfaces/send-options.interface.js';
+import {
+  ServiceProxyRequestError,
+  ServiceProxyTimeoutError,
+} from './erros/index.js';
+import type { SendOptions } from './interfaces/index.js';
 
 export class ServiceProxy {
   constructor(
@@ -68,10 +72,13 @@ export class ServiceProxy {
       throw new InternalServerErrorException('ERR_SERVICE_METHOD_NOT_FOUND');
     }
 
+    const methodName = `${this.options.packageName}.${this.serviceName}.${method}`;
+    const timeoutNumber = options?.timeout ?? this.options.timeout ?? 3000;
+
     return this.service[method](data, metadata).pipe(
-      map((reply: GrpcReply) => {
+      map((reply: GrpcReply<unknown & { '@type'?: string }>) => {
         if (Array.isArray(reply.data)) {
-          if (!reply.data[0]['@type']) {
+          if (!reply.data[0] || !reply.data[0]['@type']) {
             return reply;
           }
 
@@ -98,10 +105,10 @@ export class ServiceProxy {
         };
       }),
       timeout({
-        first: options?.timeout ?? this.options.timeout ?? 3000,
+        first: timeoutNumber,
         with: () =>
           throwError(
-            () => new InternalServerErrorException('ERR_GRPC_REQUEST_TIMEOUT'),
+            () => new ServiceProxyTimeoutError(methodName, timeoutNumber),
           ),
       }),
       retry({
@@ -109,14 +116,7 @@ export class ServiceProxy {
         delay: options?.retryDelay ?? this.options.retryDelay ?? 600,
       }),
       catchError((err) => {
-        return throwError(
-          () =>
-            new InternalServerErrorException({
-              message: `ERR_SEND_REQUEST: send request "${this.options.packageName}.${this.serviceName}.${method}" failed`,
-              code: 500,
-              cause: err,
-            }),
-        );
+        return throwError(() => new ServiceProxyRequestError(methodName, err));
       }),
     );
   }
