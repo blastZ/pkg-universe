@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
-    "sourceMap": false,
     "declaration": false,
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
@@ -15,8 +14,13 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "noImplicitOverride": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+    "paths": {
+      "@/*": [
+        "./src/*/index.js"
+      ],
+    }
   },
   "exclude": [
     "**/node_modules/**",
