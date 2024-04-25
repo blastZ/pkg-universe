@@ -12,6 +12,7 @@
     "outDir": "./dist",
     "removeComments": true,
     "strict": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,
