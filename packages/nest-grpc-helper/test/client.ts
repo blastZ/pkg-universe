@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import { ServiceProxy, ServiceProxyDec } from '../src/index.js';
+import { ServiceProxy, ServiceProxyDec, type GrpcReply } from '../src/index.js';
+
+interface User {
+  id: number;
+  name: string;
+}
 
 @Injectable()
 export class UsersService {
@@ -9,13 +14,18 @@ export class UsersService {
     private client: ServiceProxy,
   ) {}
 
-  async createUser(params: { name: string; email: string }) {
-    const { data: user } = await this.client
-      .pSend('createUser', params)
-      .catch((err) => {
-        console.error(err);
-      });
+  async createUser(params: { name: string }) {
+    const result = await this.client.pSend<any, GrpcReply<User>>(
+      'createUser',
+      params,
+    );
 
-    return user;
+    return result;
+  }
+
+  async listUsers(): Promise<GrpcReply<User[]>> {
+    const result = await this.client.pSend('listUsers', {});
+
+    return result;
   }
 }
