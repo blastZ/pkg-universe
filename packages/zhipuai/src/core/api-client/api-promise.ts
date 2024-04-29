@@ -1,3 +1,4 @@
+import { Stream } from '@/core/streaming';
 import { printDiagnostics } from '@/utils';
 
 import type {
@@ -15,7 +16,22 @@ async function defaultParseResponse<T>(props: APIResponseProps): Promise<T> {
   const { response } = props;
 
   if (props.options.stream) {
-    // TODO stream handler
+    printDiagnostics(
+      'defaultParseResponse::stream',
+      response.status,
+      response.url,
+      response.headers,
+      response.body,
+    );
+
+    if (props.options.__streamClass) {
+      return props.options.__streamClass.fromSSEResponse(
+        response,
+        props.controller,
+      ) as any;
+    }
+
+    return Stream.fromSSEResponse(response, props.controller) as any;
   }
 
   if (response.status === 204) {

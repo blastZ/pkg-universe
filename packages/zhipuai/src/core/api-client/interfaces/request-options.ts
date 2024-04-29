@@ -1,3 +1,5 @@
+import { Stream } from '@/core/streaming';
+
 import type { Agent, HTTPMethod, Headers, Readable } from './shared-types.js';
 
 export type RequestOptions<Req = unknown | Record<string, unknown> | Readable> =
@@ -14,6 +16,8 @@ export type RequestOptions<Req = unknown | Record<string, unknown> | Readable> =
     httpAgent?: Agent;
     signal?: AbortSignal | null;
     idempotencyKey?: string;
+
+    __streamClass?: typeof Stream;
   };
 
 export type FinalRequestOptions<

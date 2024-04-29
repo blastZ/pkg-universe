@@ -2,6 +2,8 @@ import type { ChatCompletionMessageToolCall } from './chat-completion-assistant-
 
 export interface ChatCompletionMessage {
   role: 'assistant';
+
   content: string | null;
+
   tool_calls?: Array<ChatCompletionMessageToolCall>;
 }
