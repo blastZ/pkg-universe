@@ -36,10 +36,10 @@ import {
 import { VERSION } from './version.js';
 
 export abstract class APIClient {
-  baseURL: string;
-  maxRetries: number;
-  timeout: number;
-  httpAgent: Agent;
+  protected baseURL: string;
+  protected maxRetries: number;
+  protected timeout: number;
+  protected httpAgent: Agent;
 
   private fetch: Fetch;
 
@@ -140,7 +140,7 @@ export abstract class APIClient {
       .join('&');
   }
 
-  buildURL<Req>(path: string, query: Req | null | undefined) {
+  protected buildURL<Req>(path: string, query: Req | null | undefined) {
     const url = isAbsoluteURL(path)
       ? new URL(path)
       : new URL(
@@ -191,7 +191,7 @@ export abstract class APIClient {
     return reqHeaders;
   }
 
-  buildRequest(options: FinalRequestOptions) {
+  protected buildRequest(options: FinalRequestOptions) {
     const method = options.method;
 
     /* TODO
@@ -254,7 +254,7 @@ export abstract class APIClient {
     };
   }
 
-  async fetchWithTimeout(
+  protected async fetchWithTimeout(
     url: RequestInfo,
     reqInit: RequestInit | undefined,
     timeoutNumber: number,
@@ -470,7 +470,7 @@ export abstract class APIClient {
     };
   }
 
-  request(
+  protected request(
     options: FinalRequestOptions,
     remainingRetries: number | null = null,
   ) {

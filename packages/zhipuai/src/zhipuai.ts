@@ -7,12 +7,13 @@ import { ZhipuAIAuthManger } from '@/core/zhipuai-auth-manager';
 import { ZhipuAIError } from '@/errors';
 import type { ZhipuAIClientOptions } from '@/interfaces';
 import { Chat } from '@/resources/chat';
+import { Embeddings } from '@/resources/embeddings';
 import { isRunningInBrowser, readEnv } from '@/utils';
 
 export class ZhipuAI extends APIClient {
-  apiKey: string;
-  organization: string | null;
-  project: string | null;
+  protected apiKey: string;
+  protected organization: string | null;
+  protected project: string | null;
 
   private options: ZhipuAIClientOptions;
   private authManager = new ZhipuAIAuthManger();
@@ -66,6 +67,7 @@ export class ZhipuAI extends APIClient {
   }
 
   chat = new Chat(this);
+  embeddings = new Embeddings(this);
 
   protected override defaultQuery() {
     return this.options.defaultQuery;
