@@ -37,6 +37,21 @@ for await (const chunk of stream) {
 }
 ```
 
+## ZhipuAI Special Features
+
+ZhipuAI support create chat completion tasks, and retrieve the result later by task id.
+
+```ts
+const { id } = await zhipuai.chat.completions.tasks.create({
+  model: 'glm-3-turbo',
+  messages,
+});
+
+const result = await zhipuai.chat.completions.tasks.retrieve({
+  id,
+});
+```
+
 ## License
 
 MIT
