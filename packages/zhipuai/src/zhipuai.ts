@@ -8,6 +8,7 @@ import { ZhipuAIError } from '@/errors';
 import type { ZhipuAIClientOptions } from '@/interfaces';
 import { Chat } from '@/resources/chat';
 import { Embeddings } from '@/resources/embeddings';
+import { Images } from '@/resources/images';
 import { isRunningInBrowser, readEnv } from '@/utils';
 
 export class ZhipuAI extends APIClient {
@@ -68,6 +69,7 @@ export class ZhipuAI extends APIClient {
 
   chat = new Chat(this);
   embeddings = new Embeddings(this);
+  images = new Images(this);
 
   protected override defaultQuery() {
     return this.options.defaultQuery;
