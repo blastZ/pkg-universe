@@ -1,6 +1,6 @@
 # Package Universe
 
-Package monorepo based on [nx](https://github.com/nrwl/nx).
+Package monorepo based on [pkgx](https://github.com/blastZ/pkgx).
 
 ## Install
 
@@ -11,17 +11,17 @@ pnpm install
 ## Test
 
 ```bash
-pnpm nx run [package]:test
+pkgx test packages/<package-name>
 ```
 
 ## Build
 
 ```bash
-pnpm nx run [package]:build
+pkgx build packages/<package-name>
 ```
 
 ## Publish
 
 ```bash
-pnpm nx run [package]:publish:prod
+pkgx publish packages/<package-name>
 ```
