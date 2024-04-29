@@ -16,10 +16,11 @@
     "skipDefaultLibCheck": true,
     "noImplicitOverride": true,
     "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*/index.js"
-      ],
+      ]
     }
   },
   "exclude": [
