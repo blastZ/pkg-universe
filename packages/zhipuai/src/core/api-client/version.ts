@@ -1,0 +1,1 @@
+export const VERSION = '__@@PKGX_REPLACE_WITH_PACKAGE_VERSION@@__';
