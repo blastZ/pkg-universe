@@ -57,4 +57,23 @@ describe('zhipuai', () => {
 
     expect(result === '6');
   });
+
+  it('should work with tasks', async () => {
+    const result = await zhipuai.chat.completions.tasks.create({
+      model: 'glm-3-turbo',
+      messages,
+    });
+
+    // console.log(inspect({ result }, false, 10, true));
+
+    expect(result.id).toBeDefined();
+
+    const retrieveResult = await zhipuai.chat.completions.tasks.retrieve({
+      id: result.id,
+    });
+
+    // console.log(inspect({ retrieveResult }, false, 10, true));
+
+    expect(retrieveResult.id).toBeDefined();
+  }, 10000);
 });
