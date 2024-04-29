@@ -1,15 +1,8 @@
 {
   "name": "zhipuai",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "zhipuai sdk",
   "type": "module",
-  "main": "./cjs/index.js",
-  "exports": {
-    "types": "./index.d.ts",
-    "require": "./cjs/index.js",
-    "import": "./esm/index.js"
-  },
-  "types": "./index.d.ts",
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/zhipuai",
   "repository": {
     "type": "git",
@@ -19,7 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.2",
-    "axios": "^1.4.0",
-    "jsonwebtoken": "^9.0.1"
+    "agentkeepalive": "^4.5.0",
+    "jsonwebtoken": "^9.0.1",
+    "node-fetch": "^3.3.2"
   }
 }
