@@ -489,7 +489,23 @@ export abstract class APIClient {
     });
   }
 
+  get(path: string, options: RequestOptions) {
+    return this.methodRequest('get', path, options);
+  }
+
   post(path: string, options: RequestOptions) {
     return this.methodRequest('post', path, options);
+  }
+
+  patch(path: string, options: RequestOptions) {
+    return this.methodRequest('patch', path, options);
+  }
+
+  put(path: string, options: RequestOptions) {
+    return this.methodRequest('put', path, options);
+  }
+
+  delete(path: string, options: RequestOptions) {
+    return this.methodRequest('delete', path, options);
   }
 }

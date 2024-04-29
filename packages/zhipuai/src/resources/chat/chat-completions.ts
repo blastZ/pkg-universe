@@ -3,6 +3,7 @@ import type { Stream } from '@/core/streaming';
 
 import { APIResource } from '../shared.js';
 
+import { ChatCompletionTasks } from './chat-completion-tasks.js';
 import type {
   ChatCompletionChunk,
   ChatCompletionCreateParams,
@@ -12,6 +13,8 @@ import type {
 } from './interfaces/index.js';
 
 export class ChatCompletions extends APIResource {
+  tasks = new ChatCompletionTasks(this._client);
+
   create(
     body: ChatCompletionCreateParamsNonStreaming,
     options?: RequestOptions,

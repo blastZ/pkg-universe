@@ -11,3 +11,5 @@ export * from './chat-completion-chunk.js';
 export * from './chat-completion-response.js';
 
 export * from './chat-model.js';
+
+export * from './chat-completion-tasks/index.js';
