@@ -1,6 +1,6 @@
 {
   "name": "@blastz/nest-grpc-helper",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "nestjs grpc helper",
   "type": "module",
   "homepage": "https://github.com/blastZ/pkg-universe/tree/master/packages/nest-grpc-helper",
