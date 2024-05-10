@@ -23,8 +23,8 @@ export class UsersService {
     return result;
   }
 
-  async listUsers(): Promise<GrpcReply<User[]>> {
-    const result = await this.client.pSend('listUsers', {});
+  async listUsers(ids: number[]): Promise<GrpcReply<User[]>> {
+    const result = await this.client.pSend('listUsers', { ids });
 
     return result;
   }

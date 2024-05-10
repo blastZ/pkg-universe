@@ -4,7 +4,7 @@ package accountManager;
 
 service UsersService {
   rpc CreateUser(CreateUserRequest) returns (Reply) {};
-  rpc ListUsers(EmptyRequest) returns (ArrayReply) {};
+  rpc ListUsers(ListUsersRequest) returns (ArrayReply) {};
 }
 
 message User {
@@ -18,4 +18,8 @@ message CreateUserRequest {
 
 message CreateUserReplyErrorData {
   string contact = 1;
+}
+
+message ListUsersRequest {
+  repeated uint64 ids = 1;
 }

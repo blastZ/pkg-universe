@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   Module,
+  type ArgumentsHost,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 
@@ -113,15 +114,19 @@ class UsersController {
   }
 
   @GrpcHelperMethod({ data: 'User' })
-  listUsers() {
+  listUsers(params: { ids: number[] }) {
+    if (params.ids.length < 1) {
+      throw new BadRequestException('ids is required');
+    }
+
     return users;
   }
 }
 
 @Catch()
 class CustomFilter extends GrpcExceptionsFilter {
-  catch(exception: any): any {
-    return super.catch(exception);
+  override catch(exception: any, host: ArgumentsHost): any {
+    return super.catch(exception, host);
   }
 }
 

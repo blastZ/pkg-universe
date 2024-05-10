@@ -44,7 +44,7 @@ describe('grpc helper', () => {
   });
 
   it('should work with array reply', async () => {
-    const t1 = await usersService.listUsers();
+    const t1 = await usersService.listUsers([1]);
 
     expect(Array.isArray(t1.data)).toBeTruthy();
 
@@ -54,9 +54,23 @@ describe('grpc helper', () => {
       name: randomName,
     });
 
-    const t2 = await usersService.listUsers();
+    const t2 = await usersService.listUsers([1]);
 
     expect(t2.data.find((o) => o.name === randomName)).toBeTruthy();
+  });
+
+  it('should work with exception and reply', async () => {
+    const result = await usersService.createUser({
+      name: 'specific-http-exception',
+    });
+
+    expect(result.error).toEqual({ code: '400', message: 'Bad Request' });
+  });
+
+  it('should work with exception and array reply', async () => {
+    const result = await usersService.listUsers([]);
+
+    expect(result.error).toEqual({ code: '400', message: 'ids is required' });
   });
 
   describe('with grpc exception', () => {
