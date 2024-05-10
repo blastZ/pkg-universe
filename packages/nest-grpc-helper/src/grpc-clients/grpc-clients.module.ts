@@ -13,13 +13,17 @@ import { serviceProxyToken } from '../service-proxy/service-proxy-token.util.js'
 
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
+import { SERVICE_DEFINITION_MAP } from './constants/service-definition-map.constant.js';
 import { GrpcClientsService } from './grpc-clients.service.js';
 import type { GrpcClientsOptions } from './interfaces/grpc-clients-options.interface.js';
 import type { GrpcClients } from './interfaces/grpc-clients.interface.js';
+import type { ServiceDefinitionMap } from './interfaces/service-definition-map.interface.js';
 
 export class GrpcClientsModule {
   static async forRoot(options: GrpcClientsOptions): Promise<DynamicModule> {
     const serviceProviders: Provider[] = [];
+
+    const serviceDefinitionMap: ServiceDefinitionMap = new Map();
 
     await Promise.all(
       options.map(async (o) => {
@@ -29,9 +33,38 @@ export class GrpcClientsModule {
 
         const protoPath = getProtoPath(packageName, o);
         const definition = await loader.load(protoPath);
+
         Object.entries(definition).map(([key, value]) => {
           if (key.startsWith(`${packageName}.`) && !value.format) {
-            services.push(key.replace(`${packageName}.`, ''));
+            const serviceName = key.replace(`${packageName}.`, '');
+
+            services.push(serviceName);
+
+            if (!serviceDefinitionMap.has(serviceName)) {
+              serviceDefinitionMap.set(serviceName, new Map());
+            }
+
+            const serviceDefinition = serviceDefinitionMap.get(serviceName)!;
+
+            Object.entries<any>(value).map(([method, definition]) => {
+              const methodName =
+                method.slice(0, 1).toLowerCase() + method.slice(1);
+
+              // definition => MethodDefinition
+              serviceDefinition.set(methodName, {
+                path: definition.path,
+                requestType: {
+                  type: {
+                    name: definition.requestType.type.name,
+                  },
+                },
+                responseType: {
+                  type: {
+                    name: definition.responseType.type.name,
+                  },
+                },
+              });
+            });
           }
         });
 
@@ -98,6 +131,10 @@ export class GrpcClientsModule {
           },
         },
         ...serviceProviders,
+        {
+          provide: SERVICE_DEFINITION_MAP,
+          useValue: serviceDefinitionMap,
+        },
       ],
       exports: [GrpcClientsService, ...serviceProviders],
       global: true,

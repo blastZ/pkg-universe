@@ -1,4 +1,4 @@
-import { Catch, Logger } from '@nestjs/common';
+import { Catch, Logger, type ArgumentsHost } from '@nestjs/common';
 import { of } from 'rxjs';
 
 import type { ReplyError } from '../grpc-common/index.js';
@@ -58,6 +58,11 @@ export class GrpcExceptionsFilter {
         return response.message;
       }
 
+      // Validation Pipe => BadRequestException => getResponse => { message: ['msg-1', 'msg-2'] }
+      if (Array.isArray(response.message) && response.message.length > 0) {
+        return response.message.join('\n');
+      }
+
       if (typeof response.error === 'string') {
         return response.error;
       }
@@ -88,9 +93,10 @@ export class GrpcExceptionsFilter {
       getStatus?: () => number;
       getError?: () => string | object;
     },
+    metadata: Record<string, string>,
   ): Payload {
     const payload: Payload = {
-      data: {},
+      data: metadata['x-response-type-name'] === 'ArrayReply' ? [] : {},
       error: {
         code: '500',
         message: 'Internal server error',
@@ -112,7 +118,10 @@ export class GrpcExceptionsFilter {
 
       payload.error.code = code;
       payload.error.message = message;
-      payload.data = data || {};
+
+      if (data) {
+        payload.data = data;
+      }
 
       return payload;
     }
@@ -122,7 +131,7 @@ export class GrpcExceptionsFilter {
 
       const wrappedError = this.convertToError(wrapped);
 
-      return this.getPayload(wrappedError);
+      return this.getPayload(wrappedError, metadata);
     }
 
     if (err instanceof Error) {
@@ -132,19 +141,19 @@ export class GrpcExceptionsFilter {
     return payload;
   }
 
-  catch(exception: any): any {
+  catch(exception: any, host: ArgumentsHost): any {
+    const metadata = host.switchToRpc()?.getContext()?.getMap() || {};
+
     const err = this.convertToError(exception);
 
     this.logger.error(err.message, err.stack);
 
-    const payload = this.getPayload(err);
+    const payload = this.getPayload(err, metadata);
 
     return this.handleError(payload);
   }
 
   protected handleError(payload: Payload) {
-    // console.log({ payload });
-
     return of(payload);
   }
 }

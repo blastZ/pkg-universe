@@ -9,10 +9,12 @@ import { ServiceProxy } from '../service-proxy/index.js';
 
 import { GRPC_CLIENTS_OPTIONS } from './constants/grpc-clients-options.constant.js';
 import { GRPC_CLIENTS } from './constants/grpc-clients.constant.js';
+import { SERVICE_DEFINITION_MAP } from './constants/service-definition-map.constant.js';
 import type {
   GrpcClientOptions,
   GrpcClients,
   GrpcClientsOptions,
+  ServiceDefinitionMap,
 } from './interfaces/index.js';
 
 @Injectable()
@@ -23,6 +25,8 @@ export class GrpcClientsService {
   constructor(
     @Inject(GRPC_CLIENTS) private clients: GrpcClients,
     @Inject(GRPC_CLIENTS_OPTIONS) options: GrpcClientsOptions,
+    @Inject(SERVICE_DEFINITION_MAP)
+    private serviceDefinitionMap: ServiceDefinitionMap,
   ) {
     options.map((o) => {
       this.optionsMap.set(o.packageName, o);
@@ -60,6 +64,8 @@ export class GrpcClientsService {
       throw new InternalServerErrorException('ERR_CLIENT_OPTIONS_NOT_FOUND');
     }
 
-    return new ServiceProxy(serviceName, service, options);
+    const serviceDefinition = this.serviceDefinitionMap.get(serviceName)!;
+
+    return new ServiceProxy(serviceName, service, options, serviceDefinition);
   }
 }

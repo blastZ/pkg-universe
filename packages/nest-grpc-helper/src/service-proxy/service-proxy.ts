@@ -10,7 +10,10 @@ import {
   type Observable,
 } from 'rxjs';
 
-import type { GrpcClientOptions } from '../grpc-clients/index.js';
+import type {
+  GrpcClientOptions,
+  ServiceDefinition,
+} from '../grpc-clients/index.js';
 import type { GrpcReply } from '../grpc-common/index.js';
 
 import { COMMON_PROPAGATION_HEADERS } from './common-propagation-headers.constant.js';
@@ -25,10 +28,20 @@ export class ServiceProxy {
     private serviceName: string,
     private service: any,
     private options: GrpcClientOptions,
+    private serviceDefinition: ServiceDefinition,
   ) {}
 
-  private getMetadata(meta?: Record<string, string | Buffer>) {
+  private getMetadata(method: string, meta?: Record<string, string | Buffer>) {
     const metadata = new Metadata();
+
+    const methodDefinition = this.serviceDefinition.get(method)!;
+
+    metadata.set('x-request-path', methodDefinition.path);
+    metadata.set('x-request-type-name', methodDefinition.requestType.type.name);
+    metadata.set(
+      'x-response-type-name',
+      methodDefinition.responseType.type.name,
+    );
 
     if (meta) {
       Object.keys(meta).map((key) => {
@@ -66,7 +79,7 @@ export class ServiceProxy {
     data: T1,
     options?: SendOptions,
   ): Observable<T2> {
-    const metadata = this.getMetadata(options?.meta);
+    const metadata = this.getMetadata(method, options?.meta);
 
     if (!this.service[method]) {
       throw new InternalServerErrorException('ERR_SERVICE_METHOD_NOT_FOUND');
