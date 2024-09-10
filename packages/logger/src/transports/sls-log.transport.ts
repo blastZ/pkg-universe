@@ -1,10 +1,10 @@
 import $SDK from 'aliyun-sdk';
 import { MESSAGE } from 'triple-beam';
 import { format } from 'winston';
-import Transport, { TransportStreamOptions } from 'winston-transport';
+import Transport, { type TransportStreamOptions } from 'winston-transport';
 
 import { createJsonFormat, createTimestampFormat } from '../formats/index.js';
-import { SlsLogTransportOptions } from '../interfaces/index.js';
+import type { SlsLogTransportOptions } from '../interfaces/index.js';
 
 class SlsLogTransport extends Transport {
   private client: $SDK.SLS;
@@ -17,7 +17,7 @@ class SlsLogTransport extends Transport {
     this.client = new $SDK.SLS(opts);
   }
 
-  log(info: any, next: () => void) {
+  override log(info: any, next: () => void) {
     this.client.putLogs(
       {
         projectName: info.sls?.projectName || this.options.projectName,

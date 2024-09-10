@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { format, Logform } from 'winston';
+import { format, type Logform } from 'winston';
 
 export function createLevelFormat(): Logform.Format {
   const colorize = (inputLevel: string) => {

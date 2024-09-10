@@ -1,14 +1,14 @@
-import { format, transports } from "winston";
-import "winston-daily-rotate-file";
+import { format, transports } from 'winston';
+import 'winston-daily-rotate-file';
 
-import { LoggerLevel } from "../enums/index.js";
+import { LoggerLevel } from '../enums/index.js';
 import {
   createJsonFormat,
   createLevelFormat,
   createMessageFormat,
   createTimestampFormat,
-} from "../formats/index.js";
-import { FileTransportOptions } from "../interfaces/index.js";
+} from '../formats/index.js';
+import type { FileTransportOptions } from '../interfaces/index.js';
 
 export function createFileTransport(options: FileTransportOptions = {}) {
   const formats =
@@ -18,12 +18,12 @@ export function createFileTransport(options: FileTransportOptions = {}) {
 
   return new transports.DailyRotateFile({
     level: LoggerLevel.Trace,
-    frequency: "3h",
+    frequency: '3h',
     dirname: options.level ? `./log/${options.level}` : `./log/trace`,
-    datePattern: "YYYY-MM-DD-HH",
+    datePattern: 'YYYY-MM-DD-HH',
     maxSize: undefined,
-    maxFiles: "7d",
-    filename: (options.stream ? undefined : "%DATE%.log") as any,
+    maxFiles: '7d',
+    filename: (options.stream ? undefined : '%DATE%.log') as any,
     format: format.combine(...formats),
     ...options,
   });

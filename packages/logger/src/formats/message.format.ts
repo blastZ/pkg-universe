@@ -1,5 +1,6 @@
 import { inspect } from 'node:util';
-import { format, Logform } from 'winston';
+
+import { format, type Logform } from 'winston';
 
 export function createMessageFormat(): Logform.Format {
   const messageFormat = format.printf((info: Logform.TransformableInfo) => {

@@ -1,12 +1,7 @@
-import dotenv from 'dotenv';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
-dotenv.config({
-  path: resolve(process.cwd(), './packages/logger/.env'),
-});
+import { describe, it } from 'vitest';
 
-import { AsyncLocalStorage } from 'async_hooks';
-
-import { resolve } from 'path';
 import {
   createConsoleTransport,
   createFileTransport,
@@ -15,8 +10,8 @@ import {
   LoggerLevel,
 } from '../src/index.js';
 
-describe('logger', () => {
-  it('should work with console transport', () => {
+describe('console transport', () => {
+  it('should work', () => {
     logger.clear().add(createConsoleTransport({ level: LoggerLevel.Trace }));
 
     logger.fatal('fatal');
@@ -26,8 +21,36 @@ describe('logger', () => {
     logger.debug('debug');
     logger.trace('trace');
   });
+});
 
-  it('should work with file transport', () => {
+describe('logger', () => {
+  it('should work with child logger', () => {
+    logger.clear().add(createConsoleTransport({ level: LoggerLevel.Trace }));
+
+    logger.child({ stage: 'test' }).trace('test');
+  });
+
+  it('should work with custom meta', () => {
+    logger.clear().add(createConsoleTransport({ level: LoggerLevel.Trace }));
+
+    const context = new AsyncLocalStorage<Record<string, unknown>>();
+
+    logger.customMeta = () => context.getStore() ?? {};
+
+    context.run({ requestId: 'xxx' }, () => {
+      logger.info('test context');
+    });
+  });
+
+  it('should output error', () => {
+    logger.clear().add(createConsoleTransport({ level: LoggerLevel.Trace }));
+
+    logger.error(new Error('test'));
+  });
+});
+
+describe('file transport', () => {
+  it('should work', () => {
     logger
       .clear()
       .add(createFileTransport({ level: LoggerLevel.Trace }))
@@ -41,33 +64,19 @@ describe('logger', () => {
     logger.trace('trace');
   });
 
-  it('should work with file transport (disable json output)', () => {
+  it('should work with json output false', () => {
     logger
       .clear()
       .add(
-        createFileTransport({ level: LoggerLevel.Trace, jsonOutput: false })
+        createFileTransport({ level: LoggerLevel.Trace, jsonOutput: false }),
       );
 
     logger.error('error');
   });
+});
 
-  it('should work with child logger', () => {
-    logger.clear().add(createConsoleTransport());
-
-    logger.child({ stage: 'test' }).trace('test');
-  });
-
-  it('should work with context', () => {
-    const context = new AsyncLocalStorage<Record<string, unknown>>();
-
-    logger.context = context;
-
-    context.run({ requestId: 'xxx' }, () => {
-      logger.info('test context');
-    });
-  });
-
-  it('should work with sls log transport', () => {
+describe('sls transport', () => {
+  it('should work', () => {
     logger
       .clear()
       .add(createConsoleTransport({ level: LoggerLevel.Trace }))
@@ -82,7 +91,7 @@ describe('logger', () => {
           logStoreName: process.env.SLS_LOG_LOG_STORE_NAME!,
           topic: 'cool',
           source: 'app-a',
-        })
+        }),
       );
 
     logger.debug({
@@ -101,11 +110,5 @@ describe('logger', () => {
       .debug({
         target: 'project2',
       });
-  });
-
-  it('should output error', () => {
-    logger.clear().add(createConsoleTransport({ level: LoggerLevel.Trace }));
-
-    logger.error(new Error('test'));
   });
 });

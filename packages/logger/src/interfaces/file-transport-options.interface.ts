@@ -1,7 +1,8 @@
-import { GeneralDailyRotateFileTransportOptions } from "winston-daily-rotate-file";
+import type { GeneralDailyRotateFileTransportOptions } from 'winston-daily-rotate-file';
 
-import { LoggerLevel } from "../enums/index.js";
-import { BaseOptions } from "./base-options.interface.js";
+import { LoggerLevel } from '../enums/index.js';
+
+import type { BaseOptions } from './base-options.interface.js';
 
 export interface FileTransportOptions
   extends BaseOptions,

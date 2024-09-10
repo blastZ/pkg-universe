@@ -1,4 +1,4 @@
-import { LoggerLevel } from "../enums/index.js";
+import { LoggerLevel } from '../enums/index.js';
 
 export interface BaseOptions {
   level?: LoggerLevel;

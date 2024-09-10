@@ -1,4 +1,4 @@
-import { format, Logform } from 'winston';
+import { format, type Logform } from 'winston';
 
 export function createJsonFormat(): Logform.Format {
   return format.json();

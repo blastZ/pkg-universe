@@ -1,4 +1,4 @@
-declare module "aliyun-sdk" {
+declare module 'aliyun-sdk' {
   export interface Options {
     accessKeyId: string;
     secretAccessKey: string;
@@ -9,7 +9,7 @@ declare module "aliyun-sdk" {
     };
   }
 
-  export type Progress = "Incomplete" | "Complete";
+  export type Progress = 'Incomplete' | 'Complete';
 
   export interface Error {
     request_id: string;
@@ -32,7 +32,7 @@ declare module "aliyun-sdk" {
         count: number;
         logstores: string[];
         headers: Record<string, string>;
-      }>
+      }>,
     ): void;
 
     putLogs(
@@ -51,7 +51,7 @@ declare module "aliyun-sdk" {
       cb?: Callback<{
         request_id: string;
         headers: Record<string, string>;
-      }>
+      }>,
     ): void;
 
     getHistograms(
@@ -74,7 +74,7 @@ declare module "aliyun-sdk" {
           count: number;
           progress: Progress;
         }[];
-      }>
+      }>,
     ): void;
 
     getLogs(
@@ -94,7 +94,7 @@ declare module "aliyun-sdk" {
         progress: Progress;
         count: number;
         logs: Record<string, string>[];
-      }>
+      }>,
     ): void;
   }
 }
